@@ -1,23 +1,18 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <alert type="success">
+      <p>You successfully read this important alert message.</p>
+    </alert>
   </div>
 </template>
 
 <script>
+import {alert} from '@/index.js'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    alert
+  }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
