@@ -9,14 +9,11 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    vuecoms: './src/index.js'
+    app: './src/main.js'
   },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    library: 'works',
-    libraryTarget: 'umd',
-    umdNamedDefine: true,
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
@@ -30,6 +27,15 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.(js|vue)$/,
+        loader: 'eslint-loader',
+        enforce: 'pre',
+        include: [resolve('src'), resolve('test')],
+        options: {
+          formatter: require('eslint-friendly-formatter')
+        }
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
