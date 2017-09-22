@@ -15,4 +15,4 @@ if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue)
 }
 
-module.exports = vuecoms
+export default vuecoms
