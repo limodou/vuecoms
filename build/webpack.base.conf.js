@@ -32,7 +32,8 @@ module.exports = {
         commonjs: 'vue',
         commonjs2: 'vue',
         amd: 'vue'
-    }
+    },
+    'vue-strap': 'VueStrap'
   },
   module: {
     rules: [

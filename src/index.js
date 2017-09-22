@@ -1,14 +1,12 @@
 import {alert} from 'vue-strap'
 
-const components = {
-  alert
+let vuecoms = {
+  'uiAlert': alert
 }
 
-Vue.component('alert', alert)
-
 const install = function (Vue, opts = {}) {
-    Object.keys(components).forEach((key) => {
-        Vue.component(key, components[key])
+    Object.keys(vuecoms).forEach((key) => {
+        Vue.component(key, vuecoms[key])
     })
 }
 
@@ -17,4 +15,4 @@ if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue)
 }
 
-module.exports = Object.assign(components, {install});
+module.exports = vuecoms
