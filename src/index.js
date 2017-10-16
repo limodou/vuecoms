@@ -1,10 +1,12 @@
 import {alert} from 'vue-strap'
+import Box from './Box'
 
 let vuecoms = {
-  'uiAlert': alert
+  uiAlert: alert,
+  uiBox: Box
 }
 
-const install = function (Vue, opts = {}) {
+const install = function () {
     Object.keys(vuecoms).forEach((key) => {
         Vue.component(key, vuecoms[key])
     })
@@ -12,7 +14,7 @@ const install = function (Vue, opts = {}) {
 
 // auto install
 if (typeof window !== 'undefined' && window.Vue) {
-    install(window.Vue)
+    install(window.Vue);
 }
 
-export default vuecoms
+export vuecoms

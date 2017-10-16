@@ -5,15 +5,30 @@
   <title>vuecoms - Vue component library</title>
   <meta name="description" content="Vue component library">
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <script src="/node_modules/vue/dist/vue.min.js"></script>
+  <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/dist/static/css/vuecoms.css">
+  <script src="/node_modules/vue/dist/vue.js"></script>
   <script src="/node_modules/vue-strap/dist/vue-strap.min.js"></script>
   <script src="/dist/static/js/vuecoms.js"></script>
 </head>
 <body>
   <div id="app">
-    <ui-alert type="success">
+    <ui-alert type="success" :dismissable="true">
       <p>You successfully read this important alert message.</p>
     </ui-alert>
+
+    <ui-box title="Title" header-class="success">
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p>这是内容</p>
+      <p slot="footer">Footer</p>
+    </ui-box>
   </div>
 </body>
 <script>
