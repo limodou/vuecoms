@@ -1,9 +1,7 @@
-import {alert} from 'vue-strap'
-import Box from './Box'
+import Box from './Box.vue'
 
-let vuecoms = {
-  uiAlert: alert,
-  uiBox: Box
+const vuecoms = {
+  Box
 }
 
 const install = function () {
@@ -17,4 +15,4 @@ if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
 
-export vuecoms
+module.exports = vuecoms

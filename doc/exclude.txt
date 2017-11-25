@@ -1,0 +1,11 @@
+conf.py
+templates
+.git
+.svn
+_svn
+*.pyc
+*.bak
+*.txt
+html
+.DS_Store
+make.sh

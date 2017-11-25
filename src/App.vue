@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <alert type="success">
+    <Box title="success">
       <p>You successfully read this important alert message.</p>
-    </alert>
+    </Box>
   </div>
 </template>
 
 <script>
-import {alert} from '@/index.js'
+import {Box} from '@/index.js'
 
 export default {
   name: 'app',

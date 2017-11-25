@@ -4,36 +4,31 @@
   <meta charset="UTF-8">
   <title>vuecoms - Vue component library</title>
   <meta name="description" content="Vue component library">
-  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="/dist/static/css/vuecoms.css">
   <script src="/node_modules/vue/dist/vue.js"></script>
-  <script src="/node_modules/vue-strap/dist/vue-strap.min.js"></script>
   <script src="/dist/static/js/vuecoms.js"></script>
 </head>
 <body>
   <div id="app">
-    <ui-alert type="success" :dismissable="true">
-      <p>You successfully read this important alert message.</p>
-    </ui-alert>
-
-    <ui-box title="Title" header-class="success">
-      <p>这是内容</p>
-      <p>这是内容</p>
-      <p>这是内容</p>
-      <p>这是内容</p>
-      <p>这是内容</p>
-      <p>这是内容</p>
-      <p>这是内容</p>
-      <p>这是内容</p>
-      <p>这是内容</p>
+    <box title="Title" header-class="success" :height="height">
+      <form class="form-horizontal">
+        <div class="form-group">
+        </div>
+      </form>
       <p slot="footer">Footer</p>
-    </ui-box>
+    </box>
+
+
   </div>
 </body>
 <script>
   var app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+      input: 'Test',
+      height: 300
+    }
   })
 </script>
 </html>

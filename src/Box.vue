@@ -19,7 +19,7 @@
       @after-enter="afterEnter"
       @before-leave="beforeLeave"
     >
-      <div class="box-body no-padding" v-if="open">
+      <div class="box-body no-padding" v-if="open" :style="bodyStyle">
         <slot></slot>
       </div>
     </transition>
@@ -32,9 +32,11 @@
 
 <script>
 export default {
+  name: 'box',
+  
   data() {
     return {
-      open: this.collapse
+      open: true
     }
   },
 
@@ -62,21 +64,31 @@ export default {
     remove: {
       type: Boolean,
       default: false
+    },
+
+    height: {
     }
   },
 
   computed: {
     headerStyle () {
       return `box-${this.headerClass}`
+    },
+
+    bodyStyle () {
+      if (this.height) {
+        if (typeof this.height === 'number') {
+          return {height: `${this.height}px`, overflow: 'auto'}
+        } else {
+          return {height: this.height, overflow: 'auto'}
+        }
+      }
     }
   },
 
   methods: {
     toggle () {
       this.open = !this.open
-      console.log(
-        'aaaaa', this.open
-      )
     },
 
     enter (el) {
@@ -366,7 +378,9 @@ export default {
     padding: 5px;
     font-size: 12px;
     background: transparent;
-    color: #97a0b3
+    color: #97a0b3;
+    box-shadow: none;
+    border: 1px solid transparent;
 }
 
 .open .btn-box-tool,.btn-box-tool:hover {

@@ -10,7 +10,7 @@ function resolve (dir) {
 module.exports = {
   entry: {
     vuecoms: './src/index.js',
-    // app: './src/main.js'
+    app: './src/main.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -33,7 +33,7 @@ module.exports = {
         commonjs2: 'vue',
         amd: 'vue'
     },
-    'vue-strap': 'VueStrap'
+    iview: 'iview'
   },
   module: {
     rules: [
