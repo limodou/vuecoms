@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<link rel="stylesheet" href="./static/bootstrap/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="./static/font-awesome/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="./static/asset/prettify.css">
+<link rel="stylesheet" href="./static/asset/light.css"/>
+<link rel="stylesheet" href="./static/ui.totop.css"/>
+<link rel="stylesheet" href="./static/docs.css"/>
+<link rel="stylesheet" href="./static/custom.css"/>
+<link rel="stylesheet" href="./static/iview/styles/iview.css"/>
+<link rel="stylesheet" href="./static/vuecoms.css"/>
+
+
+
+
+
+<script>
+var relpath = '.';
+</script>
+
+<script src="./static/jquery.min.js"></script>
+<script src="./static/bootstrap/js/bootstrap.min.js"></script>
+<script src="./static/asset/prettify.js"></script>
+<script src="./static/jquery.ui.totop.js"></script>
+<script src="./static/jquery.hotkeys.js"></script>
+<script src="./static/docs.js"></script>
+<script src="./static/comment.js"></script>
+<script src="./static/vue.js"></script>
+<script src="./static/iview/iview.min.js"></script>
+<script src="./static/vuecoms.js"></script>
+
+
+
+
+
+
+
+
+    
+<script type="text/javascript">
+$(function(){
+    var form = $('#searchform');
+    form.submit(function(e){
+        e.preventDefault();
+        var wq=$('input[name="q"]').val();
+        var link="http://www.google.com/search?q=site:limodou.github.io/vuecoms "+wq;
+        window.open(link);
+
+    });
+});
+</script>
+
+
+
+<title>vuecoms - vuecoms</title>
+</head>
+<body>
+
+
+
+<div class="navbar navbar-default" role="navigation">
+  <div class="container">
+
+    <!-- Collapsed navigation -->
+    <div class="navbar-header">
+
+      <!-- Expander button -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <!-- Main title -->
+      <a class="navbar-brand" href="index.html">vuecoms</a>
+    </div>
+
+    <!-- Expanded navigation -->
+    <div class="navbar-collapse collapse">
+
+      <!-- Main navigation -->
+      <ul class="nav navbar-nav">
+      
+        <li class="active"><a href="./index.html">Home</a></li><li><a href="./examples.html">Examples</a></li>
+      
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="https://github.com/limodou/vuecoms">
+            <i class="fa fa-github"></i>
+            vuecoms
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="jumbotron bs-docs-header">
+  <div class="container text-center">
+    <h1>vuecoms</h1>
+    <p class="lead">vuecoms is Vue component lib.
+</p>
+    <a class="btn btn-outline-inverse btn-lg" href="https://github.com/limodou/vuecoms/archive/master.zip" role="button">
+      <i class="fa fa-download"></i> Download (1.0)
+    </a>
+  </div>
+</div>
+
+<div class="container" id="markdown-content">
+    <h1 id="title_1">vuecoms<a class="anchor" href="#title_1">&para;</a></h1>
+<blockquote><p>Vue component library</p>
+</blockquote>
+<h2 id="title_1-1">Build Setup<a class="anchor" href="#title_1-1">&para;</a></h2>
+<pre class="prettyprint "><code class="language-bash"># install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report</code></pre>
+<p>For detailed explanation on how things work, checkout the <a class="outter" href="http://vuejs-templates.github.io/webpack/">guide</a> and <a class="outter" href="http://vuejs.github.io/vue-loader">docs for vue-loader</a>.</p>
+
+    
+</div>
+
+<div class="footer" id="footer">
+  <div class="container text-center">
+    
+<p>Designed by Limodou, Copyright 2017, Limodou</p>
+<p>CSS framework <a href="https://github.com/twitter/bootstrap">Bootstrap</a>, Markdown parser lib <a href="https://github.com/limodou/par">Par</a> and this page is created by <a href="https://github.com/limodou/parm">Parm</a> tool.</p>
+
+  </div>
+</div>
+
+
+
+</body>
+</html>

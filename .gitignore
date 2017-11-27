@@ -12,3 +12,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.pyc
+bower_components/

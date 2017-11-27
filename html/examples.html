@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<link rel="stylesheet" href="./static/bootstrap/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="./static/font-awesome/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="./static/asset/prettify.css">
+<link rel="stylesheet" href="./static/asset/light.css"/>
+<link rel="stylesheet" href="./static/ui.totop.css"/>
+<link rel="stylesheet" href="./static/docs.css"/>
+<link rel="stylesheet" href="./static/custom.css"/>
+<link rel="stylesheet" href="./static/iview/styles/iview.css"/>
+<link rel="stylesheet" href="./static/vuecoms.css"/>
+
+
+
+
+
+<script>
+var relpath = '.';
+</script>
+
+<script src="./static/jquery.min.js"></script>
+<script src="./static/bootstrap/js/bootstrap.min.js"></script>
+<script src="./static/asset/prettify.js"></script>
+<script src="./static/jquery.ui.totop.js"></script>
+<script src="./static/jquery.hotkeys.js"></script>
+<script src="./static/docs.js"></script>
+<script src="./static/comment.js"></script>
+<script src="./static/vue.js"></script>
+<script src="./static/iview/iview.min.js"></script>
+<script src="./static/vuecoms.js"></script>
+
+
+
+
+
+
+
+
+    
+<script type="text/javascript">
+$(function(){
+    var form = $('#searchform');
+    form.submit(function(e){
+        e.preventDefault();
+        var wq=$('input[name="q"]').val();
+        var link="http://www.google.com/search?q=site:limodou.github.io/vuecoms "+wq;
+        window.open(link);
+
+    });
+});
+</script>
+
+
+
+<title>示例 - vuecoms</title>
+</head>
+<body>
+
+
+
+<div class="navbar navbar-default" role="navigation">
+  <div class="container">
+
+    <!-- Collapsed navigation -->
+    <div class="navbar-header">
+
+      <!-- Expander button -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <!-- Main title -->
+      <a class="navbar-brand" href="index.html">vuecoms</a>
+    </div>
+
+    <!-- Expanded navigation -->
+    <div class="navbar-collapse collapse">
+
+      <!-- Main navigation -->
+      <ul class="nav navbar-nav">
+      
+  <li><a href="./index.html">Home</a></li><li class="active"><a href="./examples.html">Examples</a></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="https://github.com/limodou/vuecoms">
+            <i class="fa fa-github"></i>
+            vuecoms
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3" id="side-bar">
+      <div id="toc" class="content"></div>
+    </div>
+
+    <div class="col-md-9" role="main" id="markdown-content">
+      
+
+
+      <h1 id="title_1">示例<a class="anchor" href="#title_1">&para;</a></h1>
+<h2 id="title_1-1">Box<a class="anchor" href="#title_1-1">&para;</a></h2>
+<h3 id="title_1-1-1">基本用法<a class="anchor" href="#title_1-1-1">&para;</a></h3>
+<div class="tabbable">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#tab_item_1_1" data-toggle="tab">Result</a></li>
+<li><a href="#tab_item_1_2" data-toggle="tab">Javascript</a></li>
+<li><a href="#tab_item_1_3" data-toggle="tab">HTML</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="tab_item_1_1">
+
+<p>展示一块区域</p>
+<div id="ex-box-01">
+  <Box title="这是标题">
+    <p>这是内容</p>
+    <p>这是内容</p>
+    <p>这是内容</p>
+    <p>这是内容</p>
+  </Box>
+</div>
+<script>
+var ex_box_01 = new Vue({
+  el: '#ex-box-01'
+})
+</script>
+
+</div>
+<div class="tab-pane" id="tab_item_1_2">
+
+<pre class="prettyprint "><code>var ex01 = new Vue({
+  el: '#ex-box-01'
+})</code></pre>
+
+</div>
+<div class="tab-pane" id="tab_item_1_3">
+
+<pre class="prettyprint "><code>&lt;Box title="这是标题"&gt;
+  &lt;p&gt;这是内容&lt;/p&gt;
+  &lt;p&gt;这是内容&lt;/p&gt;
+  &lt;p&gt;这是内容&lt;/p&gt;
+  &lt;p&gt;这是内容&lt;/p&gt;
+&lt;/Box&gt;</code></pre>
+
+</div>
+</div>
+</div>
+<h2 id="title_1-2">Table<a class="anchor" href="#title_1-2">&para;</a></h2>
+<h3 id="title_1-2-2">基本用法<a class="anchor" href="#title_1-2-2">&para;</a></h3>
+<div class="tabbable">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#tab_item_2_4" data-toggle="tab">Result</a></li>
+<li><a href="#tab_item_2_5" data-toggle="tab">Javascript</a></li>
+<li><a href="#tab_item_2_6" data-toggle="tab">HTML</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="tab_item_2_4">
+
+<p>展示一个表格</p>
+<div id="ex-table-01">
+  <Grid :data="table"></Grid>
+</div>
+<script>
+var ex_table_01 = new Vue({
+  el: '#ex-table-01',
+  data: function () {
+    var table = {
+      nowrap: true,
+      columns: [ {
+          name: 'id',
+          title: 'ID',
+          width: 40,
+          align: 'center'
+        },
+        {
+          name: 'title',
+          title: '标题'
+        },
+        {
+          name: 'author',
+          title: '作者',
+          width: 100,
+          align: 'center'
+        }
+      ],
+      data: [
+        {id: 1, title: '神雕侠侣', author: '金庸'},
+        {id: 2, title: '小李飞刀', author: '古龙'},
+      ],
+    }
+
+    return {table:table}
+  }
+})
+</script>
+
+</div>
+<div class="tab-pane" id="tab_item_2_5">
+
+<p><code>` `</code></p>
+
+</div>
+<div class="tab-pane" id="tab_item_2_6">
+
+<pre class="prettyprint "><code>&lt;Grid :data="table"&gt;&lt;/Grid&gt;</code></pre>
+
+</div>
+</div>
+</div>
+<h3 id="title_1-2-3">复杂用法<a class="anchor" href="#title_1-2-3">&para;</a></h3>
+<div class="tabbable">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#tab_item_3_7" data-toggle="tab">Result</a></li>
+<li><a href="#tab_item_3_8" data-toggle="tab">Javascript</a></li>
+<li><a href="#tab_item_3_9" data-toggle="tab">HTML</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="tab_item_3_7">
+
+<div id="ex-table-02">
+  <Grid ref='grid' :data="table"
+    @on-selected="handleSelected"
+    @on-deselected="handleDeselected"
+    @on-selected-all="handleSelectedAll"
+    @on-deselected-all="handleDeselectedAll"></Grid>
+  <div>{{selected}}</div>
+  <div class="logs">
+    <span v-for="log in logs">{{log}}</span>
+  </div>
+</div>
+<script>
+var ex_table_02 = new Vue({
+  el: '#ex-table-02',
+  data: function () {
+    var table = {
+      columns: [],
+      multiSelect: true,
+      resizable: true,
+      pagination: true,
+      pageSizeOpts: [10, 30, 50],
+      total: 80,
+      height: 300,
+
+      checkCol: true,
+      checkColWidth: 120,
+      checkColTitle: 'Check All',
+      indexCol: true,
+
+      data: [
+      ]
+    }
+    table.columns.push({
+      name: 'id',
+      title: 'ID',
+      width: 40,
+      sortable: false,
+      fixed: 'left'
+    })
+
+    table.columns.push({
+      name: 'title',
+      title: 'Title',
+      sortable: false,
+      fixed: 'left'
+    })
+
+    for (var j = 1; j < 10; j++) {
+      table.columns.push({
+        name: 'name' + j,
+        title: 'Column' + j,
+        width: 100,
+        sortable: false,
+        align: 'center'
+      })
+    }
+
+    for (var i = 0; i < 10; i++) {
+      var row = {id: i + 1, title: 'Title-' + (i + 1)}
+      for (var j = 1; j < 10; j++) {
+        row['name' + j] = 'Name-' + (i + 1) + '-' + j
+      }
+      table.data.push(row)
+    }
+
+    return {table:table, selected:[], logs:[]}
+  },
+
+  methods: {
+    handleSelected: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['selected', row])
+    },
+    handleDeselected: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['deselected', row])
+    },
+    handleSelectedAll: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['selected-all', row])
+    },
+    handleDeselectedAll: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['deselected-all', row])
+    }
+  }
+})
+</script>
+
+</div>
+<div class="tab-pane" id="tab_item_3_8">
+
+<p><code>` `</code></p>
+
+</div>
+<div class="tab-pane" id="tab_item_3_9">
+
+<pre class="prettyprint "><code>&lt;Grid :data="table"&gt;&lt;/Grid&gt;</code></pre>
+
+</div>
+</div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-9 col-md-offset-3">
+      <!-- disqus -->
+      
+    </div>
+  </div>
+</div>
+
+<div class="footer" id="footer">
+  <div class="container text-center">
+    
+<p>Designed by Limodou, Copyright 2017, Limodou</p>
+<p>CSS framework <a href="https://github.com/twitter/bootstrap">Bootstrap</a>, Markdown parser lib <a href="https://github.com/limodou/par">Par</a> and this page is created by <a href="https://github.com/limodou/parm">Parm</a> tool.</p>
+
+  </div>
+</div>
+
+
+
+</body>
+</html>

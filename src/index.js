@@ -1,7 +1,9 @@
 import Box from './Box.vue'
+import Grid from './Table'
 
 const vuecoms = {
-  Box
+  Box,
+  Grid
 }
 
 const install = function () {
