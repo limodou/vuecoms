@@ -20,11 +20,14 @@ function Store (grid, options) {
     indexCol: false, // 是否显示序号列
     indexColTitle: '#',
     indexColWidth: 40,
-    loadingText: 'Loading', // 正在装入时显示的文本
+    loadingText: '<i class="icon-loading ivu-icon ivu-icon-load-c"></i> Loading', // 正在装入时显示的文本
     autoLoad: true, // 是否自动装入数据
     url: '', // 访问后台的URL
     param: {
     }, // 访问后台的URL所带参数，可以是函数
+    buttons: [],
+    rightButtons: [],
+    bottomButtons: [],
 
     // 内部变量
     columnResizing: false,

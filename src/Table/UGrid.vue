@@ -1,6 +1,13 @@
 <template>
   <div class="u-grid-wrapper">
-    <div class="u-grid-tools" slot="tools"></div>
+    <div class="u-grid-tools" slot="tools">
+      <div class="u-grid-tools-left" v-if="buttons.length">
+        <Buttons :buttons="buttons"></Buttons>
+      </div>
+      <div class="u-grid-tools-right" v-if="rightButtons.length">
+        <Buttons :buttons="rightButtons"></Buttons>
+      </div>
+    </div>
     <div class="u-grid">
       <u-table v-if="leftWidth"
         :store="store"
@@ -24,7 +31,9 @@
     </div>
     <Pagination v-if="pagination" :store="store"
       @on-page="handlePage"
-      @on-page-size="handlePageSize"></Pagination>
+      @on-page-size="handlePageSize">
+      <Buttons :buttons="bottomButtons"></Buttons>
+    </Pagination>
   </div>
 </template>
 
@@ -32,6 +41,7 @@
 import UTable from './UTable'
 import Store from './UGridStore'
 import Pagination from './pagination'
+import Buttons from './UButtons'
 import {mapState, mapMethod} from '@/utils/utils.js'
 import Emitter from '@/mixins/emitter.js'
 
@@ -41,7 +51,8 @@ export default {
 
   components: {
     UTable,
-    Pagination
+    Pagination,
+    Buttons
   },
 
   data () {
@@ -68,7 +79,7 @@ export default {
       'defaultColWidth', 'leftWidth', 'checkColTitle', 'checkColWidth',
       'indexColWidth', 'indexColTitle', 'scrollLeft', 'total', 'pageSizeOpts',
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
-      'autoLoad', 'url', 'param'
+      'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons'
     ),
 
     columnDraggerStyles () {
@@ -283,7 +294,7 @@ export default {
 
     if (this.autoLoad) {
       this.$nextTick( () => {
-        this.loadData ()        
+        this.loadData ()
       })
     }
   },
@@ -295,7 +306,33 @@ export default {
 </script>
 
 <style lang="less">
+.ivu-btn-group {
+  margin-right:3px;
+}
+
 .u-grid-wrapper {
+
+  .u-grid-tools {
+    margin-bottom: 5px;
+
+    &:after {
+      content: "";
+      display: block;
+      height: 0;
+      clear: both;
+      overflow: hidden;
+      visibility: hidden
+    }
+
+    .u-grid-tools-left {
+      float: left!important;
+    }
+
+    .u-grid-tools-right {
+      float: right!important;
+    }
+  }
+
   .u-grid {
     position: relative;
     font-size: 14px;

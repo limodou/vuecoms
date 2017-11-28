@@ -37,7 +37,8 @@
       </li>
     </ul>
 
-    <span class="pull-right page-total">共 {{total}} 条记录</span>
+    <slot></slot>
+    <span class="page-total">共 {{total}} 条记录</span>
   </div>
 </template>
 
@@ -64,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapState('total', 'page', 'pageSize', 'pageSizeOpts', 'first', 'prev', 'next', 'last'),
+    ...mapState('total', 'page', 'pageSize', 'pageSizeOpts', 'first', 'prev', 'next', 'last', 'bottomButtons'),
 
     hasFirst () {
       return this.current !== 1
@@ -135,7 +136,7 @@ export default {
   width: 100%;
   font-size: 14px;
 
-  &：after {
+  &:after {
     content: "";
     display: block;
     height: 0;
@@ -190,6 +191,7 @@ export default {
     height: 24px;
     line-height: 24px;
     margin: 0px 8px;
+    float: right!important;
   }
 
   .page-prev, .page-next, .page-first, .page-last {

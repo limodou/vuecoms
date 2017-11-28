@@ -136,6 +136,7 @@ var ex_table_01 = new Vue({
 var ex_table_02 = new Vue({
   el: '#ex-table-02',
   data: function () {
+    var self = this
     var table = {
       columns: [],
       multiSelect: true,
@@ -151,6 +152,19 @@ var ex_table_02 = new Vue({
       indexCol: true,
 
       data: [
+      ],
+
+      buttons: [
+        [{label: '新增', type:'primary', onClick: function(){
+            self.$Message.info('Click 新增')
+          }}, {label: '编辑', disabled: true}, {label: '删除'}],
+        [{label: '上移', icon:'ios-arrow-thin-up'}, {label: '下移', icon: 'ios-arrow-thin-down'}]
+      ],
+      rightButtons: [
+        [{label: '下载'}]
+      ],
+      bottomButtons: [
+        [{'label': '导出'}]
       ]
     }
     table.columns.push({
@@ -158,14 +172,14 @@ var ex_table_02 = new Vue({
       title: 'ID',
       width: 40,
       sortable: false,
-      //fixed: 'left'
+      fixed: 'left'
     })
 
     table.columns.push({
       name: 'title',
       title: 'Title',
       sortable: false,
-      //fixed: 'left'
+      fixed: 'left'
     })
 
     for (var j = 1; j < 10; j++) {
@@ -177,6 +191,13 @@ var ex_table_02 = new Vue({
         align: 'center'
       })
     }
+
+    table.columns.push({
+      name: 'title',
+      title: 'Title',
+      sortable: false,
+      hidden: true
+    })
 
     for (var i = 0; i < 10; i++) {
       var row = {id: i + 1, title: 'Title-' + (i + 1)}
