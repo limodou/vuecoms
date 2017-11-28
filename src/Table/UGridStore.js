@@ -20,6 +20,11 @@ function Store (grid, options) {
     indexCol: false, // 是否显示序号列
     indexColTitle: '#',
     indexColWidth: 40,
+    loadingText: 'Loading', // 正在装入时显示的文本
+    autoLoad: true, // 是否自动装入数据
+    url: '', // 访问后台的URL
+    param: {
+    }, // 访问后台的URL所带参数，可以是函数
 
     // 内部变量
     columnResizing: false,
@@ -31,6 +36,9 @@ function Store (grid, options) {
     xscroll: false,
     scrollLeft: 0, // 记录横向滚动条偏移量，用于显示左侧固定列的特殊样式
     guiderHeight: 0, // 拖动指示器的高度
+    loading: false, // 是否显示loading信息
+    loadingLeft: 0,
+    loadingTop: 0,
 
     // 分页相关参数
     prev: 'Prev',
@@ -42,13 +50,7 @@ function Store (grid, options) {
     pageSizeOpts: [10, 20, 30, 40, 50], // 每页条数选项
     pagination: false, // 是否显示分页信息，缺省为 false
     page: 1,
-    pageSize: 10,
-
-    // 事件
-    onSelected: function () {},
-    onDeselected: function () {},
-    onSelectAll: function () {},
-    onDeselectAll: function () {}
+    pageSize: 10
   }
 
   for (let name in options) {
@@ -56,6 +58,10 @@ function Store (grid, options) {
       this.states[name] = options[name]
     }
   }
+
+  // 初始化states.param
+  this.states.param.page = this.states.page
+  this.states.param.pageSize = this.states.pageSize
 
   if (!grid) {
     throw new Error('Grid object is Required.')
@@ -104,6 +110,17 @@ Store.prototype.getSelection = function () {
     }
   })
   return selected
+}
+
+Store.prototype.showLoading = function (loading=true, text='') {
+  this.states.loading = loading
+  if (text) {
+    this.states.loadingText = text
+  }
+  if (loading) {
+    this.states.loadingTop = this.grid.$refs.table.$el.clientHeight/2-this.states.rowHeight/2
+    this.states.loadingLeft = this.grid.$refs.table.$el.clientWidth/2-100/2
+  }
 }
 
 export default Store

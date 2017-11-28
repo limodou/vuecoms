@@ -1,25 +1,30 @@
 <template>
-  <div class="u-grid">
-    <u-table v-if="leftWidth"
-      :store="store"
-      :width="leftWidth"
-      :table-width="leftWidth"
-      :table-class="leftTableClass"
-      fixed="left"
-      ref="left">
-    </u-table>
+  <div class="u-grid-wrapper">
+    <div class="u-grid-tools" slot="tools"></div>
+    <div class="u-grid">
+      <u-table v-if="leftWidth"
+        :store="store"
+        :width="leftWidth"
+        :table-width="leftWidth"
+        :table-class="leftTableClass"
+        fixed="left"
+        ref="left">
+      </u-table>
 
-    <u-table :store="store"
-      :width="gridWidth"
-      :table-width="tableWidth"
-      table-class="u-grid-body"
-      ref="table"
-      @scroll="handleScroll"
-      ></u-table>
+      <u-table :store="store"
+        :width="gridWidth"
+        :table-width="tableWidth"
+        table-class="u-grid-body"
+        ref="table"
+        @scroll="handleScroll"
+        ></u-table>
 
-    <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
-
-    <Pagination v-if="pagination" :store="store"></Pagination>
+      <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
+      <div ref="loading" class="loading"  v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
+    </div>
+    <Pagination v-if="pagination" :store="store"
+      @on-page="handlePage"
+      @on-page-size="handlePageSize"></Pagination>
   </div>
 </template>
 
@@ -53,7 +58,8 @@ export default {
       default: function () {
         return {}
       }
-    }
+    },
+    onLoadData: {}
   },
 
   computed: {
@@ -61,7 +67,8 @@ export default {
       'gridWidth', 'width', 'resizable', 'columnPosition', 'guiderHeight',
       'defaultColWidth', 'leftWidth', 'checkColTitle', 'checkColWidth',
       'indexColWidth', 'indexColTitle', 'scrollLeft', 'total', 'pageSizeOpts',
-      'pagination'
+      'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
+      'autoLoad', 'url', 'param'
     ),
 
     columnDraggerStyles () {
@@ -83,12 +90,15 @@ export default {
         cls += ' dark'
       }
       return cls
-    }
+    },
 
+    loadingStyles () {
+      return {top: `${this.loadingTop}px`, left: `${this.loadingLeft}px`}
+    }
   },
 
   methods: {
-    ...mapMethod('getSelection'),
+    ...mapMethod('getSelection', 'showLoading'),
 
     resize () {
       if (this.width === 'auto') {
@@ -230,6 +240,35 @@ export default {
       if (this.leftWidth) {
         this.$refs.left.$refs.body.scrollTop = top
       }
+    },
+
+    handlePage (page) {
+      this.$nextTick( () => {
+        this.$set(this.store.states.param, 'page', page)
+        this.loadData()
+      })
+    },
+
+    handlePageSize (size) {
+      this.$nextTick( () => {
+        this.$set(this.store.states.param, 'pageSize', size)
+        this.loadData()
+      })
+    },
+
+    loadData (url) {
+      let _url = url || this.url
+      let param = this.param
+      let callback = (data) => {
+        this.store.states.data = data
+        this.$nextTick( () => {
+          this.showLoading(false)
+        })
+      }
+      if (this.onLoadData) {
+        this.showLoading(true)
+        this.onLoadData(_url, param, callback)
+      }
     }
   },
 
@@ -240,8 +279,13 @@ export default {
 
   mounted () {
     this.resize()
-
     window.addEventListener('resize', this.handleResize, true)
+
+    if (this.autoLoad) {
+      this.$nextTick( () => {
+        this.loadData ()        
+      })
+    }
   },
 
   watch: {
@@ -250,32 +294,51 @@ export default {
 }
 </script>
 
-<style>
-.u-grid {
-  position: relative;
-  font-size: 14px;
-}
-.u-grid .column-dragger-guide {
-  height: 100%;
-  top: 0px;
-  left: 0px;
-  border-left: 2px solid green;
-  position: absolute;
-  z-index: 1000;
-}
-.u-grid .u-table-left {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  overflow: hidden;
-  border-right: none;
-  border-bottom: none;
-}
-.u-grid .u-table-left.dark {
-  box-shadow: 1px 0px 2px #999;
-}
-.u-grid .u-table-left .u-table-body-scroll {
-  overflow: hidden;
+<style lang="less">
+.u-grid-wrapper {
+  .u-grid {
+    position: relative;
+    font-size: 14px;
+
+    > .column-dragger-guide {
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      border-left: 2px solid green;
+      position: absolute;
+      z-index: 1000;
+    }
+
+    > .loading {
+      position: absolute;
+      margin: auto;
+      height: 34px;
+      text-align: center;
+      color: black;
+      line-height: 34px;
+      border: 1px solid gray;
+      width: 100px;
+      background-color: antiquewhite;
+      z-index: 9999;
+    }
+
+    .u-table-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      overflow: hidden;
+      border-right: none;
+      border-bottom: none;
+
+      &.dark {
+        box-shadow: 1px 0px 2px #999;
+      }
+
+      .u-table-body-scroll {
+        overflow: hidden;
+      }
+    }
+  }
 }
 </style>

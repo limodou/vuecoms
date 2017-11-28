@@ -100,8 +100,8 @@ export default {
 
     handlePageSize (size) {
       this.limit = size
-      this.dispatch('Grid', 'on-page-size', size)
       this.showPageSize = false
+      this.$emit('on-page-size', size)
     },
 
     handlePageClick (page) {
@@ -115,7 +115,7 @@ export default {
     go (page) {
       if (page < 1 || page > this.pages) return
       this.current = page
-      this.dispatch('Grid', 'on-page', page)
+      this.$emit('on-page', page)
     },
 
     handleClose () {
@@ -125,7 +125,7 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 
 .pagination {
   list-style: none;
@@ -133,6 +133,7 @@ export default {
   padding-left: 0;
   margin: 8px 0;
   width: 100%;
+  font-size: 14px;
 
   &：after {
     content: "";

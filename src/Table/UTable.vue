@@ -204,7 +204,6 @@ export default {
     },
 
     handleCheckAll () {
-      console.log('aaaaaaaaaaaa')
       this.store.states.checkAll = !this.store.states.checkAll
       if (this.checkAll) {
         this.store.selectAll()
@@ -218,8 +217,6 @@ export default {
     },
 
     handleBodyScroll (e) {
-      this.$refs.header.scrollLeft = this.$refs.body.scrollLeft
-      this.store.states.scrollLeft = this.$refs.body.scrollLeft
       this.checkScroll()
       this.$emit('scroll', this.$refs.body.scrollLeft, this.$refs.body.scrollTop)
     },
@@ -227,6 +224,8 @@ export default {
     checkScroll () {
       // 主内容才计算滚动条
       if (!this.fixed) {
+        this.$refs.header.scrollLeft = this.$refs.body.scrollLeft
+        this.store.states.scrollLeft = this.$refs.body.scrollLeft
         if (this.$refs.body && this.$refs.content) {
           this.store.states.hscroll = this.$refs.body.scrollHeight > this.$refs.body.clientHeight
         }
@@ -298,7 +297,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
   .u-table {
       position: relative;
       overflow: hidden;

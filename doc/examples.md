@@ -117,7 +117,12 @@ var ex_table_01 = new Vue({
 
 {% include-code %}
 <div id="ex-table-02">
+  <div>
+    <input ref="loading" v-model="loading_text" style="display:inline-block"></input>
+    <label style="display:inline-block">切换loading<input v-model="show_loading" type="checkbox"></input></label>
+  </div>
   <Grid ref='grid' :data="table"
+    :on-load-data="onLoadData"
     @on-selected="handleSelected"
     @on-deselected="handleDeselected"
     @on-selected-all="handleSelectedAll"
@@ -153,14 +158,14 @@ var ex_table_02 = new Vue({
       title: 'ID',
       width: 40,
       sortable: false,
-      fixed: 'left'
+      //fixed: 'left'
     })
 
     table.columns.push({
       name: 'title',
       title: 'Title',
       sortable: false,
-      fixed: 'left'
+      //fixed: 'left'
     })
 
     for (var j = 1; j < 10; j++) {
@@ -181,7 +186,27 @@ var ex_table_02 = new Vue({
       table.data.push(row)
     }
 
-    return {table:table, selected:[], logs:[]}
+    onLoadData = function (url, param, callback) {
+      let data = []
+      for (var i = 0; i < 10; i++) {
+        var row = {id: i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
+        for (var j = 1; j < 10; j++) {
+          row['name' + j] = 'P' + param.page + '-Name-' + (i + 1) + '-' + j
+        }
+        data.push(row)
+      }
+      setTimeout( () => {
+        callback(data)        
+        }, 2000)
+    }
+
+    return {table:table, selected:[], logs:[], loading_text:'loading', show_loading:false, onLoadData: onLoadData}
+  },
+
+  watch: {
+    show_loading: function() {
+      this.$refs.grid.showLoading(this.show_loading, this.loading_text)
+    }
   },
 
   methods: {
