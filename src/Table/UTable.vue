@@ -61,8 +61,8 @@
                 >{{row[column.name]}}</div>
               </template>
               <template v-if="column.type === 'check'">
-                <i v-if="row._selected" class="ivu-icon ivu-icon-android-checkbox-outline" @click.stop="handleCheckClick(row)"></i>
-                <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank" @click.stop="handleCheckClick(row)"></i>
+                <i v-if="row._selected" class="ivu-icon ivu-icon-android-checkbox-outline" style="cursor:pointer" @click.stop="handleCheckClick(row)"></i>
+                <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank" style="cursor:pointer" @click.stop="handleCheckClick(row)"></i>
               </template>
               <span v-if="column.type === 'index'">
                 {{ colIndex(row_index) }}
@@ -255,11 +255,11 @@ export default {
     },
 
     handleTrMouseEnter (row) {
-      row._hover = true
+      this.$set(row, '_hover', true)
     },
 
     handleTrMouseLeave (row) {
-      row._hover = false
+      this.$set(row, '_hover', false)
     },
 
     getRowId (row) {

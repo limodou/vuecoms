@@ -329,7 +329,7 @@ var ex_table_02 = new Vue({
     }
 
     onLoadData = function (url, param, callback) {
-      let data = []
+      var data = []
       for (var i = 0; i < 10; i++) {
         var row = {id: i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
         for (var j = 1; j < 10; j++) {
@@ -337,7 +337,7 @@ var ex_table_02 = new Vue({
         }
         data.push(row)
       }
-      setTimeout( () => {
+      setTimeout( function () {
         callback(data)        
         }, 2000)
     }

@@ -82,25 +82,25 @@ Store.prototype.toggle = function (row) {
 
 Store.prototype.select = function (row) {
   if (!this.states.multiSelect) this.deselectAll()
-  row._selected = true
+  this.grid.$set(row, '_selected', true)
   this.grid.$emit('on-selected', row)
 }
 
 Store.prototype.deselect = function (row) {
-  row._selected = false
+  this.grid.$set(row, '_selected', false)
   this.grid.$emit('on-deselected', row)
 }
 
 Store.prototype.deselectAll = function () {
   this.states.data.forEach(row => {
-    row._selected = false
+    this.grid.$set(row, '_selected', false)
   })
   this.grid.$emit('on-deselected-all')
 }
 
 Store.prototype.selectAll = function () {
   this.states.data.forEach(row => {
-    row._selected = true
+    this.grid.$set(row, '_selected', true)
   })
   this.grid.$emit('on-selected-all')
 }
