@@ -127,10 +127,8 @@ var ex_table_01 = new Vue({
     @on-deselected="handleDeselected"
     @on-selected-all="handleSelectedAll"
     @on-deselected-all="handleDeselectedAll"></Grid>
-  <div>{{selected}}</div>
-  <div class="logs">
-    <span v-for="log in logs">{{log}}</span>
-  </div>
+  <div>Selected: {{selected}}</div>
+  <div>Param: {{param}}</div>
 </div>
 <script>
 var ex_table_02 = new Vue({
@@ -178,8 +176,11 @@ var ex_table_02 = new Vue({
     table.columns.push({
       name: 'title',
       title: 'Title',
-      sortable: false,
-      fixed: 'left'
+      sortable: true,
+      fixed: 'left',
+      format: function(value, column, row) {
+        return '<a href="#">' + value + '</a>'
+      }
     })
 
     for (var j = 1; j < 10; j++) {
@@ -192,6 +193,7 @@ var ex_table_02 = new Vue({
       })
     }
 
+    //隐藏字段
     table.columns.push({
       name: 'title',
       title: 'Title',
@@ -208,6 +210,7 @@ var ex_table_02 = new Vue({
     }
 
     onLoadData = function (url, param, callback) {
+      self.param = param
       var data = []
       for (var i = 0; i < 10; i++) {
         var row = {id: i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
@@ -221,7 +224,7 @@ var ex_table_02 = new Vue({
         }, 2000)
     }
 
-    return {table:table, selected:[], logs:[], loading_text:'loading', show_loading:false, onLoadData: onLoadData}
+    return {table:table, selected:[], logs:[], loading_text:'loading', show_loading:false, onLoadData: onLoadData, param:{}}
   },
 
   watch: {

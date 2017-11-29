@@ -11,29 +11,7 @@
           <thead>
             <tr :style="trStyle">
               <th v-for="(column, index) in columns" :key="column.name" :style="thStyles(column)">
-                <div v-if="column.type === 'column'" class="u-table-header-cell">
-
-                  <div class="u-table-header-cell-title" :class="{nowrap:nowrap}">{{ column.title }}</div>
-
-                  <div v-if="column.sortable" class="u-table-header-cell-sortable"></div>
-
-                  <div v-if="resizable && column.resizable" class="u-table-header-cell-resizer"
-                    @mousedown.stop.prevent="handleMouseDown(column, $event)">
-                  </div>
-
-                </div>
-
-                <div v-if="column.type === 'check'">
-                  <template v-if="multiSelect">
-                    <i v-if="checkAll" class="ivu-icon ivu-icon-android-checkbox-outline" @click.stop="handleCheckAll"></i>
-                    <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank" @click.stop="handleCheckAll"></i>
-                  </template>
-                  <span v-if="column.title">{{column.title}}</span>
-                </div>
-
-                <div v-if="column.type === 'index'">
-                  <span v-if="column.title">{{column.title}}</span>
-                </div>
+                <HeaderCell :store="store" :column="column"></HeaderCell>
               </th>
             </tr>
           </thead>
@@ -56,17 +34,7 @@
             <td v-for="(column, col_index) in columns"
               @click="handleClick(row)"
               :style="cellStyles(column)">
-              <template v-if="column.type === 'column'">
-                <div :class="{nowrap:nowrap}"
-                >{{row[column.name]}}</div>
-              </template>
-              <template v-if="column.type === 'check'">
-                <i v-if="row._selected" class="ivu-icon ivu-icon-android-checkbox-outline" style="cursor:pointer" @click.stop="handleCheckClick(row)"></i>
-                <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank" style="cursor:pointer" @click.stop="handleCheckClick(row)"></i>
-              </template>
-              <span v-if="column.type === 'index'">
-                {{ colIndex(row_index) }}
-              </span>
+              <Cell :store="store" :row="row" :column="column" :row_index="row_index"></Cell>
             </td>
           </tr>
         </tbody>
@@ -80,6 +48,8 @@
 import {Icon} from "iview"
 import {measureScrollbar, mapState, getOffset, mapMethod} from '@/utils/utils.js'
 import Emitter from '@/mixins/emitter.js'
+import Cell from './UCell'
+import HeaderCell from './UHeaderCell'
 
 export default {
   name: 'Table',
@@ -97,7 +67,9 @@ export default {
   mixins: [ Emitter ],
 
   components: {
-    Icon
+    Icon,
+    Cell,
+    HeaderCell
   },
 
   props: {
@@ -203,14 +175,6 @@ export default {
       return {textAlign: col.align || 'left'}
     },
 
-    handleCheckAll () {
-      this.store.states.checkAll = !this.store.states.checkAll
-      if (this.checkAll) {
-        this.store.selectAll()
-      } else {
-        this.store.deselectAll()
-      }
-    },
 
     handleHeaderScroll (e) {
       // this.$refs.body.scrollLeft = this.$refs.header.scrollLeft
@@ -250,10 +214,6 @@ export default {
       }
     },
 
-    handleCheckClick (row) {
-      this.store.toggle(row)
-    },
-
     handleTrMouseEnter (row) {
       this.$set(row, '_hover', true)
     },
@@ -276,10 +236,6 @@ export default {
       } else {
         return {width: `${col.width}`}
       }
-    },
-
-    colIndex (index) {
-      return this.start + index
     }
   },
 
@@ -361,7 +317,7 @@ export default {
 
   .u-table-header th {
     position: relative;
-    padding: 0 5px;
+    padding: 0;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #d2d2d2;
     overflow: hidden;
@@ -369,7 +325,7 @@ export default {
 
   .u-table-body-scroll td {
     position: relative;
-    padding: 0 5px;
+    padding: 0;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #d2d2d2;
     overflow: hidden;
