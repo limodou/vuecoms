@@ -30,6 +30,7 @@ function Store (grid, options) {
     bottomButtons: [],
 
     // 内部变量
+    drawColumns: [], // 用于绘制的表头
     columnResizing: false,
     columnPosition: 0,
     checkAll: false,

@@ -57,7 +57,6 @@ export default {
 
   data () {
     const store = new Store(this, this.data)
-
     return {
       store
     }
@@ -118,15 +117,16 @@ export default {
         this.store.states.gridWidth = this.width
       }
 
-      if (!this.resizable) return
+      // if (!this.resizable) return
       // let parentWidth = this.$el.clientWidth
       let cols = []
       let w = this.gridWidth
       let hasLeftFixed = false
+      let max_level = 0
 
-      for (let i = 0, len = this.columns.length; i < len; i++) {
-        let col = this.columns[i]
-        if (col.hidden) continue
+      for (let col of this.columns) {
+        col.subs = col.title.split('/')
+        max_level = Math.max(max_level, col.subs.length)
         if (col.width) {
           w -= col.width
         } else {
@@ -164,7 +164,6 @@ export default {
 
         for (let i = 0, len = this.columns.length; i < len; i++) {
           let col = this.columns[i]
-          if (col.hidden) continue
           if (col.type === 'check' || col.type === 'index' || col.fixed === 'left') {
             leftCols.push(col)
             this.store.states.leftWidth += col.width
@@ -174,6 +173,77 @@ export default {
         }
         this.store.states.columns = leftCols.concat(restCols)
       }
+      this.store.states.drawColumns = this.parse_header(this.columns, max_level)
+    },
+
+    parse_header (cols, max_level) {
+      let columns = [], //保存每行的最后有效列
+        columns_width = {}, //保存每行最右坐标
+        i, len, j, jj, col, jl,
+        subs_len,
+        path,
+        rowspan, //每行平均层数，max_level/sub_len，如最大4层，当前总层数为2,则每行占两层
+        colspan,
+        parent, //上一层的结点为下一层的父结点
+        new_col, //记录显示用的表头单元
+        left  //某层最左结点
+
+      if (!cols || cols.length === 0)
+        return []
+
+      //初始化表头层
+      for (i = 0; i < max_level; i ++) {
+        columns[i] = []
+        columns_width[i] = 0
+      }
+      //处理多级表头
+      for(let col of cols) {
+        subs_len = col.subs.length
+        rowspan = 1//Math.floor(max_level / subs_len)
+        for (j=0; j<subs_len; j++) {
+          path = col.subs[j]
+          new_col = Object.assign({}, col)
+          new_col.title = path.replace('%%', '/')
+          new_col.level = j
+          new_col.colspan = 1
+          new_col.col = col
+          if (j == subs_len - 1) {
+            //如果是最后一层，则rowspan为最大值减其余层
+            new_col.rowspan = max_level - (subs_len-1)*rowspan
+          } else {
+            new_col.rowspan = rowspan
+          }
+          new_col.leaf = true
+
+          //查找同层最左边的结点，判断是否title和rowspan一致
+          //如果一致，进行合并，即colspan +1
+          //如果不一致，则插入新的结点
+          //对于一层以下的结点，还要看上一层是否同一个结点，如果是才合并，否则插入
+          if (columns[j].length > 0)
+            left = columns[j][columns[j].length-1]
+          else {
+            left = null
+          }
+
+          //进行合并的判断，当left不为null，并且标题，层级，并且位置小于当前位置
+          if (left && left.title === new_col.title && left.level === new_col.level) {
+            left.colspan ++
+            left.width += new_col.width
+            columns_width[j] += new_col.width
+            left.leaf = false
+          } else {
+            //当new_col占多行时，将下层结点清空
+            columns[j].push(new_col)
+            new_col.left = columns_width[j]
+            columns_width[j] += new_col.width
+            for (jl=1; jl<new_col.rowspan; jl++) {
+              columns_width[j+jl] += new_col.width
+            }
+          }
+          col.left = new_col.left
+        }
+      }
+      return columns
     },
 
     getDefaultColumn (options) {
@@ -225,11 +295,13 @@ export default {
         cols.push(d)
       }
 
-      this.columns.forEach(col => {
-        let d = this.getDefaultColumn()
-        if (!d.title) d.title = d.name
-        Object.assign(d, col)
-        cols.push(d)
+      this.data.columns.forEach(col => {
+        if (!col.hidden) {
+          let d = this.getDefaultColumn()
+          if (!d.title) d.title = d.name
+          Object.assign(d, col)
+          cols.push(d)
+        }
       })
 
       return cols
@@ -294,13 +366,19 @@ export default {
 
     if (this.autoLoad) {
       this.$nextTick( () => {
-        this.loadData ()
+        this.loadData()
       })
     }
   },
 
   watch: {
-
+    'data.columns': {
+      handler: function () {
+        this.store.states.columns = this.makeCols()
+        this.resize()
+      },
+      deep: true
+    }
   }
 }
 </script>

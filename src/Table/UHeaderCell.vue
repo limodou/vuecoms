@@ -1,10 +1,10 @@
 <template>
   <div class="u-header-cell">
-    <div v-if="column.type === 'column'" class="u-table-header-header-cell">
+    <div v-if="column.type === 'column'" class="u-table-header-header-cell" :style="trStyles(column)">
 
       <div class="u-table-header-cell-title" :class="{nowrap:nowrap}" v-html="column.title"></div>
 
-      <div v-if="resizable && column.resizable" class="u-table-header-cell-resizer"
+      <div v-if="resizable && column.resizable && column.leaf" class="u-table-header-cell-resizer"
         @mousedown.stop.prevent="handleMouseDown(column, $event)">
       </div>
 
@@ -41,7 +41,9 @@ export default {
     Sort
   },
 
-  computed: mapState('nowrap', 'resizable', 'multiSelect', 'checkAll'),
+  computed: {
+    ...mapState('nowrap', 'resizable', 'multiSelect', 'checkAll', 'rowHeight')
+  },
 
   methods: {
     handleCheckAll () {
@@ -54,7 +56,12 @@ export default {
     },
 
     handleMouseDown (column, e) {
-      this.$parent.handleMouseDown(column, e)
+      this.$parent.handleMouseDown(column.col, e)
+    },
+
+    trStyles (column) {
+      let h = `${column.rowspan * this.rowHeight}px`
+      return {height: h, lineHeight: h}
     }
   }
 }

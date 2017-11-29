@@ -79,14 +79,20 @@ var ex_table_01 = new Vue({
         },
         {
           name: 'author',
-          title: '作者',
+          title: '作者/姓名',
+          width: 100,
+          align: 'center'
+        },
+        {
+          name: 'sex',
+          title: '作者/性别',
           width: 100,
           align: 'center'
         }
       ],
       data: [
-        {id: 1, title: '神雕侠侣', author: '金庸'},
-        {id: 2, title: '小李飞刀', author: '古龙'},
+        {id: 1, title: '神雕侠侣', author: '金庸', 'sex': '男'},
+        {id: 2, title: '小李飞刀', author: '古龙', 'sex': '女'},
       ],
     }
 
@@ -120,6 +126,7 @@ var ex_table_01 = new Vue({
   <div>
     <input ref="loading" v-model="loading_text" style="display:inline-block"></input>
     <label style="display:inline-block">切换loading<input v-model="show_loading" type="checkbox"></input></label>
+    <button @click="handleTitleHide">切换Title字段显示</button>
   </div>
   <Grid ref='grid' :data="table"
     :on-load-data="onLoadData"
@@ -249,6 +256,10 @@ var ex_table_02 = new Vue({
     handleDeselectedAll: function(row) {
       this.selected = this.$refs.grid.getSelection()
       this.logs.push(['deselected-all', row])
+    },
+    handleTitleHide: function() {
+      var title_column = this.table.columns[1]
+      this.$set(title_column, 'hidden', !title_column.hidden)
     }
   }
 })

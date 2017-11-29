@@ -9,8 +9,10 @@
             <col v-for="(column, index) in columns" :style="getColumnStyle(column)" :key="column.name">
           </colgroup>
           <thead>
-            <tr :style="trStyle">
-              <th v-for="(column, index) in columns" :key="column.name" :style="thStyles(column)">
+            <tr :style="trStyle" v-for="cols in drawColumns">
+              <th v-for="(column, index) in cols" :key="column.name" :style="thStyles(column)"
+                :rowspan="column.rowspan" :colspan="column.colspan"
+              >
                 <HeaderCell :store="store" :column="column"></HeaderCell>
               </th>
             </tr>
@@ -95,7 +97,7 @@ export default {
     ...mapState('data', 'rows', 'nowrap', 'selected', 'idField',
       'hscroll', 'xscroll', 'rowHeight', 'height', 'columnResizing',
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
-      'multiSelect'
+      'multiSelect', 'drawColumns'
     ),
 
     columns () {
