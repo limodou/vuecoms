@@ -151,6 +151,9 @@ export default {
       this.dragging_col_new_width = col.width
       // 计算拖动指示器的高度
       this.store.states.guiderHeight = this.$el.offsetHeight
+
+      document.documentElement.addEventListener('mousemove', this.handleMouseMove, true)
+      document.documentElement.addEventListener('mouseup', this.handleMouseUp, true)
     },
 
     handleMouseMove (e) {
@@ -166,7 +169,9 @@ export default {
     handleMouseUp (e) {
       if (this.columnResizing) {
         this.store.states.columnResizing = false
-        this.dragging_col.width = this.dragging_col_new_width
+        this.$set(this.dragging_col, 'width', this.dragging_col_new_width)
+        document.documentElement.removeEventListener('mousemove', this.handleMouseMove, true)
+        document.documentElement.removeEventListener('mouseup', this.handleMouseUp, true)
         this.$nextTick(() => {
           this.checkScroll()
         })
@@ -243,14 +248,10 @@ export default {
   },
 
   mounted () {
-    document.documentElement.addEventListener('mousemove', this.handleMouseMove, true)
-    document.documentElement.addEventListener('mouseup', this.handleMouseUp, true)
     this.checkScroll()
   },
 
   beforeDestroy () {
-    document.documentElement.removeEventListener('mousemove', this.handleMouseMove, true)
-    document.documentElement.removeEventListener('mouseup', this.handleMouseUp, true)
   }
 
 }
