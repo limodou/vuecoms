@@ -174,7 +174,8 @@ export default {
     },
 
     thStyles (col) {
-      return {textAlign: col.align || 'left'}
+      // return {textAlign: col.align || 'left'}
+      return {textAlign: 'center'}
     },
 
 

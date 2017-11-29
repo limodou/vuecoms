@@ -174,7 +174,7 @@ var ex_table_02 = new Vue({
     }
     table.columns.push({
       name: 'id',
-      title: 'ID',
+      title: '合并/ID',
       width: 40,
       sortable: false,
       fixed: 'left'
@@ -182,7 +182,7 @@ var ex_table_02 = new Vue({
 
     table.columns.push({
       name: 'title',
-      title: 'Title',
+      title: '合并/Title',
       sortable: true,
       fixed: 'left',
       format: function(value, column, row) {
