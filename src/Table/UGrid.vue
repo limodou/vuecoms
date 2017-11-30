@@ -211,10 +211,10 @@ export default {
           if (j == subs_len - 1) {
             //如果是最后一层，则rowspan为最大值减其余层
             new_col.rowspan = max_level - (subs_len-1)*rowspan
+            new_col.leaf = true
           } else {
             new_col.rowspan = rowspan
           }
-          new_col.leaf = true
 
           //查找同层最左边的结点，判断是否title和rowspan一致
           //如果一致，进行合并，即colspan +1
@@ -231,7 +231,7 @@ export default {
             left.colspan ++
             left.width += new_col.width
             columns_width[j] += new_col.width
-            left.leaf = false
+            // left.leaf = false
           } else {
             //当new_col占多行时，将下层结点清空
             columns[j].push(new_col)
