@@ -22,7 +22,7 @@
       <span v-if="column.title">{{column.title}}</span>
     </div>
 
-    <Sort v-if="column.sortable" :store="store" :column="column"></Sort>
+    <Sort v-if="column.sortable && column.leaf" :store="store" :column="column"></Sort>
 
   </div>
 </template>

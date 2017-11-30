@@ -78,7 +78,8 @@ export default {
       'defaultColWidth', 'leftWidth', 'checkColTitle', 'checkColWidth',
       'indexColWidth', 'indexColTitle', 'scrollLeft', 'total', 'pageSizeOpts',
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
-      'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons'
+      'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
+      'selected'
     ),
 
     columnDraggerStyles () {
@@ -108,7 +109,7 @@ export default {
   },
 
   methods: {
-    ...mapMethod('getSelection', 'showLoading'),
+    ...mapMethod('getSelection', 'showLoading', 'setSelection'),
 
     resize () {
       if (this.width === 'auto') {
@@ -346,6 +347,7 @@ export default {
         this.store.states.data = data
         this.$nextTick( () => {
           this.showLoading(false)
+          this.setSelection(this.selected)
         })
       }
       if (this.onLoadData) {

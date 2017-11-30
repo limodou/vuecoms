@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 function Store (grid, options) {
   this.grid = grid
   this.states = {
@@ -43,6 +45,7 @@ function Store (grid, options) {
     loading: false, // 是否显示loading信息
     loadingLeft: 0,
     loadingTop: 0,
+    selected: {}, // 记录选中结果，可以跨页保存
 
     // 分页相关参数
     prev: 'Prev',
@@ -84,17 +87,21 @@ Store.prototype.toggle = function (row) {
 Store.prototype.select = function (row) {
   if (!this.states.multiSelect) this.deselectAll()
   this.grid.$set(row, '_selected', true)
+  let id = row[this.states.idField]
+  this.grid.$set(this.states.selected, id, id)
   this.grid.$emit('on-selected', row)
 }
 
 Store.prototype.deselect = function (row) {
   this.grid.$set(row, '_selected', false)
+  this.grid.$delete(this.states.selected, row[this.states.idField])
   this.grid.$emit('on-deselected', row)
 }
 
 Store.prototype.deselectAll = function () {
   this.states.data.forEach(row => {
     this.grid.$set(row, '_selected', false)
+    this.grid.$delete(this.states.selected, row[this.states.idField])
   })
   this.grid.$emit('on-deselected-all')
 }
@@ -102,18 +109,23 @@ Store.prototype.deselectAll = function () {
 Store.prototype.selectAll = function () {
   this.states.data.forEach(row => {
     this.grid.$set(row, '_selected', true)
+    let id = row[this.states.idField]
+    this.grid.$set(this.states.selected, id, id)
   })
   this.grid.$emit('on-selected-all')
 }
 
 Store.prototype.getSelection = function () {
-  let selected = []
-  this.states.data.forEach(row => {
-    if (row._selected) {
-      selected.push(row[this.states.idField])
+  return Object.values(this.states.selected)
+}
+
+Store.prototype.setSelection = function (selection) {
+  for(let row of this.states.data) {
+    let id = row[this.states.idField]
+    if (this.states.selected.hasOwnProperty(id)) {
+      this.grid.$set(row, '_selected', true)
     }
-  })
-  return selected
+  }
 }
 
 Store.prototype.showLoading = function (loading=true, text='') {

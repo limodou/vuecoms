@@ -297,7 +297,7 @@ var ex_table_02 = new Vue({
       name: 'id',
       title: '合并/ID',
       width: 40,
-      sortable: false,
+      sortable: true,
       fixed: 'left'
     })
 
@@ -340,8 +340,9 @@ var ex_table_02 = new Vue({
     onLoadData = function (url, param, callback) {
       self.param = param
       var data = []
+      var b = (param.page - 1) * param.pageSize
       for (var i = 0; i < 10; i++) {
-        var row = {id: i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
+        var row = {id: b + i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
         for (var j = 1; j < 10; j++) {
           row['name' + j] = 'P' + param.page + '-Name-' + (i + 1) + '-' + j
         }
@@ -349,7 +350,7 @@ var ex_table_02 = new Vue({
       }
       setTimeout( function () {
         callback(data)        
-        }, 2000)
+        }, 500)
     }
 
     return {table:table, selected:[], logs:[], loading_text:'loading', show_loading:false, onLoadData: onLoadData, param:{}}
