@@ -38,7 +38,7 @@
               :style="cellStyles(col.column)"
               :rowspan="col.rowspan"
               :colspan="col.colspan">
-              <Cell :store="store" :row="row" :col="col" :row_index="row_index"></Cell>
+              <Cell :store="store" :col="col" :row_index="row_index"></Cell>
             </td>
           </tr>
         </tbody>
@@ -128,7 +128,7 @@ export default {
         let new_row = []
         rows.push(new_row)
         this.columns.forEach( (col, j) => {
-          let item = {value: row[col.name], rowspan: 1, colspan: 1, column: col}
+          let item = {value: row[col.name], rowspan: 1, colspan: 1, column: col, row: row}
 
           // 不需要合并
           if (!this.combineCols) {
