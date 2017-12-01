@@ -186,34 +186,24 @@ var ex_table_01 = new Vue({
   data: function () {
     var table = {
       nowrap: true,
-      columns: [ {
-          name: 'id',
-          title: 'ID',
-          width: 40,
-          align: 'center'
-        },
-        {
-          name: 'title',
-          title: '标题'
-        },
-        {
-          name: 'author',
-          title: '作者/姓名',
-          width: 100,
-          align: 'center'
-        },
-        {
-          name: 'sex',
-          title: '作者/性别',
-          width: 100,
-          align: 'center'
-        }
+      columns: [
+        {name:'name1', title:'Name1', width:200, fixed: 'left'},
+        {name:'name2', title:'Name2', width: 200, fixed: 'left'},
+        {name:'name3', title:'Name3', width:200},
+        {name:'name4', title:'Name4', align:'center', width:200},
+        {name:'name5', title:'Name5', width:200},
+        {name:'name6', title:'Name6', width:200}
       ],
-      data: [
-        {id: 1, title: '神雕侠侣', author: '金庸', 'sex': '男'},
-        {id: 2, title: '小李飞刀', author: '古龙', 'sex': '女'},
-      ],
+      data: [],
+      combineCols:['name1', 'name2', 'name3', 'name4']
     }
+
+    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:2, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:3, name1:'A1', name2:'B2', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:4, name1:'A2', name2:'B2', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:5, name1:'A2', name2:'B2', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:6, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
 
     return {table:table}
   }
@@ -223,7 +213,33 @@ var ex_table_01 = new Vue({
 </div>
 <div class="tab-pane" id="tab_item_2_5">
 
-<p><code>` `</code></p>
+<pre class="prettyprint "><code>var ex_table_01 = new Vue({
+  el: '#ex-table-01',
+  data: function () {
+    var table = {
+      nowrap: true,
+      columns: [
+        {name:'name1', title:'Name1', width:200},
+        {name:'name2', title:'Name2', width: 200},
+        {name:'name3', title:'Name3', width:200},
+        {name:'name4', title:'Name4', align:'center', width:200},
+        {name:'name5', title:'Name5', width:200},
+        {name:'name6', title:'Name6', width:200}
+      ],
+      data: [],
+      combineCols:['name1', 'name2', 'name3', 'name4']
+    }
+
+    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:2, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:3, name1:'A1', name2:'B2', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:4, name1:'A2', name2:'B2', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:5, name1:'A2', name2:'B2', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:6, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+
+    return {table:table}
+  }
+})</code></pre>
 
 </div>
 <div class="tab-pane" id="tab_item_2_6">
@@ -390,12 +406,151 @@ var ex_table_02 = new Vue({
 </div>
 <div class="tab-pane" id="tab_item_3_8">
 
-<p><code>` `</code></p>
+<pre class="prettyprint "><code>var ex_table_02 = new Vue({
+  el: '#ex-table-02',
+  data: function () {
+    var self = this
+    var table = {
+      columns: [],
+      multiSelect: true,
+      resizable: true,
+      pagination: true,
+      pageSizeOpts: [10, 30, 50],
+      total: 80,
+      height: 300,
+
+      checkCol: true,
+      checkColWidth: 120,
+      checkColTitle: 'Check All',
+      indexCol: true,
+
+      data: [
+      ],
+
+      buttons: [
+        [{label: '新增', type:'primary', onClick: function(){
+            self.$Message.info('Click 新增')
+          }}, {label: '编辑', disabled: true}, {label: '删除'}],
+        [{label: '上移', icon:'ios-arrow-thin-up'}, {label: '下移', icon: 'ios-arrow-thin-down'}]
+      ],
+      rightButtons: [
+        [{label: '下载'}]
+      ],
+      bottomButtons: [
+        [{'label': '导出'}]
+      ]
+    }
+    table.columns.push({
+      name: 'id',
+      title: '合并/ID',
+      width: 40,
+      sortable: true,
+      fixed: 'left'
+    })
+
+    table.columns.push({
+      name: 'title',
+      title: '合并/Title',
+      sortable: true,
+      fixed: 'left',
+      format: function(value, column, row) {
+        return '&lt;a href="#"&gt;' + value + '&lt;/a&gt;'
+      }
+    })
+
+    for (var j = 1; j &lt; 10; j++) {
+      table.columns.push({
+        name: 'name' + j,
+        title: 'Column' + j,
+        width: 100,
+        sortable: false,
+        align: 'center'
+      })
+    }
+
+    //隐藏字段
+    table.columns.push({
+      name: 'title',
+      title: 'Title',
+      sortable: false,
+      hidden: true
+    })
+
+    for (var i = 0; i &lt; 10; i++) {
+      var row = {id: i + 1, title: 'Title-' + (i + 1)}
+      for (var j = 1; j &lt; 10; j++) {
+        row['name' + j] = 'Name-' + (i + 1) + '-' + j
+      }
+      table.data.push(row)
+    }
+
+    onLoadData = function (url, param, callback) {
+      self.param = param
+      var data = []
+      var b = (param.page - 1) * param.pageSize
+      for (var i = 0; i &lt; 10; i++) {
+        var row = {id: b + i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
+        for (var j = 1; j &lt; 10; j++) {
+          row['name' + j] = 'P' + param.page + '-Name-' + (i + 1) + '-' + j
+        }
+        data.push(row)
+      }
+      setTimeout( function () {
+        callback(data)        
+        }, 500)
+    }
+
+    return {table:table, selected:[], logs:[], loading_text:'loading', show_loading:false, onLoadData: onLoadData, param:{}}
+  },
+
+  watch: {
+    show_loading: function() {
+      this.$refs.grid.showLoading(this.show_loading, this.loading_text)
+    }
+  },
+
+  methods: {
+    handleSelected: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['selected', row])
+    },
+    handleDeselected: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['deselected', row])
+    },
+    handleSelectedAll: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['selected-all', row])
+    },
+    handleDeselectedAll: function(row) {
+      this.selected = this.$refs.grid.getSelection()
+      this.logs.push(['deselected-all', row])
+    },
+    handleTitleHide: function() {
+      var title_column = this.table.columns[1]
+      this.$set(title_column, 'hidden', !title_column.hidden)
+    }
+  }
+})</code></pre>
 
 </div>
 <div class="tab-pane" id="tab_item_3_9">
 
-<pre class="prettyprint "><code>&lt;Grid :data="table"&gt;&lt;/Grid&gt;</code></pre>
+<pre class="prettyprint "><code>&lt;div id="ex-table-02"&gt;
+  &lt;div&gt;
+    &lt;input ref="loading" v-model="loading_text" style="display:inline-block"&gt;&lt;/input&gt;
+    &lt;label style="display:inline-block"&gt;切换loading&lt;input v-model="show_loading" type="checkbox"&gt;&lt;/input&gt;&lt;/label&gt;
+    &lt;button @click="handleTitleHide"&gt;切换Title字段显示&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;Grid ref='grid' :data="table"
+    :on-load-data="onLoadData"
+    @on-selected="handleSelected"
+    @on-deselected="handleDeselected"
+    @on-selected-all="handleSelectedAll"
+    @on-deselected-all="handleDeselectedAll"&gt;&lt;/Grid&gt;
+  &lt;div&gt;Selected: {{selected}}&lt;/div&gt;
+  &lt;div&gt;Param: {{param}}&lt;/div&gt;
+&lt;/div&gt;</code></pre>
 
 </div>
 </div>

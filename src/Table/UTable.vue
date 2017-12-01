@@ -26,17 +26,19 @@
           <col v-for="(column, index) in columns" :style="getColumnStyle(column)" :key="column.name">
         </colgroup>
         <tbody>
-          <tr v-for="(row, row_index) in data"
+          <tr v-for="(row, row_index) in rows"
             :style="trStyle"
             :key="getRowId(row)"
             :class="{selected:row._selected, hover:row._hover}"
             @mouseenter="handleTrMouseEnter(row)"
             @mouseleave="handleTrMouseLeave(row)"
             >
-            <td v-for="(column, col_index) in columns"
+            <td v-for="(col, col_index) in row"
               @click="handleClick(row)"
-              :style="cellStyles(column)">
-              <Cell :store="store" :row="row" :column="column" :row_index="row_index"></Cell>
+              :style="cellStyles(col.column)"
+              :rowspan="col.rowspan"
+              :colspan="col.colspan">
+              <Cell :store="store" :row="row" :col="col" :row_index="row_index"></Cell>
             </td>
           </tr>
         </tbody>
@@ -97,11 +99,67 @@ export default {
     ...mapState('data', 'rows', 'nowrap', 'selected', 'idField',
       'hscroll', 'xscroll', 'rowHeight', 'height', 'columnResizing',
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
-      'multiSelect', 'drawColumns'
+      'multiSelect', 'drawColumns', 'combineCols'
     ),
 
     columns () {
       return this.cols || this.store.states.columns
+    },
+
+    combineColsIndex () {
+      let index = []
+      let pos
+      this.columns.forEach( (col, j) => {
+        pos = this.combineCols.indexOf(col.name)
+        if (pos > -1) {
+          index.push(j)
+        }
+      })
+      return index
+    },
+
+    rows () {
+      let rows = []
+      let item
+      let last_columns = [], _col
+      let index
+
+      this.data.forEach( (row, i) => {
+        let new_row = []
+        rows.push(new_row)
+        this.columns.forEach( (col, j) => {
+          let item = {value: row[col.name], rowspan: 1, colspan: 1, column: col}
+
+          // 不需要合并
+          if (!this.combineCols) {
+            new_row.push(item)
+          } else {
+            // 非合并字段
+            index = this.combineColsIndex.indexOf(j)
+            if (index === -1) {
+              new_row.push(item)
+            } else {
+              _col = last_columns[index]
+              if (!_col) {
+                new_row.push(item)
+                last_columns.push(item)
+              } else {
+                // 检查是否相同
+                if (_col.value === item.value) {
+                  _col.rowspan ++
+                } else {
+                  last_columns.splice(index)
+                  new_row.push(item)
+                  last_columns.push(item)
+                }
+              }
+            }
+          }
+
+        })
+      })
+
+      return rows
     },
 
     headerScrollStyles () {

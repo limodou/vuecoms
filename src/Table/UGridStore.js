@@ -30,6 +30,7 @@ function Store (grid, options) {
     buttons: [],
     rightButtons: [],
     bottomButtons: [],
+    combineCols: [], // 单元格合并列名
 
     // 内部变量
     drawColumns: [], // 用于绘制的表头
