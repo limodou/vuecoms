@@ -18,10 +18,11 @@ class Store {
       multiSelect: false,
       clickSelect: false,  // 点击选中
       resizable: true, // 是否表头列可以调整大小
+      draggable: false,
       indexCol: false, // 是否显示序号列
       indexColTitle: '#',
       indexColWidth: 40,
-      loadingText: '<i class="icon-loading ivu-icon ivu-icon-load-c"></i> Loading', // 正在装入时显示的文本
+      loadingText: '<i class="icon-loading ivu-icon ivu-icon-load-c"></i> Loading...', // 正在装入时显示的文本
       autoLoad: true, // 是否自动装入数据
       url: '', // 访问后台的URL
       param: {
@@ -48,8 +49,8 @@ class Store {
       selected: {}, // 记录选中结果，可以跨页保存
 
       // 分页相关参数
-      prev: 'Prev',
-      next: 'Next',
+      prev: '上一页',
+      next: '下一页',
       first: '',
       last: '',
       start: 1,
@@ -85,9 +86,16 @@ class Store {
   }
 
   _select (row) {
-    this.grid.$set(row, '_selected', true)
-    let id = row[this.states.idField]
-    this.grid.$set(this.states.selected, id, id)
+    let selectable = true
+    if (this.grid.onSelect) {
+      selectable = this.grid.onSelect(row)
+    }
+    this.grid.$set(row, '_selected', selectable)
+    if (selectable) {
+      this.grid.$set(row, '_selected', true)
+      let id = row[this.states.idField]
+      this.grid.$set(this.states.selected, id, id)
+    }
   }
 
   select (row) {
@@ -103,16 +111,26 @@ class Store {
     this.grid.$emit('on-selected-all')
   }
 
+  _deselect (row) {
+    let deselectable = true
+    if (this.grid.onDeselect) {
+      deselectable = this.grid.onDeselect(row)
+    }
+    this.grid.$set(row, '_deselected', deselectable)
+    if (deselectable) {
+      this.grid.$set(row, '_selected', false)
+      this.grid.$delete(this.states.selected, row[this.states.idField])
+    }
+  }
+
   deselect (row) {
-    this.grid.$set(row, '_selected', false)
-    this.grid.$delete(this.states.selected, row[this.states.idField])
+    this._deselect(row)
     this.grid.$emit('on-deselected', row)
   }
 
   deselectAll () {
     this.states.data.forEach(row => {
-      this.grid.$set(row, '_selected', false)
-      this.grid.$delete(this.states.selected, row[this.states.idField])
+      this._deselect(row)
     })
     this.grid.$emit('on-deselected-all')
   }

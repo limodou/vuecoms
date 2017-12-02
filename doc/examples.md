@@ -150,7 +150,9 @@ var ex_table_01 = new Vue({
     @on-selected="handleSelected"
     @on-deselected="handleDeselected"
     @on-selected-all="handleSelectedAll"
-    @on-deselected-all="handleDeselectedAll"></Grid>
+    @on-deselected-all="handleDeselectedAll"
+    :on-select="onSelect"
+    :on-checkable="onCheckable"></Grid>
   <div>Selected: {{selected}}</div>
   <div>Param: {{param}}</div>
 </div>
@@ -167,6 +169,7 @@ var ex_table_02 = new Vue({
       pageSizeOpts: [10, 30, 50],
       total: 80,
       height: 300,
+      draggable: true,
 
       checkCol: true,
       checkColWidth: 120,
@@ -249,7 +252,30 @@ var ex_table_02 = new Vue({
         }, 500)
     }
 
-    return {table:table, selected:[], logs:[], loading_text:'loading', show_loading:false, onLoadData: onLoadData, param:{}}
+    onSelect = function (row) {
+      let r = row.id !== 1
+      if (!r) {
+        self.$Message.info('本行不能选择')
+      }
+      return r
+    }
+
+    onCheckable = function (row) {
+      let r = row.id !== 2 && row.id !==3
+      return r
+    }
+
+    return {
+      table:table,
+      selected:[],
+      logs:[],
+      loading_text:'loading',
+      show_loading:false,
+      onLoadData: onLoadData,
+      onSelect: onSelect,
+      onCheckable: onCheckable,
+      param:{}
+    }
   },
 
   watch: {
@@ -433,6 +459,96 @@ var ex_table_02 = new Vue({
   <div>Selected: {{selected}}</div>
   <div>Param: {{param}}</div>
 </div>
+```
+
+{% endtabs %}
+
+### 表格拖动
+
+{% tabs %}
+
+-- Result --
+
+展示一个表格
+
+{% include-code %}
+<div id="ex-table-03">
+  <Grid ref="table" :data="table" @on-drag="handleDrag"></Grid>
+</div>
+<script>
+var ex_table_03 = new Vue({
+  el: '#ex-table-03',
+  data: function () {
+    var table = {
+      nowrap: true,
+      draggable: true,
+      clickSelect: true,
+      columns: [
+        {name:'name1', title:'Name1', width:200},
+        {name:'name2', title:'Name2', width: 200},
+        {name:'name3', title:'Name3', width:200},
+        {name:'name4', title:'Name4', align:'center', width:200},
+        {name:'name5', title:'Name5', width:200},
+        {name:'name6', title:'Name6', width:200}
+      ],
+      data: []
+    }
+
+    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:2, name1:'A2', name2:'B2', name3:'C2', name4:'D2', name5:'E2', name6:'F2'})
+    table.data.push({id:3, name1:'A3', name2:'B3', name3:'C3', name4:'D3', name5:'E3', name6:'F3'})
+    table.data.push({id:4, name1:'A4', name2:'B4', name3:'C4', name4:'D4', name5:'E4', name6:'F4'})
+    table.data.push({id:5, name1:'A5', name2:'B5', name3:'C5', name4:'D5', name5:'E5', name6:'F5'})
+    table.data.push({id:6, name1:'A6', name2:'B6', name3:'C6', name4:'D6', name5:'E6', name6:'F6'})
+
+    return {table:table}
+  },
+  methods: {
+    handleDrag: function (v) {
+      console.log(v)
+      console.table(this.$refs.table.store.states.data)
+    }
+  }
+})
+</script>
+{% endinclude-code %}
+
+-- Javascript --
+
+```
+var ex_table_01 = new Vue({
+  el: '#ex-table-01',
+  data: function () {
+    var table = {
+      nowrap: true,
+      columns: [
+        {name:'name1', title:'Name1', width:200, fixed: 'left'},
+        {name:'name2', title:'Name2', width: 200, fixed: 'left'},
+        {name:'name3', title:'Name3', width:200},
+        {name:'name4', title:'Name4', align:'center', width:200},
+        {name:'name5', title:'Name5', width:200},
+        {name:'name6', title:'Name6', width:200}
+      ],
+      data: [],
+      combineCols:['name1', 'name2', 'name3', 'name4']
+    }
+
+    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
+    table.data.push({id:2, name1:'A2', name2:'B2', name3:'C2', name4:'D2', name5:'E2', name6:'F2'})
+    table.data.push({id:3, name1:'A3', name2:'B3', name3:'C3', name4:'D3', name5:'E3', name6:'F3'})
+    table.data.push({id:4, name1:'A4', name2:'B4', name3:'C4', name4:'D4', name5:'E4', name6:'F4'})
+    table.data.push({id:5, name1:'A5', name2:'B5', name3:'C5', name4:'D5', name5:'E5', name6:'F5'})
+    table.data.push({id:6, name1:'A6', name2:'B6', name3:'C6', name4:'D6', name5:'E6', name6:'F6'})
+
+    return {table:table}
+  }
+})
+```
+
+-- HTML --
+
+```
+<Grid :data="table"></Grid>
 ```
 
 {% endtabs %}

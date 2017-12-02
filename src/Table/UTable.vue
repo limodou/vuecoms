@@ -25,7 +25,7 @@
         <colgroup>
           <col v-for="(column, index) in columns" :style="getColumnStyle(column)" :key="column.name">
         </colgroup>
-        <tbody>
+        <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
             :style="trStyle"
             :key="getRowId(row.row)"
@@ -54,6 +54,7 @@ import {measureScrollbar, mapState, getOffset, mapMethod} from '@/utils/utils.js
 import Emitter from '@/mixins/emitter.js'
 import Cell from './UCell'
 import HeaderCell from './UHeaderCell'
+import Sortable from 'sortablejs'
 
 export default {
   name: 'Table',
@@ -99,7 +100,7 @@ export default {
     ...mapState('data', 'nowrap', 'selected', 'idField',
       'hscroll', 'xscroll', 'rowHeight', 'height', 'columnResizing',
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
-      'multiSelect', 'drawColumns', 'combineCols'
+      'multiSelect', 'drawColumns', 'combineCols', 'draggable'
     ),
 
     columns () {
@@ -302,16 +303,25 @@ export default {
       } else {
         return {width: `${col.width}`}
       }
+    },
+
+    handleRowEnd (el) {
+      let row = this.store.states.data.splice(el.oldIndex, 1)
+      this.store.states.data.splice(el.newIndex, 0, row[0])
+      this.dispatch('Grid', 'on-drag', {oldIndex:el.oldIndex, newIndex:el.newIndex})
     }
   },
 
   mounted () {
     this.checkScroll()
-  },
 
-  beforeDestroy () {
+    if (this.draggable) {
+      let el = this.$refs.table_body
+      Sortable.create(el, {
+        onEnd: this.handleRowEnd
+      })
+    }
   }
-
 }
 </script>
 

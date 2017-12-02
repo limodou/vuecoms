@@ -4,7 +4,7 @@
       <div class="u-cell-text" :class="{nowrap:nowrap}"
       v-html="value"></div>
     </template>
-    <template v-if="col.column.type === 'check'">
+    <template v-if="col.column.type === 'check' && checkable">
       <i v-if="col.row._selected" class="ivu-icon ivu-icon-android-checkbox-outline u-cell-checkbox" @click.stop="handleCheckClick"></i>
       <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank u-cell-checkbox" @click.stop="handleCheckClick"></i>
     </template>
@@ -37,6 +37,15 @@ export default {
 
     index () {
       return this.start + this.row_index
+    },
+
+    checkable () {
+      let c = this.col.row._checkable
+      if (this.store.grid.onCheckable) {
+        c = this.store.grid.onCheckable(this.col.row)
+        this.$set(this.col.row, '_checkable', c)
+      }
+      return c
     }
   },
 

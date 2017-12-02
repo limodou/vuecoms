@@ -71,7 +71,8 @@ export default {
     },
     onLoadData: null, // 装入数据回调函数，将传入 funcition (url, param, callback)
     onSelect: null, // 在选择行前执行，返回为True，则允许选中
-    onDeselect: null // 在取消选择行前执行，返回为True，则允许取消选中
+    onDeselect: null, // 在取消选择行前执行，返回为True，则允许取消选中
+    onCheckable: null // 是否显示checkbox
   },
 
   computed: {
@@ -265,7 +266,9 @@ export default {
     getDefaultRow (row) {
       return Object.assign({
         _selected: false,
-        _hover: false
+        _hover: false,
+        _selectable: true, // 可被选中
+        _checkable: true // 可显示checkbox
       }, row)
     },
 
@@ -310,9 +313,9 @@ export default {
       return cols
     },
 
-    makeRows () {
+    makeRows (data) {
       var rows = []
-      this.store.states.data.forEach(row => {
+      data.forEach(row => {
         rows.push(this.getDefaultRow(row))
       })
       return rows
@@ -346,7 +349,7 @@ export default {
       let _url = url || this.url
       let param = this.param
       let callback = (data) => {
-        this.store.states.data = data
+        this.store.states.data = this.makeRows(data)
         this.$nextTick( () => {
           this.showLoading(false)
           this.setSelection(this.selected)
@@ -361,7 +364,7 @@ export default {
 
   created () {
     this.store.states.columns = this.makeCols()
-    this.store.states.data = this.makeRows()
+    this.store.states.data = this.makeRows(this.store.states.data)
   },
 
   mounted () {
@@ -423,7 +426,7 @@ export default {
       height: 100%;
       top: 0px;
       left: 0px;
-      border-left: 2px solid green;
+      border-left: 2px dashed green;
       position: absolute;
       z-index: 1000;
     }
