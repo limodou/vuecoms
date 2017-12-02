@@ -69,7 +69,9 @@ export default {
         return {}
       }
     },
-    onLoadData: {}
+    onLoadData: null, // 装入数据回调函数，将传入 funcition (url, param, callback)
+    onSelect: null, // 在选择行前执行，返回为True，则允许选中
+    onDeselect: null // 在取消选择行前执行，返回为True，则允许取消选中
   },
 
   computed: {

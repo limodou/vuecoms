@@ -5685,6 +5685,7 @@ var iview = (0, _extends3.default)({}, components, {
 var install = function install(Vue) {
     var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
+    if (install.installed) return;
     _index2.default.use(opts.locale);
     _index2.default.i18n(opts.i18n);
 
@@ -5704,7 +5705,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 var API = (0, _extends3.default)({
-    version: '2.7.3',
+    version: '2.7.4',
     locale: _index2.default.use,
     i18n: _index2.default.i18n,
     install: install,
@@ -9013,7 +9014,7 @@ exports.default = {
     props: {
         type: {
             validator: function validator(value) {
-                return (0, _assist.oneOf)(value, ['text', 'textarea', 'password']);
+                return (0, _assist.oneOf)(value, ['text', 'textarea', 'password', 'url', 'email', 'date']);
             },
 
             default: 'text'
@@ -14876,7 +14877,7 @@ module.exports = { render: function render() {
     var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;
     return _c('div', {
       staticClass: "ivu-color-picker-alpha"
-    }, [_vm._m(0), _vm._v(" "), _c('div', {
+    }, [_vm._m(0, false, false), _vm._v(" "), _c('div', {
       staticClass: "ivu-color-picker-alpha-gradient",
       style: {
         background: _vm.gradientColor
@@ -18750,9 +18751,11 @@ module.exports = Component.exports
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.default = {};
+exports.default = {
+    name: 'DropdownMenu'
+};
 
 /***/ }),
 /* 330 */
@@ -24673,7 +24676,7 @@ module.exports = { render: function render() {
       on: {
         "click": _vm.prev
       }
-    }, [_vm._m(0)]), _vm._v(" "), _c('div', {
+    }, [_vm._m(0, false, false)]), _vm._v(" "), _c('div', {
       class: _vm.simplePagerClasses,
       attrs: {
         "title": _vm.currentPage + '/' + _vm.allPages
@@ -24700,7 +24703,7 @@ module.exports = { render: function render() {
       on: {
         "click": _vm.next
       }
-    }, [_vm._m(1)])]) : _c('ul', {
+    }, [_vm._m(1, false, false)])]) : _c('ul', {
       class: _vm.wrapClasses,
       style: _vm.styles
     }, [_vm.showTotal ? _c('span', {
@@ -24713,7 +24716,7 @@ module.exports = { render: function render() {
       on: {
         "click": _vm.prev
       }
-    }, [_vm._m(2)]), _vm._v(" "), _c('li', {
+    }, [_vm._m(2, false, false)]), _vm._v(" "), _c('li', {
       class: _vm.firstPageClasses,
       attrs: {
         "title": "1"
@@ -24731,7 +24734,7 @@ module.exports = { render: function render() {
       on: {
         "click": _vm.fastPrev
       }
-    }, [_vm._m(3)]) : _vm._e(), _vm._v(" "), _vm.currentPage - 2 > 1 ? _c('li', {
+    }, [_vm._m(3, false, false)]) : _vm._e(), _vm._v(" "), _vm.currentPage - 2 > 1 ? _c('li', {
       class: [_vm.prefixCls + '-item'],
       attrs: {
         "title": _vm.currentPage - 2
@@ -24784,7 +24787,7 @@ module.exports = { render: function render() {
       on: {
         "click": _vm.fastNext
       }
-    }, [_vm._m(4)]) : _vm._e(), _vm._v(" "), _vm.allPages > 1 ? _c('li', {
+    }, [_vm._m(4, false, false)]) : _vm._e(), _vm._v(" "), _vm.allPages > 1 ? _c('li', {
       class: _vm.lastPageClasses,
       attrs: {
         "title": _vm.allPages
@@ -24802,7 +24805,7 @@ module.exports = { render: function render() {
       on: {
         "click": _vm.next
       }
-    }, [_vm._m(5)]), _vm._v(" "), _c('Options', {
+    }, [_vm._m(5, false, false)]), _vm._v(" "), _c('Options', {
       attrs: {
         "show-sizer": _vm.showSizer,
         "page-size": _vm.currentPageSize,
@@ -31040,7 +31043,7 @@ exports.default = {
         isInsideHiddenElement: function isInsideHiddenElement() {
             var parentNode = this.$el.parentNode;
             while (parentNode && parentNode !== document.body) {
-                if (parentNode.style.display === 'none') {
+                if (parentNode.style && parentNode.style.display === 'none') {
                     return parentNode;
                 }
                 parentNode = parentNode.parentNode;
@@ -34076,6 +34079,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.Select = _select2.default;
 exports.Option = _option2.default;
 exports.OptionGroup = _optionGroup2.default;
+exports.default = _select2.default;
 
 /***/ }),
 /* 530 */

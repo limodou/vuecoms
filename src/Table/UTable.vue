@@ -28,13 +28,13 @@
         <tbody>
           <tr v-for="(row, row_index) in rows"
             :style="trStyle"
-            :key="getRowId(row)"
-            :class="{selected:row._selected, hover:row._hover}"
-            @mouseenter="handleTrMouseEnter(row)"
-            @mouseleave="handleTrMouseLeave(row)"
+            :key="getRowId(row.row)"
+            :class="{selected:row.row._selected, hover:row.row._hover}"
+            @mouseenter="handleTrMouseEnter(row.row)"
+            @mouseleave="handleTrMouseLeave(row.row)"
             >
-            <td v-for="(col, col_index) in row"
-              @click="handleClick(row)"
+            <td v-for="(col, col_index) in row.columns"
+              @click="handleClick(col.row)"
               :style="cellStyles(col.column)"
               :rowspan="col.rowspan"
               :colspan="col.colspan">
@@ -96,7 +96,7 @@ export default {
   },
 
   computed: {
-    ...mapState('data', 'rows', 'nowrap', 'selected', 'idField',
+    ...mapState('data', 'nowrap', 'selected', 'idField',
       'hscroll', 'xscroll', 'rowHeight', 'height', 'columnResizing',
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
       'multiSelect', 'drawColumns', 'combineCols'
@@ -125,23 +125,23 @@ export default {
       let index
 
       this.data.forEach( (row, i) => {
-        let new_row = []
+        let new_row = {row: row, columns: []}
         rows.push(new_row)
         this.columns.forEach( (col, j) => {
           let item = {value: row[col.name], rowspan: 1, colspan: 1, column: col, row: row}
 
           // 不需要合并
           if (!this.combineCols) {
-            new_row.push(item)
+            new_row.columns.push(item)
           } else {
             // 非合并字段
             index = this.combineColsIndex.indexOf(j)
             if (index === -1) {
-              new_row.push(item)
+              new_row.columns.push(item)
             } else {
               _col = last_columns[index]
               if (!_col) {
-                new_row.push(item)
+                new_row.columns.push(item)
                 last_columns.push(item)
               } else {
                 // 检查是否相同
@@ -149,7 +149,7 @@ export default {
                   _col.rowspan ++
                 } else {
                   last_columns.splice(index)
-                  new_row.push(item)
+                  new_row.columns.push(item)
                   last_columns.push(item)
                 }
               }
