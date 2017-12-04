@@ -255,7 +255,7 @@ export default {
         name: 'title',
         width: 0,
         sortable: false,
-        align: 'left',
+        align: 'center',
         hidden: false,
         fixed: '',
         resizable: true,

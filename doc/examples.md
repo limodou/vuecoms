@@ -253,7 +253,7 @@ var ex_table_02 = new Vue({
     }
 
     onSelect = function (row) {
-      let r = row.id !== 1
+      var r = row.id !== 1
       if (!r) {
         self.$Message.info('本行不能选择')
       }
@@ -261,7 +261,7 @@ var ex_table_02 = new Vue({
     }
 
     onCheckable = function (row) {
-      let r = row.id !== 2 && row.id !==3
+      var r = row.id !== 2 && row.id !==3
       return r
     }
 
@@ -476,6 +476,50 @@ var ex_table_02 = new Vue({
   <Grid ref="table" :data="table" @on-drag="handleDrag"></Grid>
 </div>
 <script>
+var editButton = function (vm, h, row) {
+  return h('Button', {
+    props: {
+      type: 'primary',
+      size: 'small'
+    },
+    style: {
+        margin: '0 5px'
+    },
+    on: {
+        'click': function () {
+          row.editting = !row.editting
+          vm.$Message.info("Button Clicked")
+        }
+    }
+  }, row.editting ? '保存' : '编辑')
+}
+var deleteButton = function (vm, h, row) {
+  return h('Poptip', {
+    props: {
+      confirm: true,
+      title: '您确定要删除这条数据吗?',
+      transfer: true
+    },
+    on: {
+      'on-ok': function () {
+        row.isDeleting = true
+      }
+    }
+  }, [
+    h('Button', {
+      style: {
+        margin: '0 5px'
+      },
+      props: {
+        type: 'error',
+        placement: 'top',
+        size: 'small',
+        loading: row.isDeleting
+      }
+    }, '删除')
+  ])
+}
+
 var ex_table_03 = new Vue({
   el: '#ex-table-03',
   data: function () {
@@ -487,19 +531,23 @@ var ex_table_03 = new Vue({
         {name:'name1', title:'Name1', width:200},
         {name:'name2', title:'Name2', width: 200},
         {name:'name3', title:'Name3', width:200},
-        {name:'name4', title:'Name4', align:'center', width:200},
-        {name:'name5', title:'Name5', width:200},
-        {name:'name6', title:'Name6', width:200}
+        {name:'name4', title:'Name4', width:200},
+        {name:'Action', title:'Name5', render: function(h, param) {
+          return h('div', [
+            editButton(ex_table_03, h, param.row),
+            deleteButton(ex_table_03, h, param.row)
+          ])
+          }}
       ],
       data: []
     }
 
-    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1', name5:'E1', name6:'F1'})
-    table.data.push({id:2, name1:'A2', name2:'B2', name3:'C2', name4:'D2', name5:'E2', name6:'F2'})
-    table.data.push({id:3, name1:'A3', name2:'B3', name3:'C3', name4:'D3', name5:'E3', name6:'F3'})
-    table.data.push({id:4, name1:'A4', name2:'B4', name3:'C4', name4:'D4', name5:'E4', name6:'F4'})
-    table.data.push({id:5, name1:'A5', name2:'B5', name3:'C5', name4:'D5', name5:'E5', name6:'F5'})
-    table.data.push({id:6, name1:'A6', name2:'B6', name3:'C6', name4:'D6', name5:'E6', name6:'F6'})
+    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1'})
+    table.data.push({id:2, name1:'A2', name2:'B2', name3:'C2', name4:'D2'})
+    table.data.push({id:3, name1:'A3', name2:'B3', name3:'C3', name4:'D3'})
+    table.data.push({id:4, name1:'A4', name2:'B4', name3:'C4', name4:'D4'})
+    table.data.push({id:5, name1:'A5', name2:'B5', name3:'C5', name4:'D5'})
+    table.data.push({id:6, name1:'A6', name2:'B6', name3:'C6', name4:'D6'})
 
     return {table:table}
   },

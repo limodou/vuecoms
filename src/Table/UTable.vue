@@ -269,7 +269,7 @@ export default {
     // 单元格样式：
     //    文字对齐
     cellStyles (col) {
-      return {textAlign: col.align || 'left'}
+      return {textAlign: col.align || 'center'}
     },
 
     /*

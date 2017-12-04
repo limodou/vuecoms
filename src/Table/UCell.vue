@@ -1,5 +1,8 @@
 <template>
   <div class="u-cell">
+    <CellRender v-if="col.column.type === 'column' && col.column.render"
+      :row="col.row" :render="col.column.render" :column="col.column"
+      :value="col.value"></CellRender>
     <template v-if="col.column.type === 'column'">
       <div class="u-cell-text" :class="{nowrap:nowrap}"
       v-html="value"></div>
@@ -16,6 +19,7 @@
 
 <script>
 import {mapState} from '@/utils/utils.js'
+import CellRender from './UCellRender'
 
 export default {
   name: 'Cell',
@@ -23,6 +27,10 @@ export default {
     col: Object,
     store: Object,
     row_index: Number
+  },
+
+  components: {
+    CellRender
   },
 
   computed: {
