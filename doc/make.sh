@@ -4,7 +4,7 @@ branch=`git branch|grep '*'`
 if [ "$branch" = "* gh-pages" ]; then
   dir=..
 else
-  dir=../html
+  dir=../docs
 fi
 if [ ! -d "$dir/static" ]; then
   mkdir -p $dir/static
