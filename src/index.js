@@ -1,9 +1,11 @@
 import Box from './Box.vue'
 import Grid from './Table'
+import QueryForm from "./query"
 
 const vuecoms = {
   Box,
-  Grid
+  Grid,
+  QueryForm
 }
 
 const install = function () {
