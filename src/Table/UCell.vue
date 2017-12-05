@@ -3,7 +3,7 @@
     <CellRender v-if="col.column.type === 'column' && col.column.render"
       :row="col.row" :render="col.column.render" :column="col.column"
       :value="col.value"></CellRender>
-    <template v-if="col.column.type === 'column'">
+    <template v-if="col.column.type === 'column' && !col.column.render">
       <div class="u-cell-text" :class="{nowrap:nowrap}"
       v-html="value"></div>
     </template>

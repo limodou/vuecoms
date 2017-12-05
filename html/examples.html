@@ -643,13 +643,51 @@ var deleteButton = function (vm, h, row) {
 var ex_table_03 = new Vue({
   el: '#ex-table-03',
   data: function () {
+    var self = this
     var table = {
       nowrap: true,
       draggable: true,
       clickSelect: true,
       columns: [
-        {name:'name1', title:'Name1', width:200},
-        {name:'name2', title:'Name2', width: 200},
+        {name:'name1', title:'Name1', width:200,
+          render: function(h, param){
+            return h('RadioGroup', {
+                props: {
+                  value: param.value
+                },
+                on: {
+                  'input': function (value) {
+                    param.row[param.column.name] = value
+                  }
+                }
+              }, [
+                h('Radio', {
+                  props: {
+                    label: 'yes'
+                  }
+                }, '同意'),
+                h('Radio', {
+                  props: {
+                    label: 'no'
+                  }
+                }, '不同意')
+              ])
+          }
+        },
+        {name:'name2', title:'Name2', width: 200,
+          render: function(h, param){
+            return h('Input', {
+                props: {
+                  value: param.value
+                },
+                on: {
+                'input': function (value) {
+                    param.row[param.column.name] = value
+                  }
+                }
+              })
+          }
+        },
         {name:'name3', title:'Name3', width:200},
         {name:'name4', title:'Name4', width:200},
         {name:'Action', title:'Name5', render: function(h, param) {
@@ -659,6 +697,12 @@ var ex_table_03 = new Vue({
           ])
           }}
       ],
+      buttons: [
+        [{label: '查看结果', type:'primary', onClick: function(){
+            console.table(self.$refs.table.store.states.data)
+          }}]
+      ],
+
       data: []
     }
 
@@ -674,7 +718,6 @@ var ex_table_03 = new Vue({
   methods: {
     handleDrag: function (v) {
       console.log(v)
-      console.table(this.$refs.table.store.states.data)
     }
   }
 })

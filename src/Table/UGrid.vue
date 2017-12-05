@@ -395,6 +395,10 @@ export default {
   margin-right:3px;
 }
 
+label {
+  margin-bottom: 0px;
+}
+
 .u-grid-wrapper {
 
   .u-grid-tools {
