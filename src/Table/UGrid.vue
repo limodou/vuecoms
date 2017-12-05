@@ -259,7 +259,8 @@ export default {
         hidden: false,
         fixed: '',
         resizable: true,
-        type: 'column'
+        type: 'column',
+        editorOptions: {}
       }, options || {})
     },
 
@@ -268,7 +269,8 @@ export default {
         _selected: false,
         _hover: false,
         _selectable: true, // 可被选中
-        _checkable: true // 可显示checkbox
+        _checkable: true, // 可显示checkbox
+        _editting: false
       }, row)
     },
 

@@ -644,6 +644,117 @@ var ex_table_01 = new Vue({
 
 {% endtabs %}
 
+### 编辑表格
+
+{% tabs %}
+
+-- Result --
+
+编辑一个表格
+
+{% include-code %}
+<div id="ex-table-04">
+  <Grid ref="table" :data="table"></Grid>
+</div>
+<script>
+var editButton_04 = function (vm, h, row) {
+  return h('Button', {
+    props: {
+      type: 'primary',
+      size: 'small'
+    },
+    style: {
+        margin: '0 5px'
+    },
+    on: {
+        'click': function () {
+          vm.$set(row, '_editting', !row._editting)
+          vm.$Message.info("Button Clicked")
+        }
+    }
+  }, row._editting ? '保存' : '编辑')
+}
+var deleteButton_04 = function (vm, h, row) {
+  return h('Poptip', {
+    props: {
+      confirm: true,
+      title: '您确定要删除这条数据吗?',
+      transfer: true
+    },
+    on: {
+      'on-ok': function () {
+        row.isDeleting = true
+      }
+    }
+  }, [
+    h('Button', {
+      style: {
+        margin: '0 5px'
+      },
+      props: {
+        type: 'error',
+        placement: 'top',
+        size: 'small',
+        loading: row.isDeleting
+      }
+    }, '删除')
+  ])
+}
+
+var ex_table_04 = new Vue({
+  el: '#ex-table-04',
+  data: function () {
+    var self = this
+    var table = {
+      editMode: 'full', // 全屏编辑模式
+      columns: [
+        {name:'name1', title:'Name1', width:200, editor: 'string'},
+        {name:'name2', title:'Name2', width: 200, editor: 'select', editorOptions: {
+          choices: [['A', 'Test A'], ['B', 'Test B']]
+          }},
+        {name:'name3', title:'Name3', width:200},
+        {name:'name4', title:'Name4', width:200},
+        {name:'Action', title:'Name5', render: function(h, param) {
+          return h('div', [
+            editButton_04(self, h, param.row),
+            deleteButton_04(self, h, param.row)
+          ])
+          }}
+      ],
+      buttons: [
+        [{label: '查看结果', type:'primary', onClick: function(){
+            console.table(self.$refs.table.store.states.data)
+          }}]
+      ],
+
+      data: []
+    }
+
+    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1'})
+    table.data.push({id:2, name1:'A2', name2:'B2', name3:'C2', name4:'D2'})
+    table.data.push({id:3, name1:'A3', name2:'B3', name3:'C3', name4:'D3'})
+    table.data.push({id:4, name1:'A4', name2:'B4', name3:'C4', name4:'D4'})
+    table.data.push({id:5, name1:'A5', name2:'B5', name3:'C5', name4:'D5'})
+    table.data.push({id:6, name1:'A6', name2:'B6', name3:'C6', name4:'D6'})
+
+    return {table:table}
+  }
+})
+</script>
+{% endinclude-code %}
+
+-- Javascript --
+
+```
+```
+
+-- HTML --
+
+```
+<Grid :data="table"></Grid>
+```
+
+{% endtabs %}
 
 ## Query
 

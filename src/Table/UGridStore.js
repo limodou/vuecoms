@@ -47,6 +47,7 @@ class Store {
       loadingLeft: 0,
       loadingTop: 0,
       selected: {}, // 记录选中结果，可以跨页保存
+      editMode: '', // 编辑模式 'full' 全屏模式 'row' 行模式
 
       // 分页相关参数
       prev: '上一页',

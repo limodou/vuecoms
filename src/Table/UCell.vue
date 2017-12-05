@@ -1,17 +1,25 @@
 <template>
   <div class="u-cell">
-    <CellRender v-if="col.column.type === 'column' && col.column.render"
+    <CellRender v-if="columnType === 'render'"
       :row="col.row" :render="col.column.render" :column="col.column"
       :value="col.value"></CellRender>
-    <template v-if="col.column.type === 'column' && !col.column.render">
+    <template v-if="columnType === 'normal'">
       <div class="u-cell-text" :class="{nowrap:nowrap}"
       v-html="value"></div>
     </template>
-    <template v-if="col.column.type === 'check' && checkable">
+    <CellEditor v-if="columnType === 'editor'"
+      :col="col"
+      :display="value"
+      :row="col.row"
+      :nowrap="nowrap"
+      :editor-options="col.column.editorOptions"
+
+      :column="col.column"></CellEditor>
+    <template v-if="columnType === 'check' && checkable">
       <i v-if="col.row._selected" class="ivu-icon ivu-icon-android-checkbox-outline u-cell-checkbox" @click.stop="handleCheckClick"></i>
       <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank u-cell-checkbox" @click.stop="handleCheckClick"></i>
     </template>
-    <span v-if="col.column.type === 'index'">
+    <span v-if="columnType === 'index'">
       {{ index }}
     </span>
   </div>
@@ -20,6 +28,7 @@
 <script>
 import {mapState} from '@/utils/utils.js'
 import CellRender from './UCellRender'
+import CellEditor from './UCellEditor'
 
 export default {
   name: 'Cell',
@@ -30,7 +39,8 @@ export default {
   },
 
   components: {
-    CellRender
+    CellRender,
+    CellEditor
   },
 
   computed: {
@@ -45,6 +55,17 @@ export default {
 
     index () {
       return this.start + this.row_index
+    },
+
+    columnType () {
+      let type = this.col.column.type
+      if (type === 'index') return 'index'
+      if (type === 'check') return 'check'
+      if (type === 'column') {
+        if (this.col.column.render) return 'render'
+        if (this.col.column.editor) return 'editor'
+        return 'normal'
+      }
     },
 
     checkable () {

@@ -392,7 +392,6 @@ export default {
     padding: 0;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #d2d2d2;
-    overflow: hidden;
   }
 
   .u-table-body-scroll td {
@@ -400,7 +399,6 @@ export default {
     padding: 0;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #d2d2d2;
-    overflow: hidden;
   }
 
   .u-table-body-scroll > td:last-child {
