@@ -1,3 +1,5 @@
+import List from '@/utils/list.js'
+
 class Store {
   constructor (grid, options) {
     this.grid = grid
@@ -30,7 +32,22 @@ class Store {
       buttons: [],
       rightButtons: [],
       bottomButtons: [],
+      comments: {}, // 记录单元格的注释，形式为 {row_id: {col_name:comment}}
       combineCols: [], // 单元格合并列名
+      editMode: '', // 编辑模式 'full' 全屏模式 'row' 行模式
+      actionColumn: '', // 行编辑时，显示编辑按钮的列名,将缺省显示['编辑', '删除']
+      deleteRowConfirm: true, // 删除前是否先确认
+
+      // 回调
+      onLoadData: null, // 装入数据回调函数，将传入 function (url, param, callback)
+      onSelect: null, // 在选择行前执行，返回为True，则允许选中
+      onDeselect: null, // 在取消选择行前执行，返回为True，则允许取消选中
+      onCheckable: null, // 是否显示checkbox
+      onSaveRow: null, // 保存行时调用 function (row, callback), callback(flag, data)
+                       // flag 为 'ok'表示成功，data 为最后的数据 'error'表示有错误, data为出错信息
+      onSaveCol: null,  // 保存单元格时调用 function (value, callback), callback(flag, data)
+                        // flag 为 'ok'表示成功，data 为最后的数据 'error'表示有错误, data为出错信息
+      onDeleteRow: null,// 删除行的确认 function (row, callback), callback(flag, data)
 
       // 内部变量
       drawColumns: [], // 用于绘制的表头
@@ -47,7 +64,6 @@ class Store {
       loadingLeft: 0,
       loadingTop: 0,
       selected: {}, // 记录选中结果，可以跨页保存
-      editMode: '', // 编辑模式 'full' 全屏模式 'row' 行模式
 
       // 分页相关参数
       prev: '上一页',
@@ -88,8 +104,8 @@ class Store {
 
   _select (row) {
     let selectable = true
-    if (this.grid.onSelect) {
-      selectable = this.grid.onSelect(row)
+    if (this.states.onSelect) {
+      selectable = this.states.onSelect(row)
     }
     this.grid.$set(row, '_selected', selectable)
     if (selectable) {
@@ -114,8 +130,8 @@ class Store {
 
   _deselect (row) {
     let deselectable = true
-    if (this.grid.onDeselect) {
-      deselectable = this.grid.onDeselect(row)
+    if (this.states.onDeselect) {
+      deselectable = this.states.onDeselect(row)
     }
     this.grid.$set(row, '_deselected', deselectable)
     if (deselectable) {
@@ -157,6 +173,68 @@ class Store {
     if (loading) {
       this.states.loadingTop = this.grid.$refs.table.$el.clientHeight/2-this.states.rowHeight/2
       this.states.loadingLeft = this.grid.$refs.table.$el.clientWidth/2-100/2
+    }
+  }
+
+  removeRow (row) {
+    List.remove(this.states.data, row)
+  }
+
+  getComment (row, column) {
+    let key, col
+    if (typeof row === 'object') {
+      key = row[this.states.idField]
+    } else {
+      key = row
+    }
+    if (typeof column === 'object') {
+      col = column.name
+    } else {
+      col = column
+    }
+    let r = this.states.comments[key]
+    if (!r) return ''
+    return r[col]
+  }
+
+  setComment (row, column, content, type='info') {
+    let key, col
+    if (typeof row === 'object') {
+      key = row[this.states.idField]
+    } else {
+      key = row
+    }
+    if (typeof column === 'object') {
+      col = column.name
+    } else {
+      col = column
+    }
+    let r = this.states.comments[key]
+    if (!r) {
+      r = this.grid.$set(this.states.comments, key, {})
+    }
+    this.grid.$set(r, col, {content:content, type:type})
+  }
+
+  removeComment (row, column) {
+    let key, col
+    if (typeof row === 'object') {
+      key = row[this.states.idField]
+    } else {
+      key = row
+    }
+    if (typeof column === 'object') {
+      col = column.name
+    } else {
+      col = column
+    }
+    let r = this.states.comments[key]
+    if (r) {
+      if (!col) {
+        delete this.states.comments[key]
+      } else {
+        delete r[col]
+      }
     }
   }
 

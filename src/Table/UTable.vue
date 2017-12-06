@@ -129,7 +129,8 @@ export default {
         let new_row = {row: row, columns: []}
         rows.push(new_row)
         this.columns.forEach( (col, j) => {
-          let item = {value: row[col.name], rowspan: 1, colspan: 1, column: col, row: row}
+          let item = {value: row[col.name], rowspan: 1, colspan: 1,
+            column: col, row: row}
 
           // 不需要合并
           if (!this.combineCols) {
@@ -269,7 +270,7 @@ export default {
     // 单元格样式：
     //    文字对齐
     cellStyles (col) {
-      return {textAlign: col.align || 'center'}
+      return {textAlign: col.align || 'center', height: `${this.rowHeight}px`}
     },
 
     /*

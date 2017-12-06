@@ -13,7 +13,7 @@
       :row="col.row"
       :nowrap="nowrap"
       :editor-options="col.column.editorOptions"
-
+      :edit-row="savingRow"
       :column="col.column"></CellEditor>
     <template v-if="columnType === 'check' && checkable">
       <i v-if="col.row._selected" class="ivu-icon ivu-icon-android-checkbox-outline u-cell-checkbox" @click.stop="handleCheckClick"></i>
@@ -22,13 +22,15 @@
     <span v-if="columnType === 'index'">
       {{ index }}
     </span>
+    <span v-if="comment" class="u-cell-comment" :class="comment.type" :title="comment.content"></span>
   </div>
 </template>
 
 <script>
-import {mapState} from '@/utils/utils.js'
+import {mapState, mapMethod} from '@/utils/utils.js'
 import CellRender from './UCellRender'
 import CellEditor from './UCellEditor'
+import {Tooltip} from 'iview'
 
 export default {
   name: 'Cell',
@@ -44,7 +46,7 @@ export default {
   },
 
   computed: {
-    ...mapState('nowrap', 'start'),
+    ...mapState('nowrap', 'start', 'editRow', 'editMode', 'onCheckable'),
     value () {
       let value = this.col.value
       if (this.col.column.format) {
@@ -53,8 +55,20 @@ export default {
       return value
     },
 
+    comment () {
+      return this.getComment(this.col.row, this.col.column)
+    },
+
     index () {
       return this.start + this.row_index
+    },
+
+    /*
+     * 根据编辑模式不同，选择数据保存的row
+     */
+    savingRow () {
+      if (this.editMode === 'row') return  this.col.row._editRow
+      else return this.col.row
     },
 
     columnType () {
@@ -70,8 +84,8 @@ export default {
 
     checkable () {
       let c = this.col.row._checkable
-      if (this.store.grid.onCheckable) {
-        c = this.store.grid.onCheckable(this.col.row)
+      if (this.onCheckable) {
+        c = this.onCheckable(this.col.row)
         this.$set(this.col.row, '_checkable', c)
       }
       return c
@@ -79,6 +93,7 @@ export default {
   },
 
   methods: {
+    ...mapMethod('getComment'),
     handleCheckClick () {
       this.store.toggle(this.col.row)
     }
@@ -91,13 +106,48 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
+  display: table;
 
   .u-cell-text {
+    max-width: 0px;
     padding: 0 5px;
+    vertical-align: middle;
+    display: table-cell
   }
 
   .u-cell-checkbox {
     cursor: pointer;
+  }
+
+  .u-cell-comment {
+    border: 4px solid;
+    border-color: transparent transparent transparent transparent;
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 99999;
+
+    &.error {
+      border-color: #b94a48 #b94a48 transparent transparent;
+    }
+
+    &.warning{
+        border-color: #f89406 #f89406 transparent transparent;
+    }
+
+    &.success{
+        border-color: #468847 #468847 transparent transparent;
+    }
+
+    &.info{
+        border-color: #3a87ad #3a87ad transparent transparent;
+    }
+
+    &.changed{
+        border-color: #f00 #f00 transparent transparent;
+    }
   }
 }
 </style>

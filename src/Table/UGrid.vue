@@ -42,7 +42,7 @@ import UTable from './UTable'
 import Store from './UGridStore'
 import Pagination from './pagination'
 import Buttons from './UButtons'
-import {mapState, mapMethod} from '@/utils/utils.js'
+import {mapState, mapMethod, copyDataRow} from '@/utils/utils.js'
 import Emitter from '@/mixins/emitter.js'
 
 export default {
@@ -68,11 +68,7 @@ export default {
       default: function () {
         return {}
       }
-    },
-    onLoadData: null, // 装入数据回调函数，将传入 funcition (url, param, callback)
-    onSelect: null, // 在选择行前执行，返回为True，则允许选中
-    onDeselect: null, // 在取消选择行前执行，返回为True，则允许取消选中
-    onCheckable: null // 是否显示checkbox
+    }
   },
 
   computed: {
@@ -82,7 +78,8 @@ export default {
       'indexColWidth', 'indexColTitle', 'scrollLeft', 'total', 'pageSizeOpts',
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
-      'selected'
+      'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
+      'onSaveRow', 'onDeleteRow', 'onLoadData'
     ),
 
     columnDraggerStyles () {
@@ -112,7 +109,8 @@ export default {
   },
 
   methods: {
-    ...mapMethod('getSelection', 'showLoading', 'setSelection'),
+    ...mapMethod('getSelection', 'showLoading', 'setSelection', 'removeRow',
+      'setComment', 'removeComment'),
 
     resize () {
       if (this.width === 'auto') {
@@ -306,6 +304,10 @@ export default {
       this.data.columns.forEach(col => {
         if (!col.hidden) {
           let d = this.getDefaultColumn()
+          // 增加行编辑操作列的render函数
+          if (this.editMode === 'row' && col.name === this.actionColumn) {
+            d.render = this.editActionRender
+          }
           if (!d.title) d.title = d.name
           Object.assign(d, col)
           cols.push(d)
@@ -345,6 +347,116 @@ export default {
         this.$set(this.store.states.param, 'pageSize', size)
         this.loadData()
       })
+    },
+
+    // 生成缺省的行编辑按钮
+    editActionRender (h, param) {
+      return h('div', {
+        'class': 'u-cell-text'
+      },
+      [
+        this.defaultEditRender(h, param.row),
+        this.defaultDeleteRender(h, param.row)
+      ])
+    },
+
+    defaultEditRender (h, row) {
+      return h('Button', {
+        props: {
+          type: 'primary',
+          size: 'small',
+          loading: row._saving
+        },
+        style: {
+            margin: '0 5px'
+        },
+        on: {
+            click: () => {
+              if (!row._editting) {
+                this.$set(row, '_editRow', Object.assign({}, row))
+                this.$set(row, '_editting', true)
+              } else {
+                this.$set(row, '_saving', true)
+                if (this.onSaveRow) {
+                  let callback = (flag, data) => {
+                    if (flag === 'ok') {
+                      copyDataRow(row, row._editRow)
+                      this.removeComment(row)
+                      this.$set(row, '_editting', !row._editting)
+                      delete row._editRow
+                    } else {
+                      for(let key in data) {
+                        let v = data[key]
+                        this.setComment(row, key, v, 'error')
+                      }
+                    }
+                    this.$set(row, '_saving', false)
+                  }
+                  this.onSaveRow.call(this, row._editRow, callback)
+                } else {
+                  copyDataRow(row, row._editRow)
+                  delete row._editRow
+                  this.$set(row, '_editting', false)
+                  this.$set(row, '_saving', false)
+                }
+              }
+            }
+        }
+      }, row._editting ? '保存' : '编辑')
+    },
+
+    defaultDeleteRender (h, row) {
+      let defaultDeleteFunc = () => {
+        if(row._editting) {
+          this.$set(row, '_editting', false)
+          return
+        }
+
+        let callback = (flag, data) => {
+          if (flag === 'ok') {
+            this.removeRow(row)
+          } else {
+            for(let key in data) {
+              let v = data[key]
+              this.setComment(row, key, v, 'error')
+            }
+            this.$set(row, '_deleting', false)
+          }
+        }
+        if (this.onDeleteRow){
+          this.onDeleteRow(row, callback)
+        } else {
+          this.removeRow(row)
+        }
+      }
+
+      let type = row._editting ? 'default' : 'error'
+
+      return h('Button', {
+        style: {
+          margin: '0 5px'
+        },
+        props: {
+          type: type,
+          placement: 'top',
+          size: 'small',
+          loading: row._deleting
+        },
+        on: {
+          click: () => {
+            if (this.deleteRowConfirm && !row._editting) {
+              this.$Modal.confirm({
+                content: '请确认是否要删除本条记录？',
+                onOk: () => {
+                  defaultDeleteFunc()
+                }
+              })
+            } else {
+              defaultDeleteFunc()
+            }
+          }
+        }
+      }, row._editting ? '取消' : '删除')
     },
 
     loadData (url) {

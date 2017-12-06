@@ -266,13 +266,10 @@ var ex_table_01 = new Vue({
     <button @click="handleTitleHide">切换Title字段显示</button>
   </div>
   <Grid ref='grid' :data="table"
-    :on-load-data="onLoadData"
     @on-selected="handleSelected"
     @on-deselected="handleDeselected"
     @on-selected-all="handleSelectedAll"
-    @on-deselected-all="handleDeselectedAll"
-    :on-select="onSelect"
-    :on-checkable="onCheckable"></Grid>
+    @on-deselected-all="handleDeselectedAll"></Grid>
   <div>Selected: {{selected}}</div>
   <div>Param: {{param}}</div>
 </div>
@@ -310,7 +307,36 @@ var ex_table_02 = new Vue({
       ],
       bottomButtons: [
         [{'label': '导出'}]
-      ]
+      ],
+
+      onLoadData: function (url, param, callback) {
+        self.param = param
+        var data = []
+        var b = (param.page - 1) * param.pageSize
+        for (var i = 0; i < 10; i++) {
+          var row = {id: b + i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
+          for (var j = 1; j < 10; j++) {
+            row['name' + j] = 'P' + param.page + '-Name-' + (i + 1) + '-' + j
+          }
+          data.push(row)
+        }
+        setTimeout( function () {
+          callback(data)
+          }, 500)
+      },
+
+      onSelect: function (row) {
+        var r = row.id !== 1
+        if (!r) {
+          self.$Message.info('本行不能选择')
+        }
+        return r
+      },
+
+      onCheckable: function (row) {
+        var r = row.id !== 2 && row.id !==3
+        return r
+      }
     }
     table.columns.push({
       name: 'id',
@@ -356,34 +382,7 @@ var ex_table_02 = new Vue({
       table.data.push(row)
     }
 
-    onLoadData = function (url, param, callback) {
-      self.param = param
-      var data = []
-      var b = (param.page - 1) * param.pageSize
-      for (var i = 0; i < 10; i++) {
-        var row = {id: b + i + 1, title: 'P' + param.page + '-Title-' + (i + 1)}
-        for (var j = 1; j < 10; j++) {
-          row['name' + j] = 'P' + param.page + '-Name-' + (i + 1) + '-' + j
-        }
-        data.push(row)
-      }
-      setTimeout( function () {
-        callback(data)
-        }, 500)
-    }
 
-    onSelect = function (row) {
-      var r = row.id !== 1
-      if (!r) {
-        self.$Message.info('本行不能选择')
-      }
-      return r
-    }
-
-    onCheckable = function (row) {
-      var r = row.id !== 2 && row.id !==3
-      return r
-    }
 
     return {
       table:table,
@@ -391,9 +390,6 @@ var ex_table_02 = new Vue({
       logs:[],
       loading_text:'loading',
       show_loading:false,
-      onLoadData: onLoadData,
-      onSelect: onSelect,
-      onCheckable: onCheckable,
       param:{}
     }
   },
@@ -596,50 +592,6 @@ var ex_table_02 = new Vue({
   <Grid ref="table" :data="table" @on-drag="handleDrag"></Grid>
 </div>
 <script>
-var editButton = function (vm, h, row) {
-  return h('Button', {
-    props: {
-      type: 'primary',
-      size: 'small'
-    },
-    style: {
-        margin: '0 5px'
-    },
-    on: {
-        'click': function () {
-          row.editting = !row.editting
-          vm.$Message.info("Button Clicked")
-        }
-    }
-  }, row.editting ? '保存' : '编辑')
-}
-var deleteButton = function (vm, h, row) {
-  return h('Poptip', {
-    props: {
-      confirm: true,
-      title: '您确定要删除这条数据吗?',
-      transfer: true
-    },
-    on: {
-      'on-ok': function () {
-        row.isDeleting = true
-      }
-    }
-  }, [
-    h('Button', {
-      style: {
-        margin: '0 5px'
-      },
-      props: {
-        type: 'error',
-        placement: 'top',
-        size: 'small',
-        loading: row.isDeleting
-      }
-    }, '删除')
-  ])
-}
-
 var ex_table_03 = new Vue({
   el: '#ex-table-03',
   data: function () {
@@ -690,12 +642,6 @@ var ex_table_03 = new Vue({
         },
         {name:'name3', title:'Name3', width:200},
         {name:'name4', title:'Name4', width:200},
-        {name:'Action', title:'Name5', render: function(h, param) {
-          return h('div', [
-            editButton(ex_table_03, h, param.row),
-            deleteButton(ex_table_03, h, param.row)
-          ])
-          }}
       ],
       buttons: [
         [{label: '查看结果', type:'primary', onClick: function(){
@@ -772,90 +718,65 @@ var ex_table_03 = new Vue({
 <div class="tab-content">
 <div class="tab-pane active" id="tab_item_5_13">
 
-<p>编辑一个表格</p>
+<p>使用行编辑</p>
 <div id="ex-table-04">
   <Grid ref="table" :data="table"></Grid>
 </div>
 <script>
-var editButton_04 = function (vm, h, row) {
-  return h('Button', {
-    props: {
-      type: 'primary',
-      size: 'small'
-    },
-    style: {
-        margin: '0 5px'
-    },
-    on: {
-        'click': function () {
-          vm.$set(row, '_editting', !row._editting)
-          vm.$Message.info("Button Clicked")
-        }
-    }
-  }, row._editting ? '保存' : '编辑')
-}
-var deleteButton_04 = function (vm, h, row) {
-  return h('Poptip', {
-    props: {
-      confirm: true,
-      title: '您确定要删除这条数据吗?',
-      transfer: true
-    },
-    on: {
-      'on-ok': function () {
-        row.isDeleting = true
-      }
-    }
-  }, [
-    h('Button', {
-      style: {
-        margin: '0 5px'
-      },
-      props: {
-        type: 'error',
-        placement: 'top',
-        size: 'small',
-        loading: row.isDeleting
-      }
-    }, '删除')
-  ])
-}
-
 var ex_table_04 = new Vue({
   el: '#ex-table-04',
   data: function () {
     var self = this
     var table = {
-      editMode: 'full', // 全屏编辑模式
+      editMode: 'row', // 行编辑模式
+      nowrap: true,
+      actionColumn: 'Action',
       columns: [
         {name:'name1', title:'Name1', width:200, editor: 'string'},
-        {name:'name2', title:'Name2', width: 200, editor: 'select', editorOptions: {
+        {name:'name2', title:'Name2', width: 200, align: 'left', editor: 'select', editorOptions: {
           choices: [['A', 'Test A'], ['B', 'Test B']]
           }},
         {name:'name3', title:'Name3', width:200},
         {name:'name4', title:'Name4', width:200},
-        {name:'Action', title:'Name5', render: function(h, param) {
-          return h('div', [
-            editButton_04(self, h, param.row),
-            deleteButton_04(self, h, param.row)
-          ])
-          }}
+        {name:'Action', title:'Name5'}
       ],
       buttons: [
         [{label: '查看结果', type:'primary', onClick: function(){
             console.table(self.$refs.table.store.states.data)
-          }}]
+          }}],
+        [{label: '显示注释', type:'primary', onClick: function(){
+              self.$refs.table.store.setComment(1, 'name3', '这是评论')
+            }}
+          ]
       ],
 
-      data: []
+      data: [],
+
+      onSaveRow: function (row, callback) {
+        self.$Message.info("save")
+        if (row.name1 === 'ok') {
+          setTimeout(function() {
+            callback('ok', row)
+          }, 500)
+        } else {
+          setTimeout(function() {
+            callback('error', {name1: '不正确'})
+          }, 500)
+        }
+
+      },
+      onDeleteRow: function (row, callback) {
+        self.$Message.info("delete")
+        callback('ok', row)
+      }
     }
 
-    table.data.push({id:1, name1:'A1', name2:'B1', name3:'C1', name4:'D1'})
-    table.data.push({id:2, name1:'A2', name2:'B2', name3:'C2', name4:'D2'})
-    table.data.push({id:3, name1:'A3', name2:'B3', name3:'C3', name4:'D3'})
-    table.data.push({id:4, name1:'A4', name2:'B4', name3:'C4', name4:'D4'})
-    table.data.push({id:5, name1:'A5', name2:'B5', name3:'C5', name4:'D5'})
-    table.data.push({id:6, name1:'A6', name2:'B6', name3:'C6', name4:'D6'})
+    table.data.push({id:1, name1:'Field-A1', name2:'A', name3:'Field-C1', name4:'Field-D1'})
+    table.data.push({id:2, name1:'Field-A2', name2:'B', name3:'Field-C2', name4:'Field-D2'})
+    table.data.push({id:3, name1:'Field-A3', name2:'A', name3:'Field-C3', name4:'Field-D3'})
+    table.data.push({id:4, name1:'Field-A4', name2:'B', name3:'Field-C4', name4:'Field-D4'})
+    table.data.push({id:5, name1:'Field-A5', name2:'A', name3:'Field-C5', name4:'Field-D5'})
+    table.data.push({id:6, name1:'Field-A6', name2:'A', name3:'Field-C6', name4:'Field-D6'})
 
     return {table:table}
   }
@@ -865,12 +786,56 @@ var ex_table_04 = new Vue({
 </div>
 <div class="tab-pane" id="tab_item_5_14">
 
-<p><code>` `</code></p>
+<pre class="prettyprint "><code>var ex_table_04 = new Vue({
+  el: '#ex-table-04',
+  data: function () {
+    var self = this
+    var table = {
+      editMode: 'row', // 行编辑模式
+      nowrap: true,
+      actionColumn: 'Action',
+      columns: [
+        {name:'name1', title:'Name1', width:200, editor: 'string'},
+        {name:'name2', title:'Name2', width: 200, editor: 'select', editorOptions: {
+          choices: [['A', 'Test A'], ['B', 'Test B']]
+          }},
+        {name:'name3', title:'Name3', width:200},
+        {name:'name4', title:'Name4', width:200},
+        {name:'Action', title:'Name5'}
+      ],
+      buttons: [
+        [{label: '查看结果', type:'primary', onClick: function(){
+            console.table(self.$refs.table.store.states.data)
+          }}]
+      ],
+
+      data: [],
+
+      onSaveRow: function (row, callback) {
+        self.$Message.info("save")
+        callback('ok', row)
+      },
+      onDeleteRow: function (row, callback) {
+        self.$Message.info("delete")
+        callback('ok', row)
+      }
+    }
+
+    table.data.push({id:1, name1:'Field-A1', name2:'A', name3:'Field-C1', name4:'Field-D1'})
+    table.data.push({id:2, name1:'Field-A2', name2:'B', name3:'Field-C2', name4:'Field-D2'})
+    table.data.push({id:3, name1:'Field-A3', name2:'A', name3:'Field-C3', name4:'Field-D3'})
+    table.data.push({id:4, name1:'Field-A4', name2:'B', name3:'Field-C4', name4:'Field-D4'})
+    table.data.push({id:5, name1:'Field-A5', name2:'A', name3:'Field-C5', name4:'Field-D5'})
+    table.data.push({id:6, name1:'Field-A6', name2:'A', name3:'Field-C6', name4:'Field-D6'})
+
+    return {table:table}
+  }
+})</code></pre>
 
 </div>
 <div class="tab-pane" id="tab_item_5_15">
 
-<pre class="prettyprint "><code>&lt;Grid :data="table"&gt;&lt;/Grid&gt;</code></pre>
+<pre class="prettyprint "><code>&lt;Grid ref="table" :data="table"&gt;&lt;/Grid&gt;</code></pre>
 
 </div>
 </div>
