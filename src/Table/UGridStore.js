@@ -33,6 +33,7 @@ class Store {
       rightButtons: [],
       bottomButtons: [],
       comments: {}, // 记录单元格的注释，形式为 {row_id: {col_name:comment}}
+      classes: {}, // 记录单元格的class
       combineCols: [], // 单元格合并列名
       editMode: '', // 编辑模式 'full' 全屏模式 'row' 行模式
       actionColumn: '', // 行编辑时，显示编辑按钮的列名,将缺省显示['编辑', '删除']
@@ -180,7 +181,7 @@ class Store {
     List.remove(this.states.data, row)
   }
 
-  getComment (row, column) {
+  getKey (row, column) {
     let key, col
     if (typeof row === 'object') {
       key = row[this.states.idField]
@@ -192,23 +193,19 @@ class Store {
     } else {
       col = column
     }
+    return {key, col}
+  }
+
+
+  getComment (row, column) {
+    let {key, col} = this.getKey(row, column)
     let r = this.states.comments[key]
     if (!r) return ''
     return r[col]
   }
 
   setComment (row, column, content, type='info') {
-    let key, col
-    if (typeof row === 'object') {
-      key = row[this.states.idField]
-    } else {
-      key = row
-    }
-    if (typeof column === 'object') {
-      col = column.name
-    } else {
-      col = column
-    }
+    let {key, col} = this.getKey(row, column)
     let r = this.states.comments[key]
     if (!r) {
       r = this.grid.$set(this.states.comments, key, {})
@@ -217,23 +214,41 @@ class Store {
   }
 
   removeComment (row, column) {
-    let key, col
-    if (typeof row === 'object') {
-      key = row[this.states.idField]
-    } else {
-      key = row
-    }
-    if (typeof column === 'object') {
-      col = column.name
-    } else {
-      col = column
-    }
+    let {key, col} = this.getKey(row, column)
     let r = this.states.comments[key]
     if (r) {
       if (!col) {
-        delete this.states.comments[key]
+        this.grid.$delete(this.states.comments, key)
       } else {
-        delete r[col]
+        this.grid.$delete(r, col)
+      }
+    }
+  }
+
+  getClass (row, column) {
+    let {key, col} = this.getKey(row, column)
+    let r = this.states.classes[key]
+    if (!r) return ''
+    return r[col]
+  }
+
+  setClass (row, column, name) {
+    let {key, col} = this.getKey(row, column)
+    let r = this.states.classes[key]
+    if (!r) {
+      r = this.grid.$set(this.states.classes, key, {})
+    }
+    this.grid.$set(r, col, name)
+  }
+
+  removeClass (row, column) {
+    let {key, col} = this.getKey(row, column)
+    let r = this.states.classes[key]
+    if (r) {
+      if (!col) {
+        this.grid.$delete(this.states.classes, key)
+      } else {
+        this.grid.$delete(r, col)
       }
     }
   }

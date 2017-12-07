@@ -626,6 +626,16 @@ var ex_table_04 = new Vue({
           }}],
         [{label: '显示注释', type:'primary', onClick: function(){
               self.$refs.table.store.setComment(1, 'name3', '这是评论')
+            }},
+        {label: '隐藏注释', type:'primary', onClick: function(){
+              self.$refs.table.store.removeComment(1, 'name3')
+            }}
+          ],
+        [{label: '显示Class', type:'primary', onClick: function(){
+              self.$refs.table.store.setClass(3, 'name3', 'ivu-btn-error')
+            }},
+        {label: '删除Class', type:'primary', onClick: function(){
+              self.$refs.table.store.removeClass(3, 'name3')
             }}
           ]
       ],

@@ -1,5 +1,5 @@
 <template>
-  <div class="u-cell">
+  <div class="u-cell" :class="classes">
     <CellRender v-if="columnType === 'render'"
       :row="col.row" :render="col.column.render" :column="col.column"
       :value="col.value"></CellRender>
@@ -22,7 +22,9 @@
     <span v-if="columnType === 'index'">
       {{ index }}
     </span>
-    <span v-if="comment" class="u-cell-comment" :class="comment.type" :title="comment.content"></span>
+    <span v-if="comment" class="u-cell-comment"
+      :class="comment.type" :title="comment.content"
+      ></span>
   </div>
 </template>
 
@@ -30,7 +32,6 @@
 import {mapState, mapMethod} from '@/utils/utils.js'
 import CellRender from './UCellRender'
 import CellEditor from './UCellEditor'
-import {Tooltip} from 'iview'
 
 export default {
   name: 'Cell',
@@ -57,6 +58,10 @@ export default {
 
     comment () {
       return this.getComment(this.col.row, this.col.column)
+    },
+
+    classes () {
+      return this.getClass(this.col.row, this.col.column)
     },
 
     index () {
@@ -93,7 +98,7 @@ export default {
   },
 
   methods: {
-    ...mapMethod('getComment'),
+    ...mapMethod('getComment', 'getClass'),
     handleCheckClick () {
       this.store.toggle(this.col.row)
     }
@@ -127,7 +132,7 @@ export default {
     position: absolute;
     top: 0px;
     right: 0px;
-    z-index: 99999;
+    z-index: 5000;
 
     &.error {
       border-color: #b94a48 #b94a48 transparent transparent;
