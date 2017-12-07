@@ -33,7 +33,6 @@
                     'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
                     'autoLoad', 'url', 'param')
         }
-            console.log("=========", rrr)
             return {
                 placeholder,
                 val
