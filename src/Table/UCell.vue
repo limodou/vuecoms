@@ -1,27 +1,26 @@
 <template>
   <div class="u-cell" :class="classes">
-    <CellRender v-if="columnType === 'render'"
-      :row="col.row" :render="col.column.render" :column="col.column"
-      :value="col.value"></CellRender>
-    <template v-if="columnType === 'normal'">
-      <div class="u-cell-text" :class="{nowrap:nowrap}"
-      v-html="value"></div>
-    </template>
-    <CellEditor v-if="columnType === 'editor'"
-      :col="col"
-      :display="value"
-      :row="col.row"
-      :nowrap="nowrap"
-      :editor-options="col.column.editorOptions"
-      :edit-row="savingRow"
-      :column="col.column"></CellEditor>
-    <template v-if="columnType === 'check' && checkable">
-      <i v-if="col.row._selected" class="ivu-icon ivu-icon-android-checkbox-outline u-cell-checkbox" @click.stop="handleCheckClick"></i>
-      <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank u-cell-checkbox" @click.stop="handleCheckClick"></i>
-    </template>
-    <span v-if="columnType === 'index'">
-      {{ index }}
-    </span>
+    <div class="u-cell-wrap">
+      <CellRender v-if="columnType === 'render'"
+        :row="col.row" :render="col.column.render" :column="col.column"
+        :value="col.value"></CellRender>
+      <div v-if="columnType === 'normal'" v-html="value" class="u-cell-text" :class="{nowrap:nowrap}"></div>
+      <CellEditor v-if="columnType === 'editor'"
+        :col="col"
+        :display="value"
+        :row="col.row"
+        :nowrap="nowrap"
+        :editor-options="col.column.editorOptions"
+        :edit-row="savingRow"
+        :column="col.column"></CellEditor>
+      <template v-if="columnType === 'check' && checkable">
+        <i v-if="col.row._selected" class="ivu-icon ivu-icon-android-checkbox-outline u-cell-checkbox" @click.stop="handleCheckClick"></i>
+        <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank u-cell-checkbox" @click.stop="handleCheckClick"></i>
+      </template>
+      <span v-if="columnType === 'index'" :class="{nowrap:nowrap}">
+        {{ index }}
+      </span>
+    </div>
     <span v-if="comment" class="u-cell-comment"
       :class="comment.type" :title="comment.content"
       ></span>
@@ -113,11 +112,16 @@ export default {
   position: relative;
   display: table;
 
-  .u-cell-text {
+  .u-cell-wrap {
+    width: 100%;
     max-width: 0px;
-    padding: 0 5px;
+    padding: 0;
     vertical-align: middle;
     display: table-cell
+  }
+
+  .u-cell-text {
+    padding: 0 5px;
   }
 
   .u-cell-checkbox {

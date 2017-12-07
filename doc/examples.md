@@ -617,7 +617,7 @@ var ex_table_04 = new Vue({
           choices: [['A', 'Test A'], ['B', 'Test B']]
           }},
         {name:'name3', title:'Name3', width:200},
-        {name:'name4', title:'Name4', width:200},
+        {name:'name4', title:'Name4', width:200, editor: 'date'},
         {name:'Action', title:'Name5'}
       ],
       buttons: [

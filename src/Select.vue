@@ -14,7 +14,7 @@ export default {
     items () {
       let r = []
       let d
-      for(let item of (this.options.choices || [])) {
+      for(let item of (this.choices || [])) {
         if (Array.isArray(item)) {
           d = {value: item[0], label: item[1]}
         } else if (typeof item === 'object'){
@@ -27,10 +27,10 @@ export default {
       return r
     }
   },
-  props: {
-    value: {},
-    options: Object
-  },
+  props: [
+    'value', 'choices'
+  ],
+  
   methods: {
     handleInput () {
       this.$emit('input', this.data)
