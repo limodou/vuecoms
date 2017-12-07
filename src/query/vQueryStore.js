@@ -54,10 +54,10 @@ Store.prototype.getVal = function (key) {
 
 Store.prototype.delVal = function (key) {
 	if (key) {
-		if (this.getField(k)['type'] && this.getField(key)['type'] == "iselect" && this.getField(key)['multiple']) {
+		if (this.getField(key)['type'] && this.getField(key)['type'] == "iselect" && this.getField(key)['multiple']) {
 			this.states.value[key] = []
 		} else if (this.getField(key) && this.getField(key)['type'] == "checkbox") {
-			this.states.value[kkey] = [];
+			this.states.value[key] = [];
 		} else {
 			this.states.value[key] = "";
 		}

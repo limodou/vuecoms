@@ -1,5 +1,5 @@
 <template>
-  <QueryForm :fields="fields" :layout="layout" :value="value" :buttons="buttons"></QueryForm>
+  <QueryForm :fields="fields" :layout="layout" :value="value" :buttons="buttons" :submit="submit" :changed="changed"></QueryForm>
 </template>
 <script type="text/ecmascript-6">
 
@@ -10,12 +10,12 @@
     data: function () {
       return {
         fields: [
-          {name: "str1", type: "str", label: "字符串1：", placeholder: "请输入字符串1"},
-          {name: "str2", type: "str", label: "字符串2：", placeholder: "请输入字符串2"},
+          {name: "str1", type: "str", label: "字符串1", placeholder: "请输入字符串1"},
+          {name: "str2", type: "str", label: "字符串2", placeholder: "请输入字符串2"},
           {
             name: "select1",
             type: "iselect",
-            label: "选择：",
+            label: "选择1",
             choices: [{label: "西雅图", value: "city_001"}, {label: "旧金山", value: "city_002"}, {
               label: "洛杉矶",
               value: "city_003"
@@ -30,7 +30,7 @@
           {
             name: "select2",
             type: "iselect",
-            label: "选择：",
+            label: "选择2",
             choices: [{label: "西雅图", value: "city_001"}, {label: "旧金山", value: "city_002"}, {
               label: "洛杉矶",
               value: "city_003"
@@ -43,7 +43,7 @@
           {
             name: "datepicker",
             type: "date",
-            label: "日期：",
+            label: "日期",
             placeholder: "日期单选",
             format: "yyyy#MM#dd",
             confirm: true,
@@ -96,7 +96,7 @@
           {
             name: "radio",
             type: "radio",
-            label: "单选框：",
+            label: "单选框",
             rType: "button", // button or null
             disabled: false,
             size: "small",
@@ -109,7 +109,7 @@
           {
             name: "checkbox",
             type: "checkbox",
-            label: "多选框：",
+            label: "多选框",
             size: "large", //small default large
             disabled: false,
             choices: [{label: "1", name: "备选项1"}, {label: "2", name: "备选项2"}, {
@@ -117,10 +117,62 @@
               name: "备选项3",
               disabled: true
             }]
-          }
+          },
+          // {
+          // 	name: "cascader1",
+          // 	type: "cascader",
+          // 	label: "级联选择：",
+          // 	showAllLevels: false,
+          // 	filterable: true,
+          // 	changeOnSelect: true,
+          // 	choices: CASCADER_CHOICES
+          // },
+          // {
+          // 	name: "timeselect",
+          // 	type: "timeselect",
+          // 	options: {start: "00:00", step: "01:00", end: "24:00"},
+          // 	label: "时间select："
+          // },
+          // {
+          // 	name: "timepicker",
+          // 	type: "timepicker",
+          // 	options: {selectableRange: '00:00:00 - 01:00:00'},
+          // 	label: "时间picker："
+          // },
+          // {name: "timepickerrange", type: "timepickerrange", label: "时间pickerrange："},
+
+          // {name: "datetimepicker", type: "datetimepicker", label: "日期时间选择："},
+          // {name: "datepickerrange", type: "datepickerrange", label: "日期范围："},
+          // {name: "datetimepickerrange", type: "datetimepickerrange", label: "日期时间范围："},
+          // {
+          // 	name: "transfer",
+          // 	type: "transfer",
+          // 	label: "穿梭框：",
+          // 	choices: [{key: 1, label: "北京"}, {key: 2, label: "上海"}, {key: 3, label: "广州"}, {
+          // 		key: 4,
+          // 		label: "深圳",
+          // 		disabled: true
+          // 	}]
+          // },
+          // {
+          // 	name: "checkbox",
+          // 	type: "checkbox",
+          // 	label: "多选框：",
+          // 	min: 0,
+          // 	max: 1,
+          // 	choices: [{label: "备选项1", name: "checkbox1"}, {label: "备选项2", name: "checkbox2"}, {
+          // 		label: "备选项3",
+          // 		name: "checkbox3",
+          // 		disabled: true
+          // 	}]
+          // },
+          // {name: "poptree", type: "poptree", label: "选择树："}
         ],
         layout: [
-          ['str1', 'str2', 'select1', 'select2', "datepicker", 'radio', 'checkbox']
+          ['str1', 'str2'],
+          ['select1', 'select2'],
+          ["datepicker"],
+          ['radio', 'checkbox']
         ],
         value: {
           select1: 'city_003',
@@ -131,20 +183,32 @@
           datepicker: "2016-01-01"
         },
         buttons: {
+          justify: "center",//按钮左中右 start center end 默认 end
           submit: {
             label: "点此查询",
-            callback: function (val) {
-              console.log("submit event => ", val);
+            beforeSubmit: function (val) {
+              console.log("beforeSubmit event => ", val);
+              return {str1: "你好Vue"};
             }
           },
           clear: {
-            title: "清除"
+            label: "点此清除"
           }
         }
       }
     },
-    components:{
+    components: {
       QueryForm
-    }
+    },
+    methods: {
+      changed: function (data) {
+        console.log(data);
+        return true;
+      },
+      submit: function(data){
+        console.log("submit event => ",data);
+        return true
+      }
+    },
   }
 </script>
