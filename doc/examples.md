@@ -812,32 +812,32 @@ var ex_query_01 = new Vue({
                         shortcuts: [
                           {
                             text: 'Today',
-                            value () {
+                            value: function() {
                               return new Date();
                             },
-                            onClick: (picker) => {
+                            onClick: function(picker){
                               this.$Message.info('Click today');
                             }
                           },
                           {
                             text: 'Yesterday',
-                            value () {
+                            value: function(){
                               const date = new Date();
                               date.setTime(date.getTime() - 3600 * 1000 * 24);
                               return date;
                             },
-                            onClick: (picker) => {
+                            onClick: function(picker){
                               this.$Message.info('Click yesterday');
                             }
                           },
                           {
                             text: 'One week',
-                            value () {
+                            value: function(){
                               const date = new Date();
                               date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
                               return date;
                             },
-                            onClick: (picker) => {
+                            onClick: function(picker){
                               this.$Message.info('Click a week ago');
                             }
                           }
@@ -880,8 +880,8 @@ var ex_query_01 = new Vue({
                     select1: 'city_003',
                     select2: ["city_001"],
                     str1: "Hello World!!!",
-                    cascader1: ['zujian', 'data', 'tag'],
-                    transfer: [1, 2],
+                    checkbox: ["1","2"],
+                    radio: "1",
                     datepicker: "2016-01-01"
                   },
                   buttons: {
