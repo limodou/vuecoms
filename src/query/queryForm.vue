@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <div class="query_form_panel">
     <template v-if="selected.length>0">
       <Row type="flex" align="middle">
         <Col span="1">
@@ -29,24 +29,27 @@
       <Row type="flex" justify="center">
                 <span @click="showHideSwitch" class="showMoreBtn">
                     {{isShow?"隐藏":"显示"}}
-                    <Icon type="android-arrow-dropup" v-show="isShow"></Icon>
-                    <Icon type="android-arrow-dropdown" v-show="!isShow"></Icon>
+                    <Icon type="ios-arrow-up" v-show="isShow"></Icon>
+                    <Icon type="ios-arrow-down" v-show="!isShow"></Icon>
                 </span>
       </Row>
       <Row type="flex" :justify="btnJustify">
         <Col style="margin:5px;" span="2" order="1">
         <Button type="primary" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
         </Col>
-        <Col style="margin:5px" span="2" order="2">
+        <Col style="margin:5px" v-if="" span="2" order="2" v-if="!(this.btnOpt.clear.show == false)">
         <Button v-if="this.hasOwnProperty('btnOpt')&&this.btnOpt.hasOwnProperty('clear')" type="error"
                 @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
         </Button>
         </Col>
       </Row>
     </Form>
-  </Card>
+  </div>
 </template>
 <style scoped>
+  div.query_form_panel{
+    padding:15px;
+  }
   div.ivu-form-item {
     margin: 5px;
   }
@@ -71,26 +74,36 @@
     border-left: 2px solid #eee;
     border-right: 2px solid #eee;
     border-bottom: 2px solid #eee;
-    padding: 3px;
+    padding: 5px 10px;
     -moz-border-radius-bottomleft: 5px;
     -moz-border-radius-bottomright: 5px;
     cursor: pointer;
     margin: 0 auto;
+    font-size: 12px;
+    color: #0000008f;
+  }
+  span.showMoreBtn:hover{
+    color: #ff5d4b;
+    border-color:#ff5d4b;
+    font-size:14px;
+    padding:5px 10px 2px 10px;
   }
 </style>
 <script>
   import Vue from "vue";
   import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
-  import "iview/dist/styles/iview.css";
+  //import "iview/dist/styles/iview.css";
   import Store from "./vQueryStore";
   import QueryString from "./queryString.vue"
   import QuerySelect from "./querySelect.vue"
   import QueryDatepicker from "./queryDatepicker.vue"
   import QueryRadio from "./queryRadio.vue"
   import QueryCheckbox from "./queryCheckbox.vue"
+  import Emitter from '@/mixins/emitter.js'
 
   export default {
     props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line"],
+    mixins: [ Emitter ],
     components: {
       "str": QueryString,
       "iselect": QuerySelect,
@@ -115,8 +128,17 @@
       }
 
       //button
-      let btnOpt = this.buttons,
-        btnJustify = btnOpt && btnOpt.hasOwnProperty("justify") ? btnOpt["justify"] : "end";
+      let btnOpt = this.buttons?this.buttons:{
+          align: "center",//按钮左中右 start center end 默认 end
+          submit: {
+            label: "点此查询"
+          },
+          clear: {
+            label: "点此清除",
+            show: true
+          }
+        },
+        btnJustify = btnOpt && btnOpt.hasOwnProperty("align") ? btnOpt["align"] : "center";
       //selected tag { name: "", label: "", val: ""}
       let selected = [];
       //showLine
@@ -254,23 +276,24 @@
 //                            this.store.setVal(i, p[i]);
 //                        }
 //                        this.createSelectedTag();
-        let re = this.submit(this.store.getVal());
-        if (re) {
-          this.selected = [];
-          this.createSelectedTag();
-        }
+//                let re = this.submit(this.store.getVal());
+//                if (re) {
+        this.selected = [];
+        this.createSelectedTag();
+//                }
 //                    } else if (typeof p == "boolean" && p) {
 //                        //if the type of return value is a boolean and it is true,
 //                        //update selected tag and value which is in store
 //                        this.submit(this.store.getVal())
 //                    }
 //                }
+        this.dispatch("QueryForm", "query.submit", this.store.getVal())
       },
       btnClear(){
         if (typeof this.changed == "function" && this.changed({})) {
           this.selected = [];
           this.store.delVal();
-          this.$emit("query.update", {})
+          this.dispatch("QueryForm", "query.clear", {});
         }
       },
       showHideSwitch(){
