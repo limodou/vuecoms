@@ -15,8 +15,8 @@
     </template>
     <Form :label-width="80">
       <template v-for="(tags, index) in formLayout">
-        <Row type="flex">
-          <template v-for="(tag, index) in tags">
+        <Row type="flex" v-show="((index+1)>showLine?isShow:true)">
+          <template v-for="(tag, _index) in tags">
             <Col span="8">
             <FormItem :label="getLabel(tag)">
               <component :is="getType(tag)" :store="store" :tagName="tag" :key="tag"></component>
@@ -24,8 +24,15 @@
             </Col>
           </template>
         </Row>
-        <div class="line"></div>
+        <div class="line" v-show="((index+1)>showLine?isShow:true)"></div>
       </template>
+      <Row type="flex" justify="center">
+                <span @click="showHideSwitch" class="showMoreBtn">
+                    {{isShow?"隐藏":"显示"}}
+                    <Icon type="android-arrow-dropup" v-show="isShow"></Icon>
+                    <Icon type="android-arrow-dropdown" v-show="!isShow"></Icon>
+                </span>
+      </Row>
       <Row type="flex" :justify="btnJustify">
         <Col style="margin:5px;" span="2" order="1">
         <Button type="primary" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
@@ -59,7 +66,16 @@
     /*left: 0;*/
     box-sizing: border-box;
   }
-
+  span.showMoreBtn{
+    border-left: 2px solid #eee;
+    border-right: 2px solid #eee;
+    border-bottom: 2px solid #eee;
+    padding:3px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    cursor:pointer;
+    margin:0 auto;
+  }
 </style>
 <script>
   import Vue from "vue";
@@ -102,12 +118,18 @@
         btnJustify = btnOpt && btnOpt.hasOwnProperty("justify") ? btnOpt["justify"] : "end";
       //selected tag { name: "", label: "", val: ""}
       let selected = [];
+      //showLine
+      let showLine = 2,
+        isShow = false;
+      console.log("showLine=", showLine, typeof showLine);
       return {
         store,
         formLayout,
         btnOpt,
         btnJustify,
-        selected
+        selected,
+        showLine,
+        isShow
       }
     },
     mounted(){
@@ -237,6 +259,9 @@
           this.store.delVal();
           this.$emit("query.update", {})
         }
+      },
+      showHideSwitch(){
+        this.isShow = !this.isShow;
       }
     }
   }
