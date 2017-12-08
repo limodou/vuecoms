@@ -28,7 +28,7 @@ class Store {
       autoLoad: true, // 是否自动装入数据
       url: '', // 访问后台的URL
       param: {
-      }, // 访问后台的URL所带参数，可以是函数
+      }, // 访问后台的URL所带参数
       buttons: [],
       rightButtons: [],
       bottomButtons: [],

@@ -37,7 +37,7 @@
         <Col style="margin:5px;" span="2" order="1">
         <Button type="primary" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
         </Col>
-        <Col style="margin:5px" v-if="" span="2" order="2" v-if="!(this.btnOpt.clear.show == false)">
+        <Col style="margin:5px" span="2" order="2" v-if="!(this.btnOpt.clear.show == false)">
         <Button v-if="this.hasOwnProperty('btnOpt')&&this.btnOpt.hasOwnProperty('clear')" type="error"
                 @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
         </Button>
@@ -287,13 +287,13 @@
 //                        this.submit(this.store.getVal())
 //                    }
 //                }
-        this.dispatch("QueryForm", "input", this.store.getVal())
+        this.$emit("input", this.store.getVal())
       },
       btnClear(){
         if (typeof this.changed == "function" && this.changed({})) {
           this.selected = [];
           this.store.delVal();
-          this.dispatch("QueryForm", "clear", {});
+          this.$emit("clear", {});
         }
       },
       showHideSwitch(){

@@ -2,7 +2,7 @@
   <div class="u-grid-wrapper">
     <Query v-if="query" :fields="query.fields" :layout="query.layout"
       :buttons="query.buttons"
-      :value="query.value"></Query>
+      :value="query.value" @input="handleQuerySubmit"></Query>
     <div class="u-grid-tools" slot="tools">
       <div class="u-grid-tools-left" v-if="buttons.length">
         <Buttons :buttons="buttons"></Buttons>
@@ -478,6 +478,11 @@ export default {
         this.showLoading(true)
         this.onLoadData(_url, param, callback)
       }
+    },
+
+    handleQuerySubmit (data) {
+      this.store.states.param = Object.assign(this.param, data)
+      this.loadData()
     }
   },
 

@@ -190,7 +190,7 @@ var ex_table_02 = new Vue({
       ],
 
       onLoadData: function (url, param, callback) {
-        self.param = param
+        self.param = Object.assign({}, param)
         var data = []
         var b = (param.page - 1) * param.pageSize
         for (var i = 0; i < param.pageSize; i++) {
@@ -273,7 +273,7 @@ var ex_table_02 = new Vue({
         str1: "Hello World!!!"
       },
       buttons: {
-        justify: "center",//按钮左中右 start center end 默认 end
+        align: "center",//按钮左中右 start center end 默认 end
         submit: {
           label: "点此查询",
         },
@@ -282,8 +282,6 @@ var ex_table_02 = new Vue({
         }
       }
     }
-
-
 
     return {
       table:table,
