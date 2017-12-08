@@ -743,7 +743,7 @@ var ex_table_04 = new Vue({
 
 {% include-code %}
 <div id="ex-query-01">
-  <query-form :fields="fields" :layout="layout" :value="value" :buttons="buttons" :submit="submit" :changed="changed"></query-form>
+  <query-form :fields="fields" :layout="layout" :value="value" :buttons="buttons" :show-line="3" :submit="submit" :changed="changed"></query-form>
 </div>
 <script>
 var ex_query_01 = new Vue({
