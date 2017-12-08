@@ -287,13 +287,13 @@
 //                        this.submit(this.store.getVal())
 //                    }
 //                }
-        this.dispatch("QueryForm", "query.submit", this.store.getVal())
+        this.dispatch("QueryForm", "input", this.store.getVal())
       },
       btnClear(){
         if (typeof this.changed == "function" && this.changed({})) {
           this.selected = [];
           this.store.delVal();
-          this.dispatch("QueryForm", "input", {});
+          this.dispatch("QueryForm", "clear", {});
         }
       },
       showHideSwitch(){
