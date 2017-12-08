@@ -743,7 +743,7 @@ var ex_table_04 = new Vue({
 
 {% include-code %}
 <div id="ex-query-01">
-  <query-form :fields="fields" :layout="layout" :value="value" :buttons="buttons" :show-line="3" :submit="submit" :changed="changed"></query-form>
+  <query-form :fields="fields" :layout="layout" :value="value" :buttons="buttons" :show-line="3"></query-form>
 </div>
 <script>
 var ex_query_01 = new Vue({
@@ -885,12 +885,13 @@ var ex_query_01 = new Vue({
                     datepicker: "2016-01-01"
                   },
                   buttons: {
-                    justify: "center",//按钮左中右 start center end 默认 end
+                    align: "center",//按钮左中右 start center end 默认 end
                     submit: {
                       label: "点此查询",
                     },
                     clear: {
-                      label: "点此清除"
+                      label: "点此清除",
+                      show:false
                     }
                   }
         }
