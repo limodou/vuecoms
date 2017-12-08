@@ -38,6 +38,7 @@ class Store {
       editMode: '', // 编辑模式 'full' 全屏模式 'row' 行模式
       actionColumn: '', // 行编辑时，显示编辑按钮的列名,将缺省显示['编辑', '删除']
       deleteRowConfirm: true, // 删除前是否先确认
+      query: null, // 查询条件对象
 
       // 回调
       onLoadData: null, // 装入数据回调函数，将传入 function (url, param, callback)

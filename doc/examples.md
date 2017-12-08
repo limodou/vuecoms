@@ -262,6 +262,27 @@ var ex_table_02 = new Vue({
       table.data.push(row)
     }
 
+    table.query = {
+      fields: [
+        {name: "str1", type: "str", label: "字符串1", placeholder: "请输入字符串1"}
+      ],
+      layout: [
+        ['str1']
+      ],
+      value: {
+        str1: "Hello World!!!"
+      },
+      buttons: {
+        justify: "center",//按钮左中右 start center end 默认 end
+        submit: {
+          label: "点此查询",
+        },
+        clear: {
+          label: "点此清除"
+        }
+      }
+    }
+
 
 
     return {

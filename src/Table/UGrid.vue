@@ -1,5 +1,8 @@
 <template>
   <div class="u-grid-wrapper">
+    <Query v-if="query" :fields="query.fields" :layout="query.layout"
+      :buttons="query.buttons"
+      :value="query.value"></Query>
     <div class="u-grid-tools" slot="tools">
       <div class="u-grid-tools-left" v-if="buttons.length">
         <Buttons :buttons="buttons"></Buttons>
@@ -44,6 +47,7 @@ import Pagination from './pagination'
 import Buttons from './UButtons'
 import {mapState, mapMethod, copyDataRow} from '@/utils/utils.js'
 import Emitter from '@/mixins/emitter.js'
+import Query from '../query'
 
 export default {
   name: 'Grid',
@@ -52,7 +56,8 @@ export default {
   components: {
     UTable,
     Pagination,
-    Buttons
+    Buttons,
+    Query
   },
 
   data () {
@@ -79,7 +84,7 @@ export default {
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
-      'onSaveRow', 'onDeleteRow', 'onLoadData'
+      'onSaveRow', 'onDeleteRow', 'onLoadData', 'query'
     ),
 
     columnDraggerStyles () {
