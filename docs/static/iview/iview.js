@@ -797,11 +797,19 @@ function getTarget(node) {
     return node instanceof window.Node ? node : document.querySelector(node);
 }
 
+function data(el, name) {
+    if (!el.dataset) {
+        return el.getAttribute('data-' + name);
+    } else {
+        return el.dataset[name];
+    }
+}
+
 var directive = {
     inserted: function inserted(el, _ref, vnode) {
         var value = _ref.value;
 
-        if (el.dataset.transfer !== 'true') return false;
+        if (data(el, 'transfer') !== 'true') return false;
         el.className = el.className ? el.className + ' v-transfer-dom' : 'v-transfer-dom';
         var parentNode = el.parentNode;
         if (!parentNode) return;
@@ -825,7 +833,7 @@ var directive = {
     componentUpdated: function componentUpdated(el, _ref2) {
         var value = _ref2.value;
 
-        if (el.dataset.transfer !== 'true') return false;
+        if (data(el, 'transfer') !== 'true') return false;
 
         var ref$1 = el.__transferDomData;
         if (!ref$1) return;
@@ -847,7 +855,7 @@ var directive = {
         }
     },
     unbind: function unbind(el) {
-        if (el.dataset.transfer !== 'true') return false;
+        if (data(el, 'transfer') !== 'true') return false;
         el.className = el.className.replace('v-transfer-dom', '');
         var ref$1 = el.__transferDomData;
         if (!ref$1) return;
@@ -3386,7 +3394,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
     function getOffsetParent(element) {
         // NOTE: 1 DOM access here
         var offsetParent = element.offsetParent;
-        return offsetParent === root.document.body || !offsetParent ? root.document.documentElement : offsetParent;
+        // return offsetParent === root.document.body || !offsetParent ? root.document.documentElement : offsetParent;
+        return offsetParent
     }
 
     /**
@@ -5600,6 +5609,8 @@ var _index = __webpack_require__(91);
 
 var _index2 = _interopRequireDefault(_index);
 
+var _shim = __webpack_require__(533);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var components = {
@@ -5703,6 +5714,8 @@ var install = function install(Vue) {
 if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
+
+(0, _shim.shim)();
 
 var API = (0, _extends3.default)({
     version: '2.7.4',
@@ -33021,7 +33034,7 @@ exports.default = {
 
 module.exports = { render: function render() {
     var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;
-    return _c('collapse-transition', [_c('ul', {
+    return _c('ul', {
       class: _vm.classes
     }, [_c('li', [_c('span', {
       class: _vm.arrowClasses,
@@ -33075,7 +33088,7 @@ module.exports = { render: function render() {
           "show-checkbox": _vm.showCheckbox
         }
       }) : _vm._e();
-    })], 2)])]);
+    })], 2)]);
   }, staticRenderFns: [] };
 
 /***/ }),
@@ -34178,6 +34191,63 @@ module.exports = { render: function render() {
       class: [_vm.prefixCls]
     }, [_vm._t("default")], 2)])]);
   }, staticRenderFns: [] };
+
+/***/ }),
+/* 533 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var shim = exports.shim = function shim() {
+  var lastTime = 0;
+  var vendors = ['webkit', 'moz'];
+  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+  }
+
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function (callback, element) {
+      var currTime = new Date().getTime();
+      var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+      var id = window.setTimeout(function () {
+        callback(currTime + timeToCall);
+      }, timeToCall);
+      lastTime = currTime + timeToCall;
+      return id;
+    };
+  }
+  if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = function (id) {
+      clearTimeout(id);
+    };
+  }
+
+  if ("performance" in window == false) {
+    window.performance = {};
+  }
+
+  Date.now = Date.now || function () {
+    return new Date().getTime();
+  };
+
+  if ("now" in window.performance == false) {
+
+    var nowOffset = Date.now();
+
+    if (performance.timing && performance.timing.navigationStart) {
+      nowOffset = performance.timing.navigationStart;
+    }
+
+    window.performance.now = function now() {
+      return Date.now() - nowOffset;
+    };
+  }
+};
 
 /***/ })
 /******/ ]);
