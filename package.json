@@ -11,7 +11,7 @@
     "lint": "eslint --ext .js,.vue src",
     "build:watch": "watch 'npm run build' ./src",
     "doc:watch": "watch 'npm run build && cd doc && ./make.sh' ./src",
-    "doc": "npm run build && cd doc && ./make.sh"
+    "doc": "cd doc && ./make.sh"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
@@ -59,7 +59,6 @@
     "shelljs": "^0.7.6",
     "sortablejs": "^1.7.0",
     "url-loader": "^0.5.8",
-    "v-tooltip": "^2.0.0-rc.25",
     "vue-loader": "^13.5.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.9",
