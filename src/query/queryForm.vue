@@ -293,7 +293,7 @@
         if (typeof this.changed == "function" && this.changed({})) {
           this.selected = [];
           this.store.delVal();
-          this.dispatch("QueryForm", "query.clear", {});
+          this.dispatch("QueryForm", "input", {});
         }
       },
       showHideSwitch(){
