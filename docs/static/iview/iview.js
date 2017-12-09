@@ -1794,8 +1794,6 @@ var Transition = {
             el.style.paddingTop = el.dataset.oldPaddingTop;
             el.style.paddingBottom = el.dataset.oldPaddingBottom;
         }
-
-        el.style.overflow = 'hidden';
     },
     afterEnter: function afterEnter(el) {
         (0, _assist.removeClass)(el, 'collapse-transition');
@@ -1809,7 +1807,6 @@ var Transition = {
         el.dataset.oldOverflow = el.style.overflow;
 
         el.style.height = el.scrollHeight + 'px';
-        el.style.overflow = 'hidden';
     },
     leave: function leave(el) {
         if (el.scrollHeight !== 0) {
@@ -33031,7 +33028,7 @@ exports.default = {
 
 module.exports = { render: function render() {
     var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;
-    return _c('ul', {
+    return _c('collapse-transition', [_c('ul', {
       class: _vm.classes
     }, [_c('li', [_c('span', {
       class: _vm.arrowClasses,
@@ -33085,7 +33082,7 @@ module.exports = { render: function render() {
           "show-checkbox": _vm.showCheckbox
         }
       }) : _vm._e();
-    })], 2)]);
+    })], 2)])]);
   }, staticRenderFns: [] };
 
 /***/ }),

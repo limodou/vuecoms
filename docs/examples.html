@@ -1053,6 +1053,75 @@ var ex_query_01 = new Vue({
 </div>
 </div>
 </div>
+<h2 id="title_1-4">Tree<a class="anchor" href="#title_1-4">&para;</a></h2>
+<h3 id="title_1-4-7">Tree演示<a class="anchor" href="#title_1-4-7">&para;</a></h3>
+<div class="tabbable">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#tab_item_7_19" data-toggle="tab">Result</a></li>
+<li><a href="#tab_item_7_20" data-toggle="tab">Javascript</a></li>
+<li><a href="#tab_item_7_21" data-toggle="tab">HTML</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="tab_item_7_19">
+
+<p>Tree控件演示</p>
+<div id="ex-tree-01" style="width: 200px; overflow: auto; border: 1px solid gray;">
+  <Tree :data="data"></Tree>
+</div>
+<script>
+var ex_tree_01 = new Vue({
+  el: '#ex-tree-01',
+  data: function () {
+    var data = [
+      {
+        title: 'parent 1',
+        expand: true,
+        children: [
+          {
+            title: 'parent 1-1 - long- long- long- long- long- long',
+            expand: true,
+            children: [
+              {
+                title: 'leaf 1-1-1- long- long- long- long- long- long'
+              },
+              {
+                title: 'leaf 1-1-2'
+              }
+            ]
+          },
+          {
+            title: 'parent 1-2',
+            expand: true,
+            children: [
+              {
+                title: 'leaf 1-2-1'
+              },
+              {
+                title: 'leaf 1-2-1'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+    return {data:data}
+  }
+})
+</script>
+
+</div>
+<div class="tab-pane" id="tab_item_7_20">
+
+<p><code>` `</code></p>
+
+</div>
+<div class="tab-pane" id="tab_item_7_21">
+
+<pre class="prettyprint "><code>&lt;Tree :data="data"&gt;&lt;/Tree&gt;</code></pre>
+
+</div>
+</div>
+</div>
 
     </div>
   </div>
