@@ -3411,6 +3411,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
     function getOffsetParent(element) {
         // NOTE: 1 DOM access here
         var offsetParent = element.offsetParent;
+        return !offsetParent ? root.document.documentElement : offsetParent;
         return offsetParent;
         // return offsetParent === root.document.body || !offsetParent ? root.document.documentElement : offsetParent;
     }

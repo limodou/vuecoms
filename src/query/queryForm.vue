@@ -1,7 +1,7 @@
 <template>
-  <div class="query_form_panel">
+  <div class="u-query">
     <template v-if="selected.length>0">
-      <Row type="flex" align="middle">
+      <Row align="middle">
         <Col span="1">
         <span style="font-size: 14px; font-weight: bold; color: rgb(70, 76, 91);">已选:</span>
         </Col>
@@ -15,7 +15,7 @@
     </template>
     <Form :label-width="80">
       <template v-for="(tags, index) in formLayout">
-        <Row type="flex" v-show="((index+1)>showLineNum?isShow:true)">
+        <Row v-show="((index+1)>showLineNum?isShow:true)">
           <template v-for="(tag, _index) in tags">
             <Col span="8">
             <FormItem :label="getLabel(tag)">
@@ -26,67 +26,84 @@
         </Row>
         <div class="line" v-show="((index+1)>showLineNum?isShow:true)"></div>
       </template>
-      <Row type="flex" justify="center">
+      <Row justify="center" class="collapse-line">
                 <span @click="showHideSwitch" class="showMoreBtn">
                     {{isShow?"隐藏":"显示"}}
                     <Icon type="ios-arrow-up" v-show="isShow"></Icon>
                     <Icon type="ios-arrow-down" v-show="!isShow"></Icon>
                 </span>
       </Row>
-      <Row type="flex" :justify="btnJustify">
-        <Col style="margin:5px;" span="2" order="1">
-        <Button type="primary" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
-        </Col>
-        <Col style="margin:5px" span="2" order="2" v-if="!(this.btnOpt.clear.show == false)">
-        <Button v-if="this.hasOwnProperty('btnOpt')&&this.btnOpt.hasOwnProperty('clear')" type="error"
-                @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
+      <Row :justify="btnJustify">
+        <Col style="margin:5px; text-align:center" span="24">
+          <Button type="primary" size="small" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
+          <Button v-if="this.hasOwnProperty('btnOpt')&&this.btnOpt.hasOwnProperty('clear')" type="error"
+              size="small"
+              @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
         </Button>
         </Col>
       </Row>
     </Form>
   </div>
 </template>
-<style scoped>
-  div.query_form_panel{
+<style lang="less">
+  .u-query {
     padding:15px;
-  }
-  div.ivu-form-item {
-    margin: 5px;
-  }
 
-  div.line {
-    height: 1px;
-  }
+    .ivu-form-item {
+      margin: 5px;
+    }
 
-  div.line:before {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background: #eee;
-    /*position: absolute;*/
-    /*top: 10px;*/
-    /*left: 0;*/
-    box-sizing: border-box;
-  }
+    .line {
+      height: 1px;
+    }
 
-  span.showMoreBtn {
-    border-left: 2px solid #eee;
-    border-right: 2px solid #eee;
-    border-bottom: 2px solid #eee;
-    padding: 5px 10px;
-    -moz-border-radius-bottomleft: 5px;
-    -moz-border-radius-bottomright: 5px;
-    cursor: pointer;
-    margin: 0 auto;
-    font-size: 12px;
-    color: #0000008f;
-  }
-  span.showMoreBtn:hover{
-    color: #ff5d4b;
-    border-color:#ff5d4b;
-    font-size:14px;
-    padding:5px 10px 2px 10px;
+    &:before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: #eee;
+      /*position: absolute;*/
+      /*top: 10px;*/
+      /*left: 0;*/
+      box-sizing: border-box;
+    }
+
+    .collapse-line {
+      text-align:center;
+      border-top:1px solid #eee;
+      height: 24px;
+      margin-bottom: 10px;
+
+      .showMoreBtn {
+        position: absolute;
+        border-top: 1px solid white;
+        border-left: 1px solid #eee;
+        border-right: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 1px 10px;
+        -moz-border-radius-bottomleft: 5px;
+        -moz-border-radius-bottomright: 5px;
+        cursor: pointer;
+        margin: 0 auto;
+        margin-top: -1px;
+        font-size: 9px;
+        color: #0000008f;
+        left: 50%;
+      }
+
+      &:hover {
+        border-top:1px solid red;
+
+        .showMoreBtn {
+          color: #ff5d4b;
+          border-color:#ff5d4b;
+          border-top: 1px solid white;
+        }
+      }
+
+    }
+
   }
 </style>
 <script>
@@ -148,7 +165,6 @@
           ? (this.showLine ? 2 : formLayout.length + 1) //showLine is a boolean. if it's true, set it to 2, if not, set it equal to formLayout's length + 1
           : 2),//showLine is not a boolean yet, set default value to 2
         isShow = false;
-      console.log("showLine=", showLineNum, typeof showLineNum);
       return {
         store,
         formLayout,
