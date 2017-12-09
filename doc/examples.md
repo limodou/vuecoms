@@ -841,7 +841,7 @@ var ex_query_01 = new Vue({
                           {
                             text: 'Yesterday',
                             value: function(){
-                              const date = new Date();
+                              var date = new Date();
                               date.setTime(date.getTime() - 3600 * 1000 * 24);
                               return date;
                             },
@@ -852,7 +852,7 @@ var ex_query_01 = new Vue({
                           {
                             text: 'One week',
                             value: function(){
-                              const date = new Date();
+                              var date = new Date();
                               date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
                               return date;
                             },
