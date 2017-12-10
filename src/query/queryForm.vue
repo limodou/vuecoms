@@ -87,7 +87,7 @@
         cursor: pointer;
         margin: 0 auto;
         margin-top: -1px;
-        font-size: 9px;
+        font-size: 12px;
         color: #0000008f;
         left: 50%;
       }

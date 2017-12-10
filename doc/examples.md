@@ -202,7 +202,7 @@ var ex_table_02 = new Vue({
         }
         setTimeout( function () {
           callback(data)
-          }, 500)
+          }, 0)
       },
 
       onSelect: function (row) {
@@ -1000,6 +1000,65 @@ var ex_tree_01 = new Vue({
 
 ```
 <Tree :data="data"></Tree>
+```
+
+{% endtabs %}
+
+## Build
+
+### 基本构建
+
+{% tabs %}
+
+-- Result --
+
+{% include-code %}
+<div id="ex-build-01">
+  <build ref="build" :data="data"></build>
+</div>
+<script>
+var ex_build_01 = new Vue({
+  el: '#ex-build-01',
+  data: function () {
+    var self = this
+    var data = [
+      {
+        name: 'basic',
+        title: '基本信息',
+        fields: [
+          {name: 'str1', label: '字符串1'},
+          {name: 'str2', label: '字符串2'},
+          {name: 'str3', label: '字符串3'}
+        ],
+        layout: [
+          ['str1', 'str2'],
+          ['str3']
+        ],
+        value: {
+          str1: '123',
+          str2: 'aaa'
+        }, //初始化数据
+        layoutComponent: 'Snippet',
+        boxComponent: 'Box'
+
+      }
+    ]
+
+    return {data:data}
+  }
+})
+</script>
+{% endinclude-code %}
+
+-- Javascript --
+
+```
+```
+
+-- HTML --
+
+```
+<Build ref="build" :data="data"></Build>
 ```
 
 {% endtabs %}

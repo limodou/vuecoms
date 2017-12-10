@@ -11,7 +11,9 @@ if [ ! -d "$dir/static" ]; then
 fi
 #cp examples.js $dir/static
 cp ../dist/static/css/vuecoms.css $dir/static
+cp ../dist/static/css/vuecoms.css.map $dir/static
 cp ../dist/static/js/vuecoms.js $dir/static
+cp ../dist/static/js/vuecoms.js.map $dir/static
 cp ../node_modules/vue/dist/vue.js $dir/static
 if [ ! -d "$dir/static/iview" ]; then
   mkdir -p $dir/static/iview
