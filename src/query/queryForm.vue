@@ -35,10 +35,10 @@
       </Row>
       <Row :justify="btnJustify">
         <Col style="margin:5px; text-align:center" span="24">
-          <Button type="primary" size="small" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
-          <Button v-if="this.hasOwnProperty('btnOpt')&&this.btnOpt.hasOwnProperty('clear')" type="error"
-              size="small"
-              @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
+        <Button type="primary" size="small" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
+        <Button v-if="this.hasOwnProperty('btnOpt')&&this.btnOpt.hasOwnProperty('clear')" type="error"
+                size="small"
+                @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
         </Button>
         </Col>
       </Row>
@@ -49,67 +49,67 @@
   .u-query {
     padding:15px;
 
-    .ivu-form-item {
-      margin: 5px;
-    }
+  .ivu-form-item {
+    margin: 5px;
+  }
 
-    .line {
-      height: 1px;
-    }
+  .line {
+    height: 1px;
+  }
 
-    &:before {
-      content: "";
-      display: block;
-      width: 100%;
-      height: 1px;
-      background: #eee;
-      /*position: absolute;*/
-      /*top: 10px;*/
-      /*left: 0;*/
-      box-sizing: border-box;
-    }
+  &:before {
+     content: "";
+     display: block;
+     width: 100%;
+     height: 1px;
+     background: #eee;
+     /*position: absolute;*/
+     /*top: 10px;*/
+     /*left: 0;*/
+     box-sizing: border-box;
+   }
 
-    .collapse-line {
-      text-align:center;
-      border-top:1px solid #eee;
-      height: 24px;
-      margin-bottom: 10px;
+  .collapse-line {
+    text-align:center;
+    border-top:1px solid #eee;
+    height: 24px;
+    margin-bottom: 10px;
 
-      .showMoreBtn {
-        position: absolute;
-        border-top: 1px solid white;
-        border-left: 1px solid #eee;
-        border-right: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        padding: 1px 10px;
-        -moz-border-radius-bottomleft: 5px;
-        -moz-border-radius-bottomright: 5px;
-        cursor: pointer;
-        margin: 0 auto;
-        margin-top: -1px;
-        font-size: 12px;
-        color: #0000008f;
-        left: 50%;
-      }
+  .showMoreBtn {
+    position: absolute;
+    border-top: 1px solid white;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 1px 10px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-top: -1px;
+    font-size: 12px;
+    color: #0000008f;
+    left: 50%;
+  }
 
-      &:hover {
-        border-top:1px solid red;
+  &:hover {
+     border-top:1px solid red;
 
-        .showMoreBtn {
-          color: #ff5d4b;
-          border-color:#ff5d4b;
-          border-top: 1px solid white;
-        }
-      }
+  .showMoreBtn {
+    color: #ff5d4b;
+    border-color:#ff5d4b;
+    border-top: 1px solid white;
+  }
+  }
 
-    }
+  }
 
   }
 </style>
 <script>
   import Vue from "vue";
   import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
-  //import "iview/dist/styles/iview.css";
+  import "iview/dist/styles/iview.css";
   import Store from "./vQueryStore";
   import QueryString from "./queryString.vue"
   import QuerySelect from "./querySelect.vue"
@@ -117,7 +117,7 @@
   import QueryRadio from "./queryRadio.vue"
   import QueryCheckbox from "./queryCheckbox.vue"
   import Emitter from '@/mixins/emitter.js'
-
+  import {QueryURL} from "../utils/utils"
   export default {
     props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line"],
     mixins: [ Emitter ],
@@ -132,20 +132,38 @@
     },
     data(){
       const store = new Store(this, this.fields, this.value);
-      //如果没有layout,根据fields的顺序生成layout
-      let formLayout = [];
-      if (this.layout) {
-        formLayout = this.layout;
-      } else {
-        let arr = [];
-        for (let i = 0, len = this.fields.length; i < len; i++) {
-          arr.push(this.fields[i]['name'])
-        }
-        formLayout.push(arr)
-      }
 
-      //button
-      let btnOpt = this.buttons?this.buttons:{
+      let selected = [],//selected tag { name: "", label: "", val: ""}
+        isShow = false; //showLine
+      return {
+        store,
+        selected,
+        isShow
+      }
+    },
+    computed:{
+      formLayout:function(){
+        let formLayout = [];
+        if (this.layout) {
+          formLayout = this.layout;
+        } else {
+          let arr = [];
+          for (let i = 0, len = this.fields.length; i < len; i++) {
+            arr.push(this.fields[i]['name'])
+          }
+          formLayout.push(arr)
+        }
+        return formLayout;
+      },
+      showLineNum:function(){
+        return (typeof this.showLine == "number") ?
+          this.showLine //showLine is number, adopt showLine
+          : ((typeof this.showLine == "boolean") //showLine isn't number and check it if boolean
+          ? (this.showLine ? 2 : formLayout.length + 1) //showLine is a boolean. if it's true, set it to 2, if not, set it equal to formLayout's length + 1
+          : 2);//showLine is not a boolean yet, set default value to 2
+      },
+      btnOpt:function(){
+        let btnOpt = this.buttons?this.buttons:{
           align: "center",//按钮左中右 start center end 默认 end
           submit: {
             label: "点此查询"
@@ -154,29 +172,17 @@
             label: "点此清除",
             show: true
           }
-        },
-        btnJustify = btnOpt && btnOpt.hasOwnProperty("align") ? btnOpt["align"] : "center";
-      //selected tag { name: "", label: "", val: ""}
-      let selected = [];
-      //showLine
-      let showLineNum = (typeof this.showLine == "number") ?
-          this.showLine //showLine is number, adopt showLine
-          : ((typeof this.showLine == "boolean") //showLine isn't number and check it if boolean
-          ? (this.showLine ? 2 : formLayout.length + 1) //showLine is a boolean. if it's true, set it to 2, if not, set it equal to formLayout's length + 1
-          : 2),//showLine is not a boolean yet, set default value to 2
-        isShow = false;
-      return {
-        store,
-        formLayout,
-        btnOpt,
-        btnJustify,
-        selected,
-        showLineNum,
-        isShow
+        };
+        return btnOpt;
+      },
+      btnJustify: function(){
+        return this.btnOpt && this.btnOpt.hasOwnProperty("align") ? this.btnOpt["align"] : "center";
       }
     },
     mounted(){
       //create selected tag
+      let qu = new QueryURL(window.location.href);
+
       this.createSelectedTag();
     },
     methods: {
