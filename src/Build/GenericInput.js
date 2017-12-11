@@ -1,62 +1,36 @@
-import {Input, DatePicker} from 'iview'
-import uSelect from '../Select'
-import {isDate} from '@/utils/utils.js'
-
-const editor_map = {
-  string: {name: 'Input', options: {}},
-  select: {name: 'u-select', options: {}},
-  date: {name: 'DatePicker', options: {transfer: true},
-    convert: x => {
-      if (x instanceof Date){
-        return `${x.getFullYear()}/${x.getMonth()+1}/${x.getDate()}`
-      }
-      if (isDate(x)) {
-        return x
-      }
-      return ''
-    }
-  }
-}
+import {getField} from './fields/fieldMapping.js'
 
 export default {
   name: 'GenericInput',
   functional: true,
   props: {
+    name: {},
     type: {
       type: String, // editor类型
       default: 'string'
     },
     value: {},  // 值
-    display: String, // 显示值
-    static: false, // 是否静态
-    options: Object // 编辑控件选项
+    static: {
+      type: Boolean,
+      default: false
+    }, //是否表态展示
+    options: Object, // 编辑控件选项
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    convert: {}
   },
   render (h, ctx) {
     let self = ctx.props
-    let editor = editor_map[self.type] || {name: 'Input', options: {}}
-    if (!self.static) {
-      let props = Object.assign(editor.options, {value: self.value}, self.options)
-      let c = h(editor.name, {
-        props,
-        on: {
-          input: (x) => {
-            if (editor.convert) {
-              x = editor.convert(x)
-            }
-            c.$emit('input', x)
-          }
-        }
-      })
-      return c
-    } else {
-      return h('span', {
-        'class': {
-          'u-generic-input-text': true
-        },
-        domProps: {
-          innerHTML: self.display || self.value
-        }
-      })
+    let InputClass = getField(self.type)
+    let input = new InputClass(ctx.props)
+    if (self.static) {
+      let callback = (v) => {
+        ctx.props.display = v
+      }
+      input.getCachedStaticValue(ctx.props.value[ctx.props.name], callback)
     }
+    return input.render(h, ctx)
   }
 }
