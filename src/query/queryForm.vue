@@ -46,8 +46,8 @@
   </div>
 </template>
 <style lang="less">
-  .u-query {
-    padding:15px;
+.u-query {
+  padding:15px;
 
   .ivu-form-item {
     margin: 5px;
@@ -75,41 +75,38 @@
     height: 24px;
     margin-bottom: 10px;
 
-  .showMoreBtn {
-    position: absolute;
-    border-top: 1px solid white;
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    padding: 1px 10px;
-    -moz-border-radius-bottomleft: 5px;
-    -moz-border-radius-bottomright: 5px;
-    cursor: pointer;
-    margin: 0 auto;
-    margin-top: -1px;
-    font-size: 12px;
-    color: #0000008f;
-    left: 50%;
-  }
+    .showMoreBtn {
+      position: absolute;
+      border-top: 1px solid white;
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 1px 10px;
+      -moz-border-radius-bottomleft: 5px;
+      -moz-border-radius-bottomright: 5px;
+      cursor: pointer;
+      margin: 0 auto;
+      margin-top: -1px;
+      font-size: 12px;
+      color: #0000008f;
+      left: 50%;
+    }
 
-  &:hover {
-     border-top:1px solid red;
+    &:hover {
+       border-top:1px solid red;
 
-  .showMoreBtn {
-    color: #ff5d4b;
-    border-color:#ff5d4b;
-    border-top: 1px solid white;
+      .showMoreBtn {
+        color: #ff5d4b;
+        border-color:#ff5d4b;
+        border-top: 1px solid white;
+      }
+    }
   }
-  }
-
-  }
-
-  }
+}
 </style>
 <script>
   import Vue from "vue";
   import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
-  import "iview/dist/styles/iview.css";
   import Store from "./vQueryStore";
   import QueryString from "./queryString.vue"
   import QuerySelect from "./querySelect.vue"

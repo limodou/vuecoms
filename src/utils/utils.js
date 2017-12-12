@@ -111,7 +111,6 @@ export const isDateTime = function (str)
     d.getMinutes() == r[6] && d.getSeconds() == r[7])
 }
 
-<<<<<<< HEAD
 export const text2html = function (text) {
     // 1: Plain Text Search
     text = text.replace(/&/g, "&amp;").
@@ -128,7 +127,8 @@ export const text2html = function (text) {
     text = "<p>" + text + "</p>";
 
     return text;
-=======
+}
+
 export let QueryURL = function(url) {
   this.urlParams = {};
   this.load(url);
@@ -218,5 +218,4 @@ QueryURL.prototype = {
     }
     return this;
   }
->>>>>>> 4a0d341ceb4a1f2de6261c6f8941e5063eaa3ab8
 }

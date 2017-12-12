@@ -27,9 +27,9 @@ export default {
     let input = new InputClass(ctx.props)
     if (self.static) {
       let callback = (v) => {
-        ctx.props.display = v
+        self.display = v
       }
-      input.getCachedStaticValue(ctx.props.value[ctx.props.name], callback)
+      input.getCachedStaticValue(self.value[self.name], callback)
     }
     return input.render(h, ctx)
   }

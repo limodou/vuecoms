@@ -72,7 +72,7 @@ export default class Field {
     else {
       display = typeof self.display !== null ? self.display : value
     }
-    return h('span', {
+    return h('div', {
       'class': {
         'u-generic-input-text': true
       },

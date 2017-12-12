@@ -4,14 +4,22 @@ export default class SelectField extends Field {
   constructor (options) {
     super(options)
     this.component = 'u-select'
+    this.options.multiple = this.multiple
   }
 
   getStaticValue (value, callback) {
-    let v
+    let v = []
     for (let c of this.options.choices) {
-      if (c.value == value) {
-        callback(c.label)
+      if (Array.isArray(value)) {
+        if (value.indexOf(c.value) > -1) {
+          v.push(c.label)
+          if (!this.multiple) break
+        }
+      } else if (c.value == value) {
+        v.push(c.label)
+        if (this.multiple) break
       }
     }
+    callback(v.join(', '))
   }
 }

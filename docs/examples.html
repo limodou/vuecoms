@@ -1174,6 +1174,16 @@ var ex_build_01 = new Vue({
             {label:'选项二', value: 'B'},
             ]}
           },
+          {name: 'select3', label: '选择', type: 'select', multiple: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'select4', label: '选择', type: 'select', multiple: true, static: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
           {name: 'text1', label: '文本1', type: 'text'},
           {name: 'text2', label: '文本2', type: 'text', static: true},
           {name: 'date1', label: '日期1', type: 'date'},
@@ -1183,6 +1193,7 @@ var ex_build_01 = new Vue({
         layout: [
           ['str1', 'str2'],
           ['select1', 'select2'],
+          ['select3', 'select4'],
           ['text1'],
           ['text2'],
           ['date1', 'date2']
@@ -1199,6 +1210,8 @@ var ex_build_01 = new Vue({
               str2: 'aaa',
               select1: 'B',
               select2: 'A',
+              select3: ['A', 'B'],
+              select4: ['A', 'B'],
               text1: 'Line 1\nLine 2',
               text2: 'Line 3\nLine 4',
               date2: '2017-12-12'
