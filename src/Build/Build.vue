@@ -3,7 +3,7 @@
     <component v-for="item in data"
       :is="item.layoutComponent"
       v-bind="item"
-      :model="value"></Snippet>
+      :value="value"></component>
   </div>
 </template>
 
@@ -15,7 +15,9 @@ export default {
       type: Array,
       default: () => []
     },
+
     plainData: true, //数据是否扁平化
+
     value: { // 数据存放对象
       type: Object,
       default: () => {
@@ -32,7 +34,8 @@ export default {
           fields: [] //字段
           layout: [] //布局
           layoutComponent： 'Snippet' //布局组件，卸省为Snippet
-          boxComponent: 'Box'
+          boxComponent: 'Box',
+          static: false, //是否静态
         }
       ]
     */

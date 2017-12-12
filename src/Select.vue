@@ -1,5 +1,5 @@
 <template>
-  <Select v-model="data" @input="handleInput">
+  <Select v-model="data" :multiple="multiple" @input="handleInput">
     <Option v-for="item in items" :value="item.value" :key="item.value">{{ item.label }}</Option>
   </Select>
 </template>
@@ -28,9 +28,9 @@ export default {
     }
   },
   props: [
-    'value', 'choices'
+    'value', 'choices', 'multiple'
   ],
-  
+
   methods: {
     handleInput () {
       this.$emit('input', this.data)

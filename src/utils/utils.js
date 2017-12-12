@@ -92,6 +92,7 @@ export const copyDataRow = function (s, o) {
 
 export const isDate = function (str)
 {
+  if (!str) return false
   let r = str.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/)
   if (r == null) return false
   let d = new Date(r[1], r[3]-1, r[4])
@@ -100,6 +101,7 @@ export const isDate = function (str)
 
 export const isDateTime = function (str)
 {
+  if (!str) return false
   let reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/
   let r = str.match(reg)
   if(r == null)return false
@@ -107,6 +109,24 @@ export const isDateTime = function (str)
   return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] &&
     d.getDate() == r[4] && d.getHours() == r[5] &&
     d.getMinutes() == r[6] && d.getSeconds() == r[7])
+}
+
+export const text2html = function (text) {
+    // 1: Plain Text Search
+    text = text.replace(/&/g, "&amp;").
+    replace(/</g, "&lt;").
+    replace(/>/g, "&gt;").replace(/  /g, "&nbsp;&nbsp;");
+
+    // 2: Line Breaks
+    text = text.replace(/\r\n?|\n/g, "<br>");
+
+    // 3: Paragraphs
+    text = text.replace(/<br>\s*<br>/g, "</p><p>");
+
+    // 4: Wrap in Paragraph Tags
+    text = "<p>" + text + "</p>";
+
+    return text;
 }
 
 export let QueryURL = function(url) {

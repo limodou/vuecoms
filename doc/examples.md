@@ -1008,13 +1008,30 @@ var ex_tree_01 = new Vue({
 
 ### 基本构建
 
+字段的标准定义如下：
+
+```
+{
+  name: //名字
+  label: //标签
+  type: string|select 等，缺省为string
+  static: true|false // 是否静态，缺省为false
+  multiple: true|false // 是否多值，缺省为false
+  options: // 根据不同的输入类型需要的额外属性
+  convert: (value) => { return result}
+}
+```
+
 {% tabs %}
 
 -- Result --
 
 {% include-code %}
 <div id="ex-build-01">
-  <build ref="build" :data="data"></build>
+  <build ref="build" :data="data" :value="value"></build>
+  <div>
+    {{value}}
+  </div>
 </div>
 <script>
 var ex_build_01 = new Vue({
@@ -1026,25 +1043,64 @@ var ex_build_01 = new Vue({
         name: 'basic',
         title: '基本信息',
         fields: [
-          {name: 'str1', label: '字符串1'},
-          {name: 'str2', label: '字符串2'},
-          {name: 'str3', label: '字符串3'}
+          {name: 'str1', label: '很长的很长的很长的字符串1'},
+          {name: 'str2', label: '静态字符串2', static: true, convert: function(v){
+            return '<a href="#">' + v + '</a>'
+            }
+          },
+          {name: 'select1', label: '选择', type: 'select', options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'select2', label: '选择', type: 'select', static: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'select3', label: '选择', type: 'select', multiple: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'select4', label: '选择', type: 'select', multiple: true, static: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'text1', label: '文本1', type: 'text'},
+          {name: 'text2', label: '文本2', type: 'text', static: true},
+          {name: 'date1', label: '日期1', type: 'date'},
+          {name: 'date2', label: '日期2', type: 'date', static: true},
+
         ],
         layout: [
           ['str1', 'str2'],
-          ['str3']
+          ['select1', 'select2'],
+          ['select3', 'select4'],
+          ['text1'],
+          ['text2'],
+          ['date1', 'date2']
         ],
-        value: {
-          str1: '123',
-          str2: 'aaa'
-        }, //初始化数据
         layoutComponent: 'Snippet',
         boxComponent: 'Box'
 
       }
+
     ]
 
-    return {data:data}
+    return {data:data, value: {
+              str1: '123',
+              str2: 'aaa',
+              select1: 'B',
+              select2: 'A',
+              select3: ['A', 'B'],
+              select4: ['A', 'B'],
+              text1: 'Line 1\nLine 2',
+              text2: 'Line 3\nLine 4',
+              date2: '2017-12-12'
+            }
+          }
   }
 })
 </script>

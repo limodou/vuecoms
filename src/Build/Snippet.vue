@@ -7,8 +7,7 @@
             <div class="u-snippet-cell-row">
               <label class="u-snippet-cell-label">{{col.label}}</label>
               <div class="u-snippet-cell-field">
-                <GenericInput v-bind="col" :value="model[col.name]" @input="handleInput(col.name, $event)"
-                ></GenericInput>
+                <GenericInput v-bind="col" :value="value"></GenericInput>
               </div>
             </div>
           </td>
@@ -49,7 +48,12 @@ export default {
       type: String,
       default: 'Box'
     },
-    model: Object
+    value: Object,
+    static: {
+      type: Boolean,
+      default: false
+    } //是否表态展示
+
   },
 
   computed: {
@@ -68,17 +72,14 @@ export default {
           }
           let width = 100 / 24 * span
           let f = List.get(this.fields, name, 'name')
-          let field = Object.assign({colspan: span, width: `${width}%`}, f)
+          let field = Object.assign({colspan: span,
+            width: `${width}%`,
+            static: col.static || this.static
+          }, f)
           new_r.push(field)
         }
       }
       return r
-    }
-  },
-
-  methods: {
-    handleInput (name, event) {
-      this.$set(model, 'name', event.target.value)
     }
   }
 }
@@ -120,10 +121,15 @@ export default {
         .u-snippet-cell-field {
           display: table-cell;
           width: 2000px;
+          vertical-align: bottom;
           /* border-bottom: 1px solid #ccc; */
 
           &:hover {
             background-color: whitesmoke;
+          }
+
+          .u-generic-input-text {
+            font-size: 14px;
           }
         }
       }
