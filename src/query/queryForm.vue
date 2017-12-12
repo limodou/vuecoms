@@ -117,7 +117,7 @@
   import QueryRadio from "./queryRadio.vue"
   import QueryCheckbox from "./queryCheckbox.vue"
   import Emitter from '@/mixins/emitter.js'
-  import {QueryURL} from "../utils/utils"
+
   export default {
     props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line"],
     mixins: [ Emitter ],
@@ -181,8 +181,6 @@
     },
     mounted(){
       //create selected tag
-      let qu = new QueryURL(window.location.href);
-
       this.createSelectedTag();
     },
     methods: {
@@ -286,29 +284,8 @@
         this.store.delVal(name)
       },
       btnSubmit(){
-        //if there is callback function in 'this', call on it and get return value
-//                if (this.btnOpt.submit.hasOwnProperty("beforeSubmit")) {
-//                    let p = this.btnOpt.submit.beforeSubmit(this.store.getVal());
-//                    if (p instanceof Object) {
-//                        //if the type of return value is an Array,
-//                        // it meant that rebuild value
-//                        // then update selected tag and value which is in store
-//                        this.selected = [];
-//                        for (let i in p) {
-//                            this.store.setVal(i, p[i]);
-//                        }
-//                        this.createSelectedTag();
-//                let re = this.submit(this.store.getVal());
-//                if (re) {
         this.selected = [];
         this.createSelectedTag();
-//                }
-//                    } else if (typeof p == "boolean" && p) {
-//                        //if the type of return value is a boolean and it is true,
-//                        //update selected tag and value which is in store
-//                        this.submit(this.store.getVal())
-//                    }
-//                }
         this.$emit("input", this.store.getVal())
       },
       btnClear(){
