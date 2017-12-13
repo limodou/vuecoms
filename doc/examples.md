@@ -1043,7 +1043,8 @@ var ex_build_01 = new Vue({
         name: 'basic',
         title: '基本信息',
         fields: [
-          {name: 'str1', label: '很长的很长的很长的字符串1'},
+          {name: 'str1', label: '字符串1', placeholder: '请输入...', help: '帮助信息',
+            info: 'info信息', required: true, rule: {type: 'email', trigger: 'blur'}},
           {name: 'str2', label: '静态字符串2', static: true, convert: function(v){
             return '<a href="#">' + v + '</a>'
             }
@@ -1068,10 +1069,49 @@ var ex_build_01 = new Vue({
             {label:'选项二', value: 'B'},
             ]}
           },
-          {name: 'text1', label: '文本1', type: 'text'},
+          {name: 'text1', label: '文本1', type: 'text', required: true},
           {name: 'text2', label: '文本2', type: 'text', static: true},
           {name: 'date1', label: '日期1', type: 'date'},
           {name: 'date2', label: '日期2', type: 'date', static: true},
+          {name: 'tree1', label: '树选择', type: 'treeselect', multiple: true, options: {options:
+            [ {
+                  id: 'fruits',
+                  label: 'Fruits',
+                  children: [ {
+                    id: 'apple',
+                    label: 'Apple',
+                  }, {
+                    id: 'grapes',
+                    label: 'Grapes',
+                  }, {
+                    id: 'pear',
+                    label: 'Pear',
+                  }, {
+                    id: 'strawberry',
+                    label: 'Strawberry',
+                  }, {
+                    id: 'watermelon',
+                    label: 'Watermelon',
+                  } ],
+                }, {
+                  id: 'vegetables',
+                  label: 'Vegetables',
+                  children: [ {
+                    id: 'corn',
+                    label: 'Corn',
+                  }, {
+                    id: 'carrot',
+                    label: 'Carrot',
+                  }, {
+                    id: 'eggplant',
+                    label: 'Eggplant',
+                  }, {
+                    id: 'tomato',
+                    label: 'Tomato',
+                  } ],
+                } ]
+          }
+          },
 
         ],
         layout: [
@@ -1080,9 +1120,10 @@ var ex_build_01 = new Vue({
           ['select3', 'select4'],
           ['text1'],
           ['text2'],
-          ['date1', 'date2']
+          ['date1', 'date2'],
+          ['tree1']
         ],
-        layoutComponent: 'Snippet',
+        layoutComponent: 'Layout',
         boxComponent: 'Box'
 
       }
@@ -1090,7 +1131,6 @@ var ex_build_01 = new Vue({
     ]
 
     return {data:data, value: {
-              str1: '123',
               str2: 'aaa',
               select1: 'B',
               select2: 'A',

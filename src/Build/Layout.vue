@@ -1,15 +1,10 @@
 <template>
-  <component :is="boxComponent" :title="title" class="u-snippet">
+  <component :is="boxComponent || 'Box'" :title="title" class="u-layout">
     <table>
       <tbody>
         <tr v-for="row in rows">
-          <td v-for="col in row" class="u-snippet-cell" :colspan="col.colspan" :width="col.width">
-            <div class="u-snippet-cell-row">
-              <label class="u-snippet-cell-label">{{col.label}}</label>
-              <div class="u-snippet-cell-field">
-                <GenericInput v-bind="col" :value="value"></GenericInput>
-              </div>
-            </div>
+          <td v-for="col in row" class="u-layout-cell" :colspan="col.colspan" :width="col.width">
+            <FormCell :col="col" :value="value"></FormCell>
           </td>
         </tr>
       </tbody>
@@ -18,13 +13,13 @@
 </template>
 
 <script>
-import GenericInput from './GenericInput'
 import List from '@/utils/list.js'
+import FormCell from './FormCell'
 
 export default {
-  name: 'Snippet',
+  name: 'Layout',
   components: {
-    GenericInput
+    FormCell
   },
   props: {
     name: String,
@@ -63,6 +58,8 @@ export default {
         let new_r = []
         r.push(new_r)
         let span = 24 / row.length
+
+        //重新计算col
         for (let col of row) {
           if (typeof col === 'object') {
             name = col.name
@@ -74,8 +71,22 @@ export default {
           let f = List.get(this.fields, name, 'name')
           let field = Object.assign({colspan: span,
             width: `${width}%`,
-            static: col.static || this.static
+            static: col.static || this.static,
           }, f)
+
+          // 初始化校验规则，使用数组形式
+          if (!field.rule) {
+            field.rule = []
+          }
+
+          if (!Array.isArray(field.rule)) {
+            field.rule = [field.rule]
+          }
+
+          // 添加必填校验
+          if (field.required) {
+            field.rule.splice(0, 0, {type: 'string', required: true})
+          }
           new_r.push(field)
         }
       }
@@ -87,7 +98,7 @@ export default {
 
 <style lang="less">
 
-.u-snippet {
+.u-layout {
   table {
     width: 100%;
 
@@ -100,12 +111,12 @@ export default {
         background-color: whitesmoke;
       }
 
-      .u-snippet-cell-row {
+      .u-layout-row {
         display: table-row;
         width: 100%;
         min-height: 34px;
 
-        .u-snippet-cell-label {
+        .u-layout-cell-label {
           min-width: 120px;
           display: table-cell;
           text-align: right;
@@ -118,7 +129,7 @@ export default {
           font-size: 14px;
         }
 
-        .u-snippet-cell-field {
+        .u-layout-cell-field {
           display: table-cell;
           width: 2000px;
           vertical-align: bottom;
@@ -130,6 +141,40 @@ export default {
 
           .u-generic-input-text {
             font-size: 14px;
+          }
+
+          .u-layout-cell-help {
+            display: block;
+            color: #9ea7b4;
+            font-size: 12px;
+            margin-top: 5px;
+            margin-left: 2px;
+          }
+        }
+
+        &.u-layout-row-required {
+          .u-layout-cell-label:before {
+            content: "*";
+            display: inline-block;
+            margin-right: 4px;
+            line-height: 1;
+            font-family: SimSun;
+            font-size: 12px;
+            color: #ed3f14;
+          }
+        }
+
+        &.u-layout-row-error {
+          .u-layout-cell-error {
+            display: block;
+            color: #ed3f14;
+            font-size: 12px;
+            margin-top: 5px;
+            margin-left: 2px;
+          }
+
+          .ivu-input {
+            border: 1px solid #ed3f14;
           }
         }
       }

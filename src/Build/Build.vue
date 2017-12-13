@@ -1,7 +1,7 @@
 <template>
   <div class="u-build">
     <component v-for="item in data"
-      :is="item.layoutComponent"
+      :is="item.layoutComponent || 'Layout'"
       v-bind="item"
       :value="value"></component>
   </div>
@@ -42,7 +42,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-
-</style>

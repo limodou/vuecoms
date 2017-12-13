@@ -14,8 +14,10 @@
     "doc": "cd doc && ./make.sh"
   },
   "dependencies": {
+    "@riophae/vue-treeselect": "0.0.6",
     "font-awesome": "^4.7.0",
     "vue": "^2.5.9",
+    "vue-multiselect": "^2.0.8",
     "vue-router": "^2.8.1"
   },
   "devDependencies": {
