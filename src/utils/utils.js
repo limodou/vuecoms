@@ -197,7 +197,7 @@ QueryURL.prototype = {
       this.urlParams[k] = v;
     else {
       if (k in this.urlParams) {
-        if ($.type(this.urlParams[k]) === 'array') {
+        if (Array.isArray(this.urlParams[k])) {
           this.urlParams[k].push(v);
         }
         else {

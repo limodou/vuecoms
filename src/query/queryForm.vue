@@ -6,7 +6,7 @@
         <span style="font-size: 14px; font-weight: bold; color: rgb(70, 76, 91);">已选:</span>
         </Col>
         <Col span="22">
-        <Tag v-for="s in selected" :key="s['name']" type="border" closable :name="s['name']"
+        <Tag :class="'selectedTag'" v-for="s in selected" :key="s['name']" type="border" closable :name="s['name']"
              @on-close="selectedCloseEvent">{{s['label']}}:{{s['val']}}
         </Tag>
         </Col>
@@ -46,8 +46,23 @@
   </div>
 </template>
 <style lang="less">
-.u-query {
-  padding:15px;
+  .selectedTag:hover {
+    border-color:#da2626!important;
+  i.ivu-icon-ios-close-empty:before{
+    color: #ffffff;
+    opacity:1;
+  }
+  i.ivu-icon-ios-close-empty{
+    z-index:1;
+  }
+  }
+  .selectedTag:hover:after {
+    background-color:#da2626!important;
+    width: 22px;
+    right: 0;
+  }
+  .u-query {
+    padding:15px;
 
   .ivu-form-item {
     margin: 5px;
@@ -75,34 +90,36 @@
     height: 24px;
     margin-bottom: 10px;
 
-    .showMoreBtn {
-      position: absolute;
-      border-top: 1px solid white;
-      border-left: 1px solid #eee;
-      border-right: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-      padding: 1px 10px;
-      -moz-border-radius-bottomleft: 5px;
-      -moz-border-radius-bottomright: 5px;
-      cursor: pointer;
-      margin: 0 auto;
-      margin-top: -1px;
-      font-size: 12px;
-      color: #0000008f;
-      left: 50%;
-    }
-
-    &:hover {
-       border-top:1px solid red;
-
-      .showMoreBtn {
-        color: #ff5d4b;
-        border-color:#ff5d4b;
-        border-top: 1px solid white;
-      }
-    }
+  .showMoreBtn {
+    position: absolute;
+    border-top: 1px solid white;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 1px 10px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-top: -1px;
+    font-size: 12px;
+    color: #0000008f;
+    left: 50%;
   }
-}
+
+  &:hover {
+     border-top:1px solid red;
+
+  .showMoreBtn {
+    color: #ff5d4b;
+    border-color:#ff5d4b;
+    border-top: 1px solid white;
+  }
+  }
+
+  }
+
+  }
 </style>
 <script>
   import Vue from "vue";
@@ -114,7 +131,6 @@
   import QueryRadio from "./queryRadio.vue"
   import QueryCheckbox from "./queryCheckbox.vue"
   import Emitter from '@/mixins/emitter.js'
-  import {QueryURL} from "../utils/utils"
   export default {
     props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line"],
     mixins: [ Emitter ],
@@ -178,8 +194,6 @@
     },
     mounted(){
       //create selected tag
-      let qu = new QueryURL(window.location.href);
-
       this.createSelectedTag();
     },
     methods: {
