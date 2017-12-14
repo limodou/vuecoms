@@ -24,12 +24,14 @@
             </Col>
           </template>
           <Col span="4" v-if="(index==0)&&isShowInlineBtn">
-          <Row justify="center" type="flex">
+          <Row type="flex">
+            <Col style="margin:5px; text-align:center" span="24">
             <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
-            <Button v-if="this.hasOwnProperty('btnOpt')&&btnOpt.hasOwnProperty('clear')" type="error"
+            <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
                     size="small"
-                    @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
+                    @click="btnClear">{{btnOpt.clear.label ||'清除' }}
             </Button>
+            </Col>
           </Row>
           </Col>
         </Row>
@@ -45,9 +47,9 @@
       <Row :justify="btnJustify" v-if="!isShowInlineBtn">
         <Col style="margin:5px; text-align:center" span="24">
         <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
-        <Button v-if="this.hasOwnProperty('btnOpt')&&btnOpt.hasOwnProperty('clear')" type="error"
+        <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
                 size="small"
-                @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
+                @click="btnClear">{{btnOpt.clear.label ||'清除' }}
         </Button>
         </Col>
       </Row>
@@ -133,6 +135,7 @@
 <script>
   import Vue from "vue";
   import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
+//  import "iview/dist/styles/iview.css";
   import Store from "./vQueryStore";
   import QueryString from "./queryString.vue"
   import QuerySelect from "./querySelect.vue"
