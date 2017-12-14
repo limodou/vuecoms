@@ -15,7 +15,7 @@
     </template>
     <Form :label-width="80">
       <template v-for="(tags, index) in formLayout">
-        <Row v-show="((index+1)>showLineNum?isShow:true)">
+        <Row v-show="((index+1)>showLineNum?isShow:true)" justify="start" align="middle" type="flex">
           <template v-for="(tag, _index) in tags">
             <Col span="8">
             <FormItem :label="getLabel(tag)">
@@ -23,20 +23,29 @@
             </FormItem>
             </Col>
           </template>
+          <Col span="4" v-if="(index==0)&&isShowInlineBtn">
+          <Row justify="center" type="flex">
+            <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
+            <Button v-if="this.hasOwnProperty('btnOpt')&&btnOpt.hasOwnProperty('clear')" type="error"
+                    size="small"
+                    @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
+            </Button>
+          </Row>
+          </Col>
         </Row>
         <div class="line" v-show="((index+1)>showLineNum?isShow:true)"></div>
       </template>
-      <Row justify="center" class="collapse-line">
+      <Row justify="center" class="collapse-line" v-if="">
                 <span @click="showHideSwitch" class="showMoreBtn">
                     {{isShow?"隐藏":"显示"}}
                     <Icon type="ios-arrow-up" v-show="isShow"></Icon>
                     <Icon type="ios-arrow-down" v-show="!isShow"></Icon>
                 </span>
       </Row>
-      <Row :justify="btnJustify">
+      <Row :justify="btnJustify" v-if="!isShowInlineBtn">
         <Col style="margin:5px; text-align:center" span="24">
-        <Button type="primary" size="small" @click="btnSubmit">{{ this.btnOpt.submit.label || '查询' }}</Button>
-        <Button v-if="this.hasOwnProperty('btnOpt')&&this.btnOpt.hasOwnProperty('clear')" type="error"
+        <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
+        <Button v-if="this.hasOwnProperty('btnOpt')&&btnOpt.hasOwnProperty('clear')" type="error"
                 size="small"
                 @click="btnClear">{{this.btnOpt.clear.label ||'清除' }}
         </Button>
@@ -131,6 +140,7 @@
   import QueryRadio from "./queryRadio.vue"
   import QueryCheckbox from "./queryCheckbox.vue"
   import Emitter from '@/mixins/emitter.js'
+  import {QueryURL} from "../utils/utils"
   export default {
     props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line"],
     mixins: [ Emitter ],
@@ -155,6 +165,17 @@
       }
     },
     computed:{
+      isShowInlineBtn:function(){
+        let isShow = !this.isShow
+        if(this.formLayout.length==1){
+          return true;
+        }else if(this.formLayout.length>1 && !this.isShow){
+          return true;
+        }else{
+          return false;
+        }
+        //return isShow;
+      },
       formLayout:function(){
         let formLayout = [];
         if (this.layout) {
@@ -197,6 +218,7 @@
       this.createSelectedTag();
     },
     methods: {
+
       getLabel(tag){
         for (let i = 0, len = this.fields.length; i < len; i++) {
           if (this.fields[i]['name'] == tag) {
@@ -297,29 +319,8 @@
         this.store.delVal(name)
       },
       btnSubmit(){
-        //if there is callback function in 'this', call on it and get return value
-//                if (this.btnOpt.submit.hasOwnProperty("beforeSubmit")) {
-//                    let p = this.btnOpt.submit.beforeSubmit(this.store.getVal());
-//                    if (p instanceof Object) {
-//                        //if the type of return value is an Array,
-//                        // it meant that rebuild value
-//                        // then update selected tag and value which is in store
-//                        this.selected = [];
-//                        for (let i in p) {
-//                            this.store.setVal(i, p[i]);
-//                        }
-//                        this.createSelectedTag();
-//                let re = this.submit(this.store.getVal());
-//                if (re) {
         this.selected = [];
         this.createSelectedTag();
-//                }
-//                    } else if (typeof p == "boolean" && p) {
-//                        //if the type of return value is a boolean and it is true,
-//                        //update selected tag and value which is in store
-//                        this.submit(this.store.getVal())
-//                    }
-//                }
         this.$emit("input", this.store.getVal())
       },
       btnClear(){
