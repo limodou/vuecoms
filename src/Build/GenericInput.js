@@ -19,7 +19,13 @@ export default {
       type: Boolean,
       default: false
     },
-    convert: {}
+    convert: {},
+    placeholder: {},
+    info: {},
+    required: {
+      type: Boolean,
+      default: false
+    }
   },
   render (h, ctx) {
     let self = ctx.props

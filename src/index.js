@@ -2,7 +2,9 @@ import Box from './Box'
 import Grid from './Table'
 import QueryForm from './query'
 import uSelect from './Select'
-import {Build, Snippet, GenericInput} from './Build'
+import {Build, Layout, FormCell, GenericInput} from './Build'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.min.css'
 
 const vuecoms = {
   Box,
@@ -10,8 +12,10 @@ const vuecoms = {
   QueryForm,
   uSelect,
   Build,
-  Snippet,
-  GenericInput
+  Layout,
+  FormCell,
+  GenericInput,
+  Treeselect
 }
 
 const install = function () {

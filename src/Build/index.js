@@ -1,11 +1,11 @@
 import Build from './Build'
 import GenericInput from './GenericInput'
-import Snippet from './Snippet'
+import Layout from './Layout'
 import getField from './fields/fieldMapping.js'
 
 module.exports = {
   Build,
   GenericInput,
-  Snippet,
+  Layout,
   getField
 }
