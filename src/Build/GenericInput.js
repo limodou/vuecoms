@@ -25,6 +25,10 @@ export default {
     required: {
       type: Boolean,
       default: false
+    },
+    display: {
+      type: String,
+      default: ''
     }
   },
   render (h, ctx) {
@@ -33,9 +37,9 @@ export default {
     let input = new InputClass(ctx.props)
     if (self.static) {
       let callback = (v) => {
-        self.display = v
+        ctx.listeners['on-display-change'] && ctx.listeners['on-display-change'](v)
       }
-      input.getCachedStaticValue(self.value[self.name], callback)
+      input.getStaticValue(self.value[self.name], callback)
     }
     return input.render(h, ctx)
   }

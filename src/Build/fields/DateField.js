@@ -6,6 +6,7 @@ export default class DateField extends Field {
     super(options)
     this.component = 'DatePicker'
     this.defaultOptions = {transfer: true}
+    this.events = ['input']
   }
 
   convert_value (x) {

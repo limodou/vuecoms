@@ -5,13 +5,21 @@
 </template>
 
 <script>
+import {Select, Option} from 'iview'
+
 export default {
   name: 'uSelect',
   data () {
-    return {data: this.value}
+    return {data: this.value, items: []}
   },
-  computed: {
-    items () {
+  created () {
+    if (typeof this.choices === 'function' && !this.choices.choices) {
+      const callback = (choices) => {
+        this.choices.choices = choices
+        this.items = choices
+      }
+      this.choices(callback)
+    } else {
       let r = []
       let d
       for(let item of (this.choices || [])) {
@@ -24,7 +32,7 @@ export default {
         }
         r.push(d)
       }
-      return r
+      this.items = r
     }
   },
   props: [
@@ -38,7 +46,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

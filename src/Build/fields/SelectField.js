@@ -7,9 +7,9 @@ export default class SelectField extends Field {
     this.options.multiple = this.multiple
   }
 
-  getStaticValue (value, callback) {
+  _getValue (value, choices, callback) {
     let v = []
-    for (let c of this.options.choices) {
+    for (let c of choices) {
       if (Array.isArray(value)) {
         if (value.indexOf(c.value) > -1) {
           v.push(c.label)
@@ -21,5 +21,21 @@ export default class SelectField extends Field {
       }
     }
     callback(v.join(', '))
+  }
+
+  getStaticValue (value, callback) {
+    if (typeof this.options.choices === 'function') {
+      if (!this.options.choices.choices) {
+        const _callback = (choices) => {
+          this.options.choices.choices = choices
+          this._getValue(value, choices, callback)
+        }
+        this.options.choices(_callback)
+      } else {
+        this._getValue(value, this.options.choices.choices, callback)
+      }
+    } else {
+      this._getValue(value, this.options.choices, callback)
+    }
   }
 }

@@ -1034,6 +1034,16 @@ var ex_tree_01 = new Vue({
   </div>
 </div>
 <script>
+function choices1_options (callback) {
+  setTimeout(function () {
+    var c = [
+      {label:'选项一', value: 'A'},
+      {label:'选项二', value: 'B'},
+      {label:'选项三', value: 'C'}
+    ]
+    callback(c)
+  }, 1000)
+}
 var ex_build_01 = new Vue({
   el: '#ex-build-01',
   data: function () {
@@ -1042,24 +1052,19 @@ var ex_build_01 = new Vue({
       {
         name: 'basic',
         title: '基本信息',
+        labelWidth: 150,
         fields: [
           {name: 'str1', label: '字符串1', placeholder: '请输入...', help: '帮助信息',
             info: 'info信息', required: true, rule: {type: 'email', trigger: 'blur'}},
-          {name: 'str2', label: '静态字符串2', static: true, convert: function(v){
+          {name: 'str2', label: '静态字符串2', static: true, required: true, convert: function(v){
             return '<a href="#">' + v + '</a>'
             }
           },
-          {name: 'select1', label: '选择', type: 'select', options: {choices: [
-            {label:'选项一', value: 'A'},
-            {label:'选项二', value: 'B'},
-            ]}
+          {name: 'select1', label: '选择', type: 'select', required: true, options: {choices: choices1_options}
           },
-          {name: 'select2', label: '选择', type: 'select', static: true, options: {choices: [
-            {label:'选项一', value: 'A'},
-            {label:'选项二', value: 'B'},
-            ]}
+          {name: 'select2', label: '选择', type: 'select', static: true, options: {choices: choices1_options}
           },
-          {name: 'select3', label: '选择', type: 'select', multiple: true, options: {choices: [
+          {name: 'select3', label: '选择', type: 'select', required: true, multiple: true, options: {choices: [
             {label:'选项一', value: 'A'},
             {label:'选项二', value: 'B'},
             ]}
@@ -1069,11 +1074,33 @@ var ex_build_01 = new Vue({
             {label:'选项二', value: 'B'},
             ]}
           },
+          {name: 'radio1', label: '选择', type: 'radio', required: true, multiple: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'radio2', label: '选择', type: 'radio', static: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'checkboxgroup1', label: '选择', type: 'checkboxgroup', required: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'checkboxgroup2', label: '选择', type: 'checkboxgroup', static: true, options: {choices: [
+            {label:'选项一', value: 'A'},
+            {label:'选项二', value: 'B'},
+            ]}
+          },
+          {name: 'checkbox1', label: '选择', type: 'checkbox', required: true},
+          {name: 'checkbox2', label: '选择', type: 'checkbox', static: true},
           {name: 'text1', label: '文本1', type: 'text', required: true},
           {name: 'text2', label: '文本2', type: 'text', static: true},
-          {name: 'date1', label: '日期1', type: 'date'},
+          {name: 'date1', label: '日期1', required: true, type: 'date'},
           {name: 'date2', label: '日期2', type: 'date', static: true},
-          {name: 'tree1', label: '树选择', type: 'treeselect', multiple: true, options: {options:
+          {name: 'tree1', label: '树选择', required: true, type: 'treeselect', multiple: true, options: {options:
             [ {
                   id: 'fruits',
                   label: 'Fruits',
@@ -1118,14 +1145,29 @@ var ex_build_01 = new Vue({
           ['str1', 'str2'],
           ['select1', 'select2'],
           ['select3', 'select4'],
+          ['radio1', 'radio2'],
+          ['checkboxgroup1', 'checkboxgroup2'],
+          ['checkbox1', 'checkbox2'],
           ['text1'],
           ['text2'],
           ['date1', 'date2'],
           ['tree1']
         ],
         layoutComponent: 'Layout',
-        boxComponent: 'Box'
-
+        boxComponent: 'Box',
+        buttons: {
+          items: [
+            [{label: '查看结果', type:'primary', onClick: function(target, data){
+                console.log(target, data)
+              }
+            }],
+            [{label: '校验', type:'primary', onClick: function(target, data){
+                target.validate(self.save)
+              }
+            }]
+          ],
+          size: ''
+        }
       }
 
     ]
@@ -1136,11 +1178,23 @@ var ex_build_01 = new Vue({
               select2: 'A',
               select3: ['A', 'B'],
               select4: ['A', 'B'],
+              radio2: 'A',
+              checkboxgroup2: ['A', 'B'],
+              checkbox2: 'B',
               text1: 'Line 1\nLine 2',
               text2: 'Line 3\nLine 4',
               date2: '2017-12-12'
             }
           }
+  },
+  methods: {
+    save: function(error) {
+      if (error) {
+        this.$Message.error(error)
+      } else {
+        this.$Message.info('saved')
+      }
+    }
   }
 })
 </script>

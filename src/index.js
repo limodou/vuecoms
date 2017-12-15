@@ -2,15 +2,20 @@ import Box from './Box'
 import Grid from './Table'
 import QueryForm from './query'
 import uSelect from './Select'
+import uRadioGroup from './RadioGroup'
+import uCheckboxGroup from './CheckboxGroup'
 import {Build, Layout, FormCell, GenericInput} from './Build'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.min.css'
+import './styles/treeselect.fix.css'
 
 const vuecoms = {
   Box,
   Grid,
   QueryForm,
   uSelect,
+  uRadioGroup,
+  uCheckboxGroup,
   Build,
   Layout,
   FormCell,

@@ -1,11 +1,9 @@
 import Field from './Field'
 
-export default class TreeSelectField extends Field {
+export default class CheckboxGroupField extends Field {
   constructor (options) {
     super(options)
-    this.component = 'Treeselect'
-    this.options.multiple = this.multiple
-    this.events = ['close']
+    this.component = 'u-checkbox-group'
   }
 
   getStaticValue (value, callback) {
@@ -14,11 +12,9 @@ export default class TreeSelectField extends Field {
       if (Array.isArray(value)) {
         if (value.indexOf(c.value) > -1) {
           v.push(c.label)
-          if (!this.multiple) break
         }
       } else if (c.value == value) {
         v.push(c.label)
-        if (this.multiple) break
       }
     }
     callback(v.join(', '))

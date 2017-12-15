@@ -1,6 +1,6 @@
 <template>
   <div class="u-buttons">
-    <ButtonGroup v-for="btnGroup in buttons" size="small">
+    <ButtonGroup v-for="btnGroup in buttons" :size="size">
       <Button v-for="btn in btnGroup" :type="btn.type"
         :disabled="btn.disabled"
         @click.prevent="handleButtonClick(btn)">
@@ -24,13 +24,18 @@ export default {
   },
 
   props: {
-    buttons: Array
+    buttons: Array,
+    data: {},
+    target: {},
+    size: {
+      default: 'small'
+    }
   },
 
   methods: {
     handleButtonClick (btn) {
       if (btn.onClick) {
-        btn.onClick()
+        btn.onClick(this.target, this.data)
       }
     }
   }

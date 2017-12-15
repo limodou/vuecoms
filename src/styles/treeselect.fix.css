@@ -1,0 +1,16 @@
+.vue-treeselect__menu {
+  z-index: 100;
+}
+
+.vue-treeselect__multi-value-item {
+  background: #f7f7f7;
+  color: black;
+}
+
+.vue-treeselect__value-remove {
+  color: #999;
+}
+
+.vue-treeselect__multi-value-item {
+  border: 1px solid #e9eaec;
+}
