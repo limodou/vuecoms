@@ -15,13 +15,12 @@
 </template>
 
 <script>
-import AsyncValidator from 'async-validator';
 import GenericInput from './GenericInput'
-import AsyncValidatorLang from '@/locale/async-validator'
+import {validateRule} from './validateUtil'
 
 export default {
   name: 'FormCell',
-  props: ['col', 'value'],
+  props: ['col', 'value', 'validateResult'],
   computed: {
     classes () {
       return {'u-layout-cell': true, 'u-layout-required': this.col.required && !this.col.static,
@@ -30,39 +29,39 @@ export default {
     },
     labelStyle () {
       return {minWidth: `${this.col.labelWidth}px`}
-    }
+    },
+    error: {
+      get () {
+        return this.validateResult[this.col.name].error
+      },
+      set (v) {
+        this.$set(this.validateResult[this.col.name], 'error', v)
+      }
+    },
+    // validateState: {
+    //   get () {
+    //     return this.validateResult[this.col.name].validateState
+    //   },
+    //
+    //   set (v) {
+    //     this.$set(this.validateResult[this.col.name], 'validateState', v)
+    //   }
+    // }
   },
 
   data () {
-    return {error: '', validateState: '', display: ''}
+    return {display: ''}
   },
 
   methods: {
-    getRules (type) {
-      // let rules = []
-      // rules = this.col.rule.filter((i) => {
-      //   (i.trigger === type) || (!i.trigger && type == 'blur')
-      // })
-      // return rules
-      return {[this.col.name]: this.col.rule}
-    },
     validate (type, callback = function () {}) {
-      let rules = this.getRules(type)
-      if (this.col.rule.length > 0) {
-        this.validateState = 'validating'
-        const validator = new AsyncValidator(rules)
-        validator.messages(AsyncValidatorLang)
-        validator.validate(this.value, { firstFields: true }, (errors, callabck) => {
-            this.validateState = !errors ? 'success' : 'error'
-            this.error = errors ? errors[0].message : ''
-
-            callback(this.error)
-        })
-      }
+      validateRule(this.value, this.col.name, this.validateResult)
     },
+
     handleValidate () {
       this.validate()
     },
+
     handleDisplay (v) {
       this.display = v
     }

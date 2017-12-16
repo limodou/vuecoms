@@ -2,7 +2,7 @@
   <component :is="boxComponent" :title="title" class="u-layout">
     <Row v-for="row in rows" class="u-layout-row">
       <Col v-for="col in row" :span="col.colspan">
-        <FormCell :col="col" :value="value"></FormCell>
+        <FormCell :col="col" :value="value" :validateResult="validateResult"></FormCell>
       </Col>
     </Row>
     <Row v-if="buttons" slot="footer">

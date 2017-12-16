@@ -1144,7 +1144,7 @@ var ex_tree_01 = new Vue({
 <div class="tab-pane active" id="tab_item_8_22">
 
 <div id="ex-build-01">
-  <build ref="build" :data="data" :value="value"></build>
+  <build ref="build" :data="data" :value="value" :errors="errors" :rules="rules"></build>
   <div>
     {{value}}
   </div>
@@ -1171,7 +1171,7 @@ var ex_build_01 = new Vue({
         labelWidth: 150,
         fields: [
           {name: 'str1', label: '字符串1', placeholder: '请输入...', help: '帮助信息',
-            info: 'info信息', required: true, rule: {type: 'email', trigger: 'blur'}},
+            info: 'info信息', required: true, rule: {type: 'email'}},
           {name: 'str2', label: '静态字符串2', static: true, required: true, convert: function(v){
             return '<a href="#">' + v + '</a>'
             }
@@ -1280,6 +1280,10 @@ var ex_build_01 = new Vue({
             [{label: '校验', type:'primary', onClick: function(target, data){
                 target.validate(self.save)
               }
+            }],
+            [{label: '合并出错结果', type:'info', onClick: function(target, data){
+                self.errors = {select1: '这是合并后的错误'}
+              }
             }]
           ],
           size: ''
@@ -1300,6 +1304,16 @@ var ex_build_01 = new Vue({
               text1: 'Line 1\nLine 2',
               text2: 'Line 3\nLine 4',
               date2: '2017-12-12'
+            },
+            errors: {},
+            rules: {
+              str1: function(rule, value, callback, source, options) {
+                if (value !== 'abc@gmail.com') {
+                  callback (new Error('邮件地址必须为 abc@gmail.com'))
+                } else {
+                  callback()
+                }
+              }
             }
           }
   },

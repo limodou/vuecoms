@@ -32,7 +32,8 @@ export default {
     labelWidth: {
       type: Number,
       default: 120
-    }
+    },
+    validateResult: {}
   },
 
   computed: {
@@ -58,23 +59,6 @@ export default {
             static: col.static || this.static,
           }, f)
 
-          // 初始化校验规则，使用数组形式
-          if (!field.rule) {
-            field.rule = []
-          }
-
-          if (!Array.isArray(field.rule)) {
-            field.rule = [field.rule]
-          }
-
-          // 添加必填校验
-          if (field.required) {
-            if (field.type !== 'checkbox') {
-              field.rule.splice(0, 0, {required:true})
-            } else {
-              field.required = false
-            }
-          }
           new_r.push(field)
         }
       }
