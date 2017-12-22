@@ -6,7 +6,8 @@
                 <span style="font-size: 14px; font-weight: bold; color: rgb(70, 76, 91);">已选:</span>
                 </Col>
                 <Col span="22">
-                <Tag :class="'selectedTag'" v-for="s in selected" :key="s['name']" type="border" closable :name="s['name']"
+                <Tag :class="'selectedTag'" v-for="s in selected" :key="s['name']" type="border" closable
+                     :name="s['name']"
                      @on-close="selectedCloseEvent">{{s['label']}}:{{s['val']}}
                 </Tag>
                 </Col>
@@ -18,26 +19,27 @@
                 <Row v-show="((index+1)>showLineNum?isShow:true)" justify="start" align="middle" type="flex">
                     <template v-for="(tag, _index) in tags">
                         <Col span="8">
-                            <FormItem :label="getLabel(tag)">
-                                <component :is="getType(tag)" :store="store" :tagName="tag" :key="tag"></component>
-                            </FormItem>
+                        <FormItem :label="getLabel(tag)">
+                            <component :is="getType(tag)" :store="store" :tagName="tag" :key="tag"></component>
+                        </FormItem>
                         </Col>
                     </template>
-                    <Col span="4" v-if="(index==0)&&isShowInlineBtn">
-                        <Row type="flex">
-                            <Col style="margin:5px; text-align:center" span="24">
-                            <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
+                    <div>
+                        <Row type="flex" v-if="((index+1)==showLineNum)&&isShowInlineBtn">
+                            <Col style="margin:5px; text-align:right" span="24">
+                            <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}
+                            </Button>
                             <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
                                     size="small"
                                     @click="btnClear">{{btnOpt.clear.label ||'清除' }}
                             </Button>
                             </Col>
                         </Row>
-                    </Col>
+                    </div>
                 </Row>
-                <div class="line" v-show="((index+1)>showLineNum?isShow:true)"></div>
+
             </template>
-            <Row justify="center" class="collapse-line" v-if="">
+            <Row justify="center" class="collapse-line">
                 <span @click="showHideSwitch" class="showMoreBtn">
                     {{isShow?"隐藏":"显示"}}
                     <Icon type="ios-arrow-up" v-show="isShow"></Icon>
@@ -46,11 +48,11 @@
             </Row>
             <Row :justify="btnJustify" v-if="!isShowInlineBtn">
                 <Col style="margin:5px; text-align:center" span="24">
-                    <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
-                    <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
-                            size="small"
-                            @click="btnClear">{{btnOpt.clear.label ||'清除' }}
-                    </Button>
+                <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
+                <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
+                        size="small"
+                        @click="btnClear">{{btnOpt.clear.label ||'清除' }}
+                </Button>
                 </Col>
             </Row>
         </Form>
@@ -58,22 +60,26 @@
 </template>
 <style lang="less">
     .selectedTag:hover {
-        border-color:#da2626!important;
-        i.ivu-icon-ios-close-empty:before{
-            color: #ffffff;
-            opacity:1;
-        }
-        i.ivu-icon-ios-close-empty{
-            z-index:1;
-        }
+        border-color: #da2626 !important;
+
+    i.ivu-icon-ios-close-empty:before {
+        color: #ffffff;
+        opacity: 1;
+    }
+
+    i.ivu-icon-ios-close-empty {
+        z-index: 1;
+    }
+
     }
     .selectedTag:hover:after {
-        background-color:#da2626!important;
+        background-color: #da2626 !important;
         width: 22px;
         right: 0;
     }
+
     .u-query {
-        padding:15px;
+        padding: 15px;
 
         .ivu-form-item {
             margin: 5px;
@@ -84,20 +90,20 @@
         }
 
         &:before {
-             content: "";
-             display: block;
-             width: 100%;
-             height: 1px;
-             background: #eee;
-             /*position: absolute;*/
-             /*top: 10px;*/
-             /*left: 0;*/
-             box-sizing: border-box;
-         }
+            content: "";
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: #eee;
+            /*position: absolute;*/
+            /*top: 10px;*/
+            /*left: 0;*/
+            box-sizing: border-box;
+        }
 
         .collapse-line {
-            text-align:center;
-            border-top:1px solid #eee;
+            text-align: center;
+            border-top: 1px solid #eee;
             height: 24px;
             margin-bottom: 10px;
 
@@ -119,17 +125,17 @@
             }
 
             &:hover {
-                 border-top:1px solid red;
+                border-top: 1px solid red;
 
                 .showMoreBtn {
                     color: #ff5d4b;
-                    border-color:#ff5d4b;
+                    border-color: #ff5d4b;
                     border-top: 1px solid white;
                 }
+
             }
 
         }
-
     }
 </style>
 <script>
@@ -149,7 +155,7 @@
 
     export default {
         props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line"],
-        mixins: [ Emitter ],
+        mixins: [Emitter],
         components: {
             "str": QueryString,
             "iselect": QuerySelect,
@@ -157,38 +163,27 @@
             "dateRange": QueryDatepicker,
             "radio": QueryRadio,
             "checkbox": QueryCheckbox,
-            "treeselect":QueryTreeSelect,
+            "treeselect": QueryTreeSelect,
             Form, Row, Col, FormItem, Button, Card, Tag, Icon
         },
         data(){
             const store = new Store(this, this.fields, this.value);
 
             let selected = [],//selected tag { name: "", label: "", val: ""}
-                isShow = false; //showLine
+                    isShow = false; //showLine
 
             return {
                 store,
                 selected,
                 isShow,
                 scrollPos: 0,
-                ready: function(){
+                ready: function () {
                     this.$scrollSet()
                 }
             }
         },
-        computed:{
-            isShowInlineBtn:function(){
-                let isShow = !this.isShow
-                if(this.formLayout.length==1){
-                    return true;
-                }else if(this.formLayout.length>1 && !this.isShow){
-                    return true;
-                }else{
-                    return false;
-                }
-                //return isShow;
-            },
-            formLayout:function(){
+        computed: {
+            formLayout: function () {
                 let formLayout = [];
                 if (this.layout) {
                     formLayout = this.layout;
@@ -201,27 +196,31 @@
                 }
                 return formLayout;
             },
-            showLineNum:function(){
-                return (typeof this.showLine == "number") ?
-                                this.showLine //showLine is number, adopt showLine
-                                : ((typeof this.showLine == "boolean") //showLine isn't number and check it if boolean
-                                ? (this.showLine ? 2 : formLayout.length + 1) //showLine is a boolean. if it's true, set it to 2, if not, set it equal to formLayout's length + 1
-                                : 2);//showLine is not a boolean yet, set default value to 2
+            showLineNum: function () {
+                return this.showLine ? this.showLine : 1;
             },
-            btnOpt:function(){
-                let btnOpt = this.buttons?this.buttons:{
-                            align: "center",//按钮左中右 start center end 默认 end
-                            submit: {
-                                label: "点此查询"
-                            },
-                            clear: {
-                                label: "点此清除",
-                                show: true
-                            }
-                        };
+            isShowInlineBtn: function () {
+                if (this.showLineNum >= this.formLayout.length ){
+                    //showLine数量 >= layout行数, 行内按钮永远不显示
+                    return false;
+                }else{
+                    return !this.isShow;
+                }
+            },
+            btnOpt: function () {
+                let btnOpt = this.buttons ? this.buttons : {
+                    align: "center",//按钮左中右 start center end 默认 end
+                    submit: {
+                        label: "点此查询"
+                    },
+                    clear: {
+                        label: "点此清除",
+                        show: true
+                    }
+                };
                 return btnOpt;
             },
-            btnJustify: function(){
+            btnJustify: function () {
                 return this.btnOpt && this.btnOpt.hasOwnProperty("align") ? this.btnOpt["align"] : "center";
             }
         },
