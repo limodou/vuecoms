@@ -229,12 +229,20 @@ export default {
     handleMouseUp (e) {
       if (this.columnResizing) {
         this.store.states.columnResizing = false
+        let oldWidth = this.dragging_col.width
         this.$set(this.dragging_col, 'width', this.dragging_col_new_width)
         document.documentElement.removeEventListener('mousemove', this.handleMouseMove, true)
         document.documentElement.removeEventListener('mouseup', this.handleMouseUp, true)
         this.$nextTick(() => {
           this.checkScroll()
+          this.calLeftWidth(this.dragging_col, this.dragging_col_new_width, oldWidth)
         })
+      }
+    },
+
+    calLeftWidth (col, newWidth, width) {
+      if (col.fixed === 'left') {
+        this.store.states.leftWidth = this.store.states.leftWidth + newWidth - width
       }
     },
 
@@ -328,102 +336,104 @@ export default {
 
 <style lang="less">
   .u-table {
-      position: relative;
-      overflow: hidden;
-      background: #fff;
-      border: 1px solid #ccc;
-      text-align: left;
-  }
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #ccc;
+    text-align: left;
 
-  .u-table .nowrap {
+    &.nowrap {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
       -o-text-overflow: ellipsis;
       -ms-text-overflow: ellipsis;
-  }
+    }
 
-  .u-table .u-table-header-wrapper {
-    overflow: hidden;
-    position: relative;
-    background-color: #eee;
-  }
-
-  .u-table .u-table-header-scroll {
-    z-index: 1;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    background-color: #eee;
-  }
-
-  .u-table .u-table-body-wrapper {
-    overflow: auto;
-    position: relative;
-  }
-
-  .u-table .u-table-body-scroll {
-    overflow: auto;
-    position: relative;
-  }
-
-  .u-table .u-table-body-scroll tr.selected{
-    background-color:#ffefd5;
-  }
-
-  .u-table .u-table-body-scroll tr.hover{
-    background-color:#e1eff8;
-  }
-
-  .u-table .u-table-header {
-      position: relative;
+    .u-table-header-wrapper {
       overflow: hidden;
-      border-top: 1px solid #eee;
-      z-index: 1;
-  }
-  .u-table table {
-    border-collapse: separate;
-    border-spacing: 0;
-    text-align: left;
-    table-layout: fixed;
+      position: relative;
+      background-color: #eee;
+
+      .u-table-header-scroll {
+        z-index: 1;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        background-color: #eee;
+
+        table{
+          border-collapse: separate;
+          border-spacing: 0;
+          text-align: left;
+          table-layout: fixed;
+          margin: 0;
+          display: table;
+
+          &.u-table-header {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+
+            th {
+              position: relative;
+              padding: 0;
+              border: none;
+              border-right: 1px solid #ddd;
+              border-bottom: 1px solid #d2d2d2;
+            }
+          }
+        }
+      }
+
+    }
+
+    .u-table-body-scroll {
+      overflow: auto;
+      position: relative;
+
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+        text-align: left;
+        table-layout: fixed;
+        margin: 0;
+        display: table;
+
+        tr {
+          &.selected{
+            background-color:#ffefd5;
+          }
+
+          &.hover{
+            background-color:#e1eff8;
+          }
+
+          &:last-child > td {
+            border-bottom: none;
+          }
+
+          td {
+            position: relative;
+            padding: 0;
+            border: none;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #d2d2d2;
+          }
+        }
+      }
+    }
+
+    .u-table-header-cell-resizer {
+      position: absolute;
+      width:4px;
+      cursor: col-resize;
+      top:0px;
+      right:0px;
+      height: 100%;
+    }
   }
 
-  .u-table-header th {
-    position: relative;
-    padding: 0;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #d2d2d2;
-  }
 
-  .u-table-body-scroll td {
-    position: relative;
-    padding: 0;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #d2d2d2;
-  }
-
-  .u-table-body-scroll > td:last-child {
-    border-right: none;
-  }
-
-  .u-table-body-scroll tr:last-child > td {
-    border-bottom: none;
-  }
-
-  .u-table-header-cell {
-  }
-
-  .u-table-header-cell-title {
-
-  }
-
-  .u-table-header-cell-resizer {
-    position: absolute;
-    width:4px;
-    cursor: col-resize;
-    top:0px;
-    right:0px;
-    height: 100%;
-  }
 
 </style>
