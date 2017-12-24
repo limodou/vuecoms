@@ -179,7 +179,10 @@ class Store {
   }
 
   removeRow (row) {
-    List.remove(this.states.data, row)
+    let removed = List.remove(this.states.data, row)
+    for(let i of removed) {
+      this.deselect(i)
+    }
   }
 
   getKey (row, column) {

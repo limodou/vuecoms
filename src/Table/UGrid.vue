@@ -5,10 +5,10 @@
       :value="query.value" @input="handleQuerySubmit"></Query>
     <div class="u-grid-tools" slot="tools">
       <div class="u-grid-tools-left" v-if="buttons.length">
-        <Buttons :buttons="buttons" :data="store" :target="$root"></Buttons>
+        <Buttons :buttons="buttons" :data="store" :target="this"></Buttons>
       </div>
       <div class="u-grid-tools-right" v-if="rightButtons.length">
-        <Buttons :buttons="rightButtons" :data="store" :target="$root"></Buttons>
+        <Buttons :buttons="rightButtons" :data="store" :target="this"></Buttons>
       </div>
     </div>
     <div class="u-grid">
@@ -35,7 +35,7 @@
     <Pagination v-if="pagination" :store="store"
       @on-page="handlePage"
       @on-page-size="handlePageSize">
-      <Buttons :buttons="bottomButtons" :target="$root" :data="store"></Buttons>
+      <Buttons :buttons="bottomButtons" :target="this" :data="store"></Buttons>
     </Pagination>
   </div>
 </template>
