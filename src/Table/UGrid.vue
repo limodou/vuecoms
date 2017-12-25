@@ -30,7 +30,7 @@
         ></u-table>
 
       <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
-      <div ref="loading" class="loading"  v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
+      <div ref="loading" class="loading" v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
     </div>
     <Pagination v-if="pagination" :store="store"
       @on-page="handlePage"
@@ -412,8 +412,12 @@ export default {
 
     defaultDeleteRender (h, row) {
       let defaultDeleteFunc = () => {
-        if(row._editting) {
+        if (row._editting) {
           this.$set(row, '_editting', false)
+          this.$delete(row, '_editRow')
+          if (row._new) {
+            this.removeRow(row)
+          }
           return
         }
 

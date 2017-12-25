@@ -115,53 +115,53 @@ export const text2html = function (text) {
     // 1: Plain Text Search
     text = text.replace(/&/g, "&amp;").
     replace(/</g, "&lt;").
-    replace(/>/g, "&gt;").replace(/  /g, "&nbsp;&nbsp;");
+    replace(/>/g, "&gt;").replace(/  /g, "&nbsp;&nbsp;")
 
     // 2: Line Breaks
-    text = text.replace(/\r\n?|\n/g, "<br>");
+    text = text.replace(/\r\n?|\n/g, "<br>")
 
     // 3: Paragraphs
-    text = text.replace(/<br>\s*<br>/g, "</p><p>");
+    text = text.replace(/<br>\s*<br>/g, "</p><p>")
 
     // 4: Wrap in Paragraph Tags
-    text = "<p>" + text + "</p>";
+    text = "<p>" + text + "</p>"
 
-    return text;
+    return text
 }
 
 export let QueryURL = function(url) {
-  this.urlParams = {};
-  this.load(url);
+  this.urlParams = {}
+  this.load(url)
 }
 
 QueryURL.prototype = {
   load: function (param) {
-    this.urlParams = {};
+    this.urlParams = {}
     this.url = param;
     var e, k, v, i,
       a = /\+/g,  // Regex for replacing addition symbol with a space
       r = /([^&=]+)=?([^&]*)/g,
       d = function (s) {
-        return decodeURIComponent(s.replace(a, " "));
+        return decodeURIComponent(s.replace(a, " "))
       }
     if (!param) {
-      param = window.location.search;
+      param = window.location.search
     }
     if (param.charAt(0) == '?') {
-      param = param.substring(1);
-      this.url = '';
+      param = param.substring(1)
+      this.url = ''
     } else {
-      i = param.indexOf('?');
+      i = param.indexOf('?')
       if (i > -1) {
-        this.url = param.substring(0, i);
-        param = param.substring(i + 1);
+        this.url = param.substring(0, i)
+        param = param.substring(i + 1)
       } else
-        param = '';
+        param = ''
     }
     while (e = r.exec(param)) {
       k = d(e[1]);
       v = d(e[2]);
-      this.set(k, v, false);
+      this.set(k, v, false)
     }
     return this;
   },
@@ -171,15 +171,15 @@ QueryURL.prototype = {
       'traditional': true
     };
     if (options) {
-      $.extend(settings, options);
+      $.extend(settings, options)
     }
-    var old = jQuery.ajaxSettings.traditional;
-    jQuery.ajaxSettings.traditional = settings.traditional;
-    var result = '?' + $.param(this.urlParams);
-    jQuery.ajaxSettings.traditional = old;
+    var old = jQuery.ajaxSettings.traditional
+    jQuery.ajaxSettings.traditional = settings.traditional
+    var result = '?' + $.param(this.urlParams)
+    jQuery.ajaxSettings.traditional = old
     if (settings.hash)
-      result = result + window.location.hash;
-    return result;
+      result = result + window.location.hash
+    return result
   },
   merge: function (data) {
     for(var k in data) {
@@ -194,28 +194,38 @@ QueryURL.prototype = {
   set: function (k, v, replace) {
     replace = replace || false;
     if (replace)
-      this.urlParams[k] = v;
+      this.urlParams[k] = v
     else {
       if (k in this.urlParams) {
         if (Array.isArray(this.urlParams[k])) {
-          this.urlParams[k].push(v);
+          this.urlParams[k].push(v)
         }
         else {
-          this.urlParams[k] = [this.urlParams[k], v];
+          this.urlParams[k] = [this.urlParams[k], v]
         }
       }
       else
-        this.urlParams[k] = v;
+        this.urlParams[k] = v
     }
     return this;
   },
   get: function (k) {
-    return this.urlParams[k];
+    return this.urlParams[k]
   },
   remove: function (k) {
     if (k in this.urlParams) {
-      delete this.urlParams[k];
+      delete this.urlParams[k]
     }
-    return this;
+    return this
   }
+}
+
+export const uuid = function () {
+  var d = new Date().getTime()
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = (d + Math.random()*16)%16 | 0
+    d = Math.floor(d/16)
+    return (c=='x' ? r : (r&0x3|0x8)).toString(16)
+  })
+  return uuid
 }
