@@ -1,7 +1,7 @@
 <template>
   <div class="u-build">
     <component v-for="item in data"
-      :is="item.layoutComponent || 'Layout'"
+      :is="item.component || 'Layout'"
       v-bind="item"
       :value="value"
       :validateResult="validateResult"
@@ -98,7 +98,7 @@ export default {
     //生成校验结构
     makeValidateResult () {
       for(let b of this.data) {
-        for(let field of b.fields) {
+        for(let field of (b.fields || [])) {
           if (!this.validateResult[field.name]) {
             let rule = this.getRule(field)
             this.$set(this.validateResult, field.name, {error: '', validateState: '', rule: rule})
