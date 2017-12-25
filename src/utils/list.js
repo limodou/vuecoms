@@ -137,10 +137,10 @@ export default {
     if (!Array.isArray(items))
       items = [items]
 
-    indexes = this.index(list, items, idField).reverse()
-    for(let i=indexes.length-1; i>=0; i--) {
-      removed.push(list[indexes[i]])
-      list.splice(indexes[i], 1)
+    indexes = this.index(list, items, idField).sort().reverse()
+    for(let i of indexes) {
+      removed.push(list[i])
+      list.splice(i, 1)
     }
 
     return removed

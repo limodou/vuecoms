@@ -5,10 +5,10 @@
       :value="query.value" @input="handleQuerySubmit"></Query>
     <div class="u-grid-tools" slot="tools">
       <div class="u-grid-tools-left" v-if="buttons.length">
-        <Buttons :buttons="buttons" :data="store" :target="$root"></Buttons>
+        <Buttons :buttons="buttons" :data="store" :target="this"></Buttons>
       </div>
       <div class="u-grid-tools-right" v-if="rightButtons.length">
-        <Buttons :buttons="rightButtons" :data="store" :target="$root"></Buttons>
+        <Buttons :buttons="rightButtons" :data="store" :target="this"></Buttons>
       </div>
     </div>
     <div class="u-grid">
@@ -30,12 +30,12 @@
         ></u-table>
 
       <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
-      <div ref="loading" class="loading"  v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
+      <div ref="loading" class="loading" v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
     </div>
     <Pagination v-if="pagination" :store="store"
       @on-page="handlePage"
       @on-page-size="handlePageSize">
-      <Buttons :buttons="bottomButtons" :target="$root" :data="store"></Buttons>
+      <Buttons :buttons="bottomButtons" :target="this" :data="store"></Buttons>
     </Pagination>
   </div>
 </template>
@@ -412,8 +412,12 @@ export default {
 
     defaultDeleteRender (h, row) {
       let defaultDeleteFunc = () => {
-        if(row._editting) {
+        if (row._editting) {
           this.$set(row, '_editting', false)
+          this.$delete(row, '_editRow')
+          if (row._new) {
+            this.removeRow(row)
+          }
           return
         }
 

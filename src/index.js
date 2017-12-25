@@ -8,6 +8,7 @@ import {Build, Layout, FormCell, GenericInput} from './Build'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.min.css'
 import './styles/treeselect.fix.css'
+import './styles/iview.fix.css'
 
 const vuecoms = {
   Box,

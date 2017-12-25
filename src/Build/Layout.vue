@@ -54,7 +54,6 @@ export default {
       font-weight: bold;
       margin-bottom: 0;
       padding-right: 10px;
-      padding-top: 5px;
       font-size: 14px;
 
       &:after {

@@ -1,4 +1,5 @@
 import List from '@/utils/list.js'
+import {uuid} from '@/utils/utils.js'
 
 class Store {
   constructor (grid, options) {
@@ -179,7 +180,10 @@ class Store {
   }
 
   removeRow (row) {
-    List.remove(this.states.data, row)
+    let removed = List.remove(this.states.data, row)
+    for(let i of removed) {
+      this.deselect(i)
+    }
   }
 
   getKey (row, column) {
@@ -252,6 +256,26 @@ class Store {
         this.grid.$delete(r, col)
       }
     }
+  }
+
+  addRow (row, position) {
+    if (!row) {
+      row = {}
+    }
+    if (!row[this.states.idField]) {
+      row[this.states.idField] = uuid()
+    }
+    List.add(this.states.data, row, position)
+    return row
+  }
+
+  /* 生成新的可编辑行 */
+  addEditRow (row) {
+    let n_row = this.addRow(row)
+    this.grid.$set(n_row, '_editRow', Object.assign({}, n_row))
+    this.grid.$set(n_row, '_editting', true)
+    this.grid.$set(n_row, '_new', true)
+    return n_row
   }
 
 }
