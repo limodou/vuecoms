@@ -335,64 +335,34 @@ export default {
 </script>
 
 <style lang="less">
-  .u-table {
-    position: relative;
+.nowrap {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+
+.u-table {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #ccc;
+  text-align: left;
+
+  .u-table-header-wrapper {
     overflow: hidden;
-    background: #fff;
-    border: 1px solid #ccc;
-    text-align: left;
+    position: relative;
+    background-color: #eee;
 
-    &.nowrap {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      -o-text-overflow: ellipsis;
-      -ms-text-overflow: ellipsis;
-    }
-
-    .u-table-header-wrapper {
+    .u-table-header-scroll {
+      z-index: 1;
+      height: 100%;
       overflow: hidden;
       position: relative;
       background-color: #eee;
 
-      .u-table-header-scroll {
-        z-index: 1;
-        height: 100%;
-        overflow: hidden;
-        position: relative;
-        background-color: #eee;
-
-        table{
-          border-collapse: separate;
-          border-spacing: 0;
-          text-align: left;
-          table-layout: fixed;
-          margin: 0;
-          display: table;
-
-          &.u-table-header {
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-
-            th {
-              position: relative;
-              padding: 0;
-              border: none;
-              border-right: 1px solid #ddd;
-              border-bottom: 1px solid #d2d2d2;
-            }
-          }
-        }
-      }
-
-    }
-
-    .u-table-body-scroll {
-      overflow: auto;
-      position: relative;
-
-      table {
+      table{
         border-collapse: separate;
         border-spacing: 0;
         text-align: left;
@@ -400,20 +370,12 @@ export default {
         margin: 0;
         display: table;
 
-        tr {
-          &.selected{
-            background-color:#ffefd5;
-          }
+        &.u-table-header {
+          position: relative;
+          overflow: hidden;
+          z-index: 1;
 
-          &.hover{
-            background-color:#e1eff8;
-          }
-
-          &:last-child > td {
-            border-bottom: none;
-          }
-
-          td {
+          th {
             position: relative;
             padding: 0;
             border: none;
@@ -424,16 +386,47 @@ export default {
       }
     }
 
-    .u-table-header-cell-resizer {
-      position: absolute;
-      width:4px;
-      cursor: col-resize;
-      top:0px;
-      right:0px;
-      height: 100%;
+  }
+
+  .u-table-body-scroll {
+    overflow: auto;
+    position: relative;
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+      table-layout: fixed;
+      margin: 0;
+      display: table;
+
+      tr {
+        &.selected{
+          background-color:#ffefd5;
+        }
+
+        &.hover{
+          background-color:#e1eff8;
+        }
+
+        td {
+          position: relative;
+          padding: 0;
+          border: none;
+          border-right: 1px solid #ddd;
+          border-bottom: 1px solid #d2d2d2;
+        }
+      }
     }
   }
 
-
-
+  .u-table-header-cell-resizer {
+    position: absolute;
+    width:4px;
+    cursor: col-resize;
+    top:0px;
+    right:0px;
+    height: 100%;
+  }
+}
 </style>

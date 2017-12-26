@@ -35,7 +35,7 @@ export default class Field {
   renderNormal (h, ctx) {
     let self = ctx.props
     let value = self.value[self.name]
-    let props = Object.assign(this.defaultOptions, {value}, this.options)
+    let props = Object.assign({}, this.defaultOptions, {value}, this.options)
     let events = {
       input: (x) => {
         x = this.convert_value(x)
@@ -61,7 +61,7 @@ export default class Field {
 
   renderStatic (h, ctx) {
     let self = ctx.props, display
-    let value = self.value[self.name]
+    let value = self.value[self.name] || ''
     if (this.convert) {
       display = this.convert(value)
     } else {
