@@ -41,7 +41,7 @@ export default {
       }
       //判断是否有name_static值，如果有，则不再执行getStaticValue的方法
       if (!self.value[`${self.name}_static`]) {
-        input.getStaticValue(self.value[self.name], callback)        
+        input.getStaticValue(self.value[self.name], callback)
       }
     }
     return input.render(h, ctx)

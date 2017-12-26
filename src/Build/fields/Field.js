@@ -16,7 +16,7 @@ export default class Field {
   }
 
   getStaticValue (value, callback) {
-    let v = value + ''
+    let v = (value === undefined || value === null) ? '' : value + ''
     callback(v)
   }
 
@@ -65,14 +65,14 @@ export default class Field {
     if (this.convert) {
       display = this.convert(value)
     } else {
-      display = typeof self.display !== null ? self.display : value
+      display = (self.display !== null && self.display !== undefined) ? self.display : value
     }
     return h('div', {
       'class': {
         'u-generic-input-text': true
       },
       domProps: {
-        innerHTML: display
+        innerHTML: display || ''
       }
     })
   }
