@@ -7,6 +7,23 @@
 <script>
 import {Select, Option} from 'iview'
 
+// 格式化choices, 转对对象形式
+const formatChoices = function (choices) {
+  let r = []
+  let d
+  for(let item of (choices || [])) {
+    if (Array.isArray(item)) {
+      d = {value: item[0], label: item[1]}
+    } else if (typeof item === 'object'){
+      d = item
+    } else {
+      d = {value: item, label: item}
+    }
+    r.push(d)
+  }
+  return r
+}
+
 export default {
   name: 'uSelect',
   data () {
@@ -16,23 +33,9 @@ export default {
     if (typeof this.choices === 'function' && !this.choices.choices) {
       const callback = (choices) => {
         this.choices.choices = choices
-        this.items = choices
+        this.items = formatChoices(choices)
       }
       this.choices(callback)
-    } else {
-      let r = []
-      let d
-      for(let item of (this.choices || [])) {
-        if (Array.isArray(item)) {
-          d = {value: item[0], label: item[1]}
-        } else if (typeof item === 'object'){
-          d = item
-        } else {
-          d = {value: item, label: item}
-        }
-        r.push(d)
-      }
-      this.items = r
     }
   },
   props: [
@@ -42,6 +45,18 @@ export default {
   methods: {
     handleInput () {
       this.$emit('input', this.data)
+    }
+  },
+
+  watch: {
+    choices: {
+      immediate: true,
+      handler: function () {
+        if (typeof this.choices !== 'function') {
+          this.items = formatChoices(this.choices)          
+        }
+      },
+      deep: true
     }
   }
 }

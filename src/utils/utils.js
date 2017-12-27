@@ -84,7 +84,7 @@ export const getOffset = function (el) {
 
 export const copyDataRow = function (s, o) {
   for (let name in o) {
-    if (o.hasOwnProperty(name) && name[0] !== '_') {
+    if (s.hasOwnProperty(name) && name[0] !== '_') {
       s[name] = o[name]
     }
   }

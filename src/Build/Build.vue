@@ -6,6 +6,7 @@
       :value="value"
       :labelWidth="item.labelWidth || labelWidth"
       :validateResult="validateResult"
+      :ref="item.name"
       ></component>
   </div>
 </template>
