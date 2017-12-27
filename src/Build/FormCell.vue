@@ -50,7 +50,8 @@ export default {
   },
 
   data () {
-    return {display: ''}
+    // 增加对 name_static 属性的支持，可以直接作为静态值进行显示
+    return {display: this.value[`${this.col.name}_static`] || ''}
   },
 
   methods: {

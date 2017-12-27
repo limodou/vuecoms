@@ -31,7 +31,7 @@ export default {
     buttons: {},
     labelWidth: {
       type: Number,
-      default: 120
+      default: 150
     },
     validateResult: {}
   },

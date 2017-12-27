@@ -16,7 +16,7 @@ export default class Field {
   }
 
   getStaticValue (value, callback) {
-    let v = value + ''
+    let v = (value === undefined || value === null) ? '' : value + ''
     callback(v)
   }
 
@@ -35,7 +35,7 @@ export default class Field {
   renderNormal (h, ctx) {
     let self = ctx.props
     let value = self.value[self.name]
-    let props = Object.assign(this.defaultOptions, {value}, this.options)
+    let props = Object.assign({}, this.defaultOptions, {value}, this.options)
     let events = {
       input: (x) => {
         x = this.convert_value(x)
@@ -61,18 +61,18 @@ export default class Field {
 
   renderStatic (h, ctx) {
     let self = ctx.props, display
-    let value = self.value[self.name]
+    let value = self.value[self.name] || ''
     if (this.convert) {
       display = this.convert(value)
     } else {
-      display = typeof self.display !== null ? self.display : value
+      display = (self.display !== null && self.display !== undefined) ? self.display : value
     }
     return h('div', {
       'class': {
         'u-generic-input-text': true
       },
       domProps: {
-        innerHTML: display
+        innerHTML: display || ''
       }
     })
   }

@@ -19,6 +19,6 @@ let fieldMapping = {
 }
 
 export const getField = function (type) {
-  let input = fieldMapping[type] || type //如果没找到假设type就是自定义的Field类
+  let input = fieldMapping[type] || type || InputField//如果没找到假设type就是自定义的Field类
   return input
 }

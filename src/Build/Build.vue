@@ -4,6 +4,7 @@
       :is="item.component || 'Layout'"
       v-bind="item"
       :value="value"
+      :labelWidth="item.labelWidth || labelWidth"
       :validateResult="validateResult"
       ></component>
   </div>
@@ -24,6 +25,11 @@ export default {
     data: {
       type: Array,
       default: () => []
+    },
+
+    labelWidth: {
+      type: Number,
+      default: 150
     },
 
     plainData: true, //数据是否扁平化

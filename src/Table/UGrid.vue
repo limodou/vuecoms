@@ -486,6 +486,8 @@ export default {
 
     handleQuerySubmit (data) {
       this.store.states.param = Object.assign(this.param, data)
+      this.$set(this.store.states, 'page', 1)
+      this.$set(store.states.param, 'page', 1)
       this.loadData()
     }
   },

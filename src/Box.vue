@@ -19,7 +19,7 @@
       @after-enter="afterEnter"
       @before-leave="beforeLeave"
     >
-      <div class="box-body no-padding" v-if="open" :style="bodyStyle">
+      <div class="box-body" v-if="open" :style="bodyStyle">
         <slot></slot>
       </div>
     </transition>
