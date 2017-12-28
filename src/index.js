@@ -1,6 +1,7 @@
 import Box from './Box'
 import Grid from './Table'
 import QueryForm from './query'
+import Uploader from './uploader'
 import uSelect from './Select'
 import uRadioGroup from './RadioGroup'
 import uCheckboxGroup from './CheckboxGroup'
@@ -14,6 +15,7 @@ const vuecoms = {
   Box,
   Grid,
   QueryForm,
+  Uploader,
   uSelect,
   uRadioGroup,
   uCheckboxGroup,
