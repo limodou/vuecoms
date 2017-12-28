@@ -56,6 +56,14 @@ export default {
       default () {
         return {}
       }
+    },
+
+    // 用于选择控件设置choices
+    choices: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
 
@@ -180,6 +188,25 @@ export default {
       },
       deep: true
     },
+
+    choices: {
+      immediate: true,
+      handler () {
+        for(let row of this.data) {
+          for(let field of (row.fields || [])) {
+            let choices = this.choices[field.name]
+            if (choices) {
+              if (!field.options) {
+                this.$set(field, 'options', {choices: choices})
+              } else {
+                this.$set(field.options, 'choices', choices)
+              }
+            }
+          }
+        }
+      },
+      deep: true
+    }
     // rules: {
     //   handler () {
     //     this.mergeRules()

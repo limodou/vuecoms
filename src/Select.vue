@@ -1,6 +1,6 @@
 <template>
   <Select v-model="data" :multiple="multiple" @input="handleInput">
-    <Option v-for="item in items" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">{{ item.label }}</Option>
   </Select>
 </template>
 
@@ -53,7 +53,7 @@ export default {
       immediate: true,
       handler: function () {
         if (typeof this.choices !== 'function') {
-          this.items = formatChoices(this.choices)          
+          this.items = formatChoices(this.choices)
         }
       },
       deep: true
