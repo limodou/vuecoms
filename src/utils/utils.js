@@ -53,8 +53,13 @@ export const clickoutside = {
 export const mapState = (...names) => {
   let r = {}
   for(let name of names) {
-    r[name] = function mappedState() {
-      return this.store.states[name]
+    r[name] = {
+      get () {
+        return this.store.states[name]
+      },
+      set (value) {
+        this.store.grid.$set(this.store.states, name, value)
+      }
     }
   }
   return r
@@ -84,7 +89,7 @@ export const getOffset = function (el) {
 
 export const copyDataRow = function (s, o) {
   for (let name in o) {
-    if (o.hasOwnProperty(name) && name[0] !== '_') {
+    if (s.hasOwnProperty(name) && name[0] !== '_') {
       s[name] = o[name]
     }
   }

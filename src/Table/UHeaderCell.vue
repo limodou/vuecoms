@@ -60,8 +60,12 @@ export default {
     },
 
     trStyles (column) {
-      let h = `${column.rowspan * this.rowHeight}px`
-      return {height: h, lineHeight: h}
+      if (!this.nowrap) {
+        return {}
+      } else {
+        let h = `${column.rowspan * this.rowHeight}px`
+        return {height: h, lineHeight: h}
+      }
     }
   }
 }

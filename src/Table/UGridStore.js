@@ -278,6 +278,14 @@ class Store {
     return n_row
   }
 
+  mergeStates (o) {
+    for (let name in o) {
+      if (this.states.hasOwnProperty(name)) {
+        this.grid.$set(this.states, name, o[name])
+      }
+    }
+  }
+
 }
 
 

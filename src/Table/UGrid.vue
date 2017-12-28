@@ -471,8 +471,12 @@ export default {
     loadData (url) {
       let _url = url || this.url
       let param = this.param
-      let callback = (data) => {
+      // data 为数据行， others 为其它信息，如total
+      let callback = (data, others) => {
         this.store.states.data = this.makeRows(data)
+        if (others && (others instanceof Object)) {
+          this.store.mergeStates(others)
+        }
         this.$nextTick( () => {
           this.showLoading(false)
           this.setSelection(this.selected)
@@ -485,9 +489,9 @@ export default {
     },
 
     handleQuerySubmit (data) {
-      this.store.states.param = Object.assign(this.param, data)
-      this.$set(this.store.states, 'page', 1)
-      this.$set(store.states.param, 'page', 1)
+      this.param = Object.assign(this.param, data)
+      this.page = 1
+      this.$set(this.param, 'page', 1)
       this.loadData()
     }
   },
