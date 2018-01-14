@@ -180,7 +180,7 @@ class Store {
   }
 
   removeRow (row) {
-    let removed = List.remove(this.states.data, row)
+    let removed = List.remove(this.states.data, row, this.states.idField)
     for(let i of removed) {
       this.deselect(i)
     }

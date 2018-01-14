@@ -49,9 +49,15 @@ export default {
   },
 
   watch: {
+    value: {
+      handler (v) {
+        this.data = v
+      },
+      deep: true
+    },
     choices: {
       immediate: true,
-      handler: function () {
+      handler () {
         if (typeof this.choices !== 'function') {
           this.items = formatChoices(this.choices)
         }

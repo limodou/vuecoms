@@ -27,10 +27,9 @@
                     <div>
                         <Row type="flex" v-if="((index+1)==showLineNum)&&isShowInlineBtn">
                             <Col style="margin:5px; text-align:right" span="24">
-                            <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}
+                            <Button type="primary" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}
                             </Button>
                             <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
-                                    size="small"
                                     @click="btnClear">{{btnOpt.clear.label ||'清除' }}
                             </Button>
                             </Col>
@@ -48,9 +47,8 @@
             </Row>
             <Row :justify="btnJustify" v-if="!isShowInlineBtn">
                 <Col style="margin:5px; text-align:center" span="24">
-                <Button type="primary" size="small" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
+                <Button type="primary" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
                 <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
-                        size="small"
                         @click="btnClear">{{btnOpt.clear.label ||'清除' }}
                 </Button>
                 </Col>

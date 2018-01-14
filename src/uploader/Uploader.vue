@@ -20,6 +20,11 @@
         },
         mounted: function () {
             this.uploader = Uploader.create(this.configuration);
+        },
+        methods:{
+            save:function(bsnId,bsnType){
+                this.uploader.save(bsnId,bsnType)
+            }
         }
     }
 </script>
