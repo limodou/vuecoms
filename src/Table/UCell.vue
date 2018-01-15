@@ -122,6 +122,7 @@ export default {
 
   .u-cell-text {
     padding: 0 5px;
+    word-wrap: break-word;
   }
 
   .u-cell-checkbox {
