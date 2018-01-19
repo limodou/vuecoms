@@ -1,6 +1,6 @@
 <template>
   <div class="u-grid-wrapper">
-    <Query v-if="query" :fields="query.fields" :layout="query.layout" :show-line="query.showLine"
+    <Query ref="query" v-if="query" :fields="query.fields" :layout="query.layout" :choices="query.choices" :show-line="query.showLine"
       :buttons="query.buttons"
       :value="query.value" @input="handleQuerySubmit"></Query>
     <div class="u-grid-tools" slot="tools">

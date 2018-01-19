@@ -1,12 +1,13 @@
 /**
  * Created by HoseaLee on 17/11/29.
  */
-function Store(form, fields, value) {
+function Store(form, fields, value, choices) {
 	this.form = form;
 
 	let defaultStates = {
 		fields: [],
-		value: {}
+		value: {},
+		choices:{}
 	};
 
 	//put filed name to default's value
@@ -19,11 +20,18 @@ function Store(form, fields, value) {
 		} else {
 			defaultStates['value'][fields[i]['name']] = "";
 		}
+		
+		if(fields[i]['type'] == 'iselect' || fields[i]['type'] == 'radio' || fields[i]['type'] == 'checkbox'){
+			defaultStates['choices'][fields[i]['name']] = []
+		}
+		
 	}
 	//combin defaultState's value and parameter's value to defaultStates's value
 	defaultStates['value'] = Object.assign(defaultStates['value'], value);
+	
+	
 	//combin all parameters to states
-	this.states = Object.assign(defaultStates, {fields: fields});
+	this.states = Object.assign(defaultStates, {fields: fields, choices:choices});
 
 	if (!form) {
 		throw new Error('QueryForm object is Required!')

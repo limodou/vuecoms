@@ -25,7 +25,7 @@
                         </Col>
                     </template>
                     <div>
-                        <Row type="flex" v-if="((index+1)==showLineNum)&&isShowInlineBtn">
+                        <Row type="flex" align="middle" v-if="((index+1)==showLineNum)&&isShowInlineBtn">
                             <Col style="margin:5px; text-align:right" span="24">
                             <Button type="primary" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}
                             </Button>
@@ -47,13 +47,14 @@
             </Row>
             <Row :justify="btnJustify" v-if="!isShowInlineBtn">
                 <Col style="margin:5px; text-align:center" span="24">
-                <Button type="primary" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
+                <Button type="primary"  @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
                 <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
                         @click="btnClear">{{btnOpt.clear.label ||'清除' }}
                 </Button>
                 </Col>
             </Row>
         </Form>
+
     </div>
 </template>
 <style lang="less">
@@ -139,7 +140,7 @@
 <script>
     import Vue from "vue";
     import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
-    //import "iview/dist/styles/iview.css";
+//    import "iview/dist/styles/iview.css";
 
     import Store from "./vQueryStore";
     import QueryString from "./queryString.vue"
@@ -151,8 +152,9 @@
     import Emitter from '@/mixins/emitter.js'
     import {QueryURL} from "../utils/utils"
 
+
     export default {
-        props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line"],
+        props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line", "choices"],
         mixins: [Emitter],
         components: {
             "str": QueryString,
@@ -165,7 +167,7 @@
             Form, Row, Col, FormItem, Button, Card, Tag, Icon
         },
         data(){
-            const store = new Store(this, this.fields, this.value);
+            const store = new Store(this, this.fields, this.value, this.choices);
 
             let selected = [],//selected tag { name: "", label: "", val: ""}
                     isShow = false; //showLine

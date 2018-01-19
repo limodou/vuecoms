@@ -4,7 +4,7 @@
 
 <template>
     <RadioGroup v-model="val" v-bind:value="val" :type="type" :size="size" :vertical="vertical">
-        <Radio v-for="r,i in cityList" :label="r['label']" :key="i" :disabled="disabled||(r.hasOwnProperty('disabled')?r['disabled']:false)">{{r['name']}}</Radio>
+        <Radio v-for="r,i in store.states.choices[tagName]" :label="r['label']" :key="i" :disabled="disabled||(r.hasOwnProperty('disabled')?r['disabled']:false)">{{r['name']}}</Radio>
     </RadioGroup>
 </template>
 

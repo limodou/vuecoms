@@ -4,7 +4,7 @@
 
 <template>
     <CheckboxGroup v-model="val" :size="size">
-        <template v-for="c,i in cityList">
+        <template v-for="c,i in store.states.choices[tagName]">
             <Checkbox :label="c['label']" :disabled="disabled||(c.hasOwnProperty('disabled')?c['disabled']:false)">
                 <span>{{c['name']}}</span>
             </Checkbox>
