@@ -117,21 +117,22 @@ export const isDateTime = function (str)
 }
 
 export const text2html = function (text) {
-    // 1: Plain Text Search
-    text = text.replace(/&/g, "&amp;").
-    replace(/</g, "&lt;").
-    replace(/>/g, "&gt;").replace(/  /g, "&nbsp;&nbsp;")
+  if (!text) return ''
+  // 1: Plain Text Search
+  text = text.replace(/&/g, "&amp;").
+  replace(/</g, "&lt;").
+  replace(/>/g, "&gt;").replace(/  /g, "&nbsp;&nbsp;")
 
-    // 2: Line Breaks
-    text = text.replace(/\r\n?|\n/g, "<br>")
+  // 2: Line Breaks
+  text = text.replace(/\r\n?|\n/g, "<br>")
 
-    // 3: Paragraphs
-    text = text.replace(/<br>\s*<br>/g, "</p><p>")
+  // 3: Paragraphs
+  text = text.replace(/<br>\s*<br>/g, "</p><p>")
 
-    // 4: Wrap in Paragraph Tags
-    text = "<p>" + text + "</p>"
+  // 4: Wrap in Paragraph Tags
+  text = "<p>" + text + "</p>"
 
-    return text
+  return text
 }
 
 export let QueryURL = function(url) {
