@@ -28,6 +28,10 @@ export default {
       type: Boolean,
       default: false
     }, //是否表态展示
+    staticSuffix: {
+      type: String,
+      default: '_static'
+    },
     buttons: {},
     labelWidth: {
       type: Number,
@@ -54,6 +58,7 @@ export default {
           }
           let width = 100 / 24 * span
           let f = List.get(this.fields, name, 'name')
+          if (!f) throw Error(`Can't find field ${name} in fields, please check if the name is not correct between layout and fields`)
           let field = Object.assign({colspan: span,
             labelWidth: this.labelWidth,
             static: col.static || this.static,

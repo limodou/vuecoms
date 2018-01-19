@@ -1,8 +1,6 @@
 <template>
   <div class="u-grid-wrapper">
-    <Query ref="query" v-if="query" :fields="query.fields" :layout="query.layout" :choices="query.choices" :show-line="query.showLine"
-      :buttons="query.buttons"
-      :value="query.value" @input="handleQuerySubmit"></Query>
+    <Query ref="query" v-if="query" v-bind="query" @input="handleQuerySubmit"></Query>
     <div class="u-grid-tools" slot="tools">
       <div class="u-grid-tools-left" v-if="buttons.length">
         <Buttons :buttons="buttons" :data="store" :target="this"></Buttons>
@@ -115,7 +113,7 @@ export default {
 
   methods: {
     ...mapMethod('getSelection', 'showLoading', 'setSelection', 'removeRow',
-      'setComment', 'removeComment'),
+      'setComment', 'removeComment', 'getSelectedRows'),
 
     resize () {
       if (this.width === 'auto') {

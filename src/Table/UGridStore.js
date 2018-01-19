@@ -159,6 +159,15 @@ class Store {
     return Object.values(this.states.selected)
   }
 
+  getSelectedRows () {
+    let rows = []
+    for(let row of this.states.data) {
+      if (row._selected)
+        rows.push(row)
+    }
+    return rows
+  }
+
   setSelection (selection) {
     for(let row of this.states.data) {
       let id = row[this.states.idField]

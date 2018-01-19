@@ -1,5 +1,5 @@
 <template>
-  <Select v-model="data" :multiple="multiple" @input="handleInput">
+  <Select v-model="data" :multiple="multiple" @input="handleInput" :clearable="clearable">
     <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">{{ item.label }}</Option>
   </Select>
 </template>
@@ -39,7 +39,7 @@ export default {
     }
   },
   props: [
-    'value', 'choices', 'multiple'
+    'value', 'choices', 'multiple', 'clearable'
   ],
 
   methods: {

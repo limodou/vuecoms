@@ -2,7 +2,7 @@
   <component :is="boxComponent" :title="title" class="u-layout">
     <Row v-for="row in rows" class="u-layout-row">
       <Col v-for="col in row" :span="col.colspan">
-        <FormCell :col="col" :value="value" :validateResult="validateResult"></FormCell>
+        <FormCell :col="col" :value="value" :validateResult="validateResult" :staticSuffix="staticSuffix"></FormCell>
       </Col>
     </Row>
     <Row v-if="buttons" slot="footer">
@@ -39,7 +39,7 @@ export default {
 
     &:after {
       content: "";
-      display: block;
+/*      display: block; */
       height: 0;
       clear: both;
       overflow: hidden;

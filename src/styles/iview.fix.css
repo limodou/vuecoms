@@ -1,3 +1,8 @@
 .ivu-radio-group {
     vertical-align: top;
 }
+
+.ivu-row:after, .ivu-row:before {
+  content: "";
+  display: block;
+}

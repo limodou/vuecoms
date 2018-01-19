@@ -1,3 +1,7 @@
 import Grid from './UGrid'
+import Buttons from './UButtons'
 
-export default Grid
+module.exports = {
+  Grid,
+  Buttons
+}

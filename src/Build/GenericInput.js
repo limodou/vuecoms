@@ -29,6 +29,10 @@ export default {
     display: {
       type: String,
       default: ''
+    },
+    staticSuffix: {
+      type: String,
+      default: '_static'
     }
   },
   render (h, ctx) {
@@ -40,8 +44,11 @@ export default {
         ctx.listeners['on-display-change'] && ctx.listeners['on-display-change'](v)
       }
       //判断是否有name_static值，如果有，则不再执行getStaticValue的方法
-      if (!self.value[`${self.name}_static`]) {
+      let v = self.value[`${self.name}${self.staticSuffix}`]
+      if (!v) {
         input.getStaticValue(self.value[self.name], callback)
+      } else {
+        callback(v)
       }
     }
     return input.render(h, ctx)
