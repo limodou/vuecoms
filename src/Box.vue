@@ -322,7 +322,7 @@ export default {
 
 .box-header:before,.box-body:before,.box-footer:before,.box-header:after,.box-body:after,.box-footer:after {
     content: " ";
-    display: table
+    display: block;
 }
 
 .box-header:after,.box-body:after,.box-footer:after {

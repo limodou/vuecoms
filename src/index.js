@@ -1,5 +1,5 @@
 import Box from './Box'
-import Grid from './Table'
+import {Grid, Buttons} from './Table'
 import QueryForm from './query'
 import Uploader from './uploader'
 import uSelect from './Select'
@@ -14,6 +14,7 @@ import './styles/iview.fix.css'
 const vuecoms = {
   Box,
   Grid,
+  Buttons,
   QueryForm,
   Uploader,
   uSelect,

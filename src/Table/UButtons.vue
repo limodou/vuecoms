@@ -35,7 +35,7 @@ export default {
   methods: {
     handleButtonClick (btn) {
       if (btn.onClick) {
-        btn.onClick(this.target, this.data)
+        btn.onClick.call(this, this.target, this.data)
       }
     }
   }

@@ -5,6 +5,7 @@
       v-bind="item"
       :value="value"
       :labelWidth="item.labelWidth || labelWidth"
+      :staticSuffix="staticSuffix"
       :validateResult="validateResult"
       :ref="item.name"
       ></component>
@@ -34,6 +35,10 @@ export default {
     },
 
     plainData: true, //数据是否扁平化
+    staticSuffix: {
+      type: String,
+      default: '_static'
+    },
 
     value: { // 数据存放对象
       type: Object,
@@ -131,16 +136,22 @@ export default {
         rule = []
       } else {
         if (!Array.isArray(field.rule)) {
+          field.rule.fullField = field.label
           rule = [field.rule]
         } else {
           rule = field.rule.slice()
+          for(var r of rule) {
+            if (r instanceof Object) {
+              r.fullField = field.label
+            }
+          }
         }
       }
 
       // 添加必填校验
       if (field.required) {
         if (field.type !== 'checkbox') {
-          rule.splice(0, 0, {required:true})
+          rule.splice(0, 0, {required:true, fullField: field.label})
         } else {
           field.required = false
         }

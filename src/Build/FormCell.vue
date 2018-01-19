@@ -7,6 +7,7 @@
     <div class="u-layout-cell-field">
       <GenericInput v-bind="col" :value="value" @on-display-change="handleDisplay"
         :display="display"
+        :staticSuffix="staticSuffix"
         @on-validate="handleValidate"></GenericInput>
       <div class="u-layout-cell-help" v-if="col.help">{{col.help}}</div>
       <div class="u-layout-cell-error" v-if="error">{{error}}</div>
@@ -20,7 +21,15 @@ import {validateRule} from './validateUtil'
 
 export default {
   name: 'FormCell',
-  props: ['col', 'value', 'validateResult'],
+  props: {
+    col:{},
+    value: {},
+    validateResult: {},
+    staticSuffix: {
+      type: String,
+      default: '_static'
+    }
+  },
   computed: {
     classes () {
       return {'u-layout-cell': true, 'u-layout-required': this.col.required && !this.col.static,
@@ -51,7 +60,7 @@ export default {
 
   data () {
     // 增加对 name_static 属性的支持，可以直接作为静态值进行显示
-    return {display: this.value[`${this.col.name}_static`] || ''}
+    return {display: this.value[`${this.col.name}${this.staticSuffix}`] || ''}
   },
 
   methods: {
