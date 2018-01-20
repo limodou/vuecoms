@@ -12,7 +12,8 @@ export default class DateField extends Field {
   convert_value (x) {
     if (x instanceof Date){
       let mon = x.getMonth() + 1 < 10 ? `0${x.getMonth()+1}` : `${x.getMonth()+1}`
-      return `${x.getFullYear()}/${mon}/${x.getDate()}`
+      let day = x.getDate() < 10 ? `0${x.getDate()}` : `${x.getDate()}`
+      return `${x.getFullYear()}/${mon}/${day}`
     }
     if (isDate(x)) {
       return x
