@@ -140,7 +140,7 @@
 <script>
     import Vue from "vue";
     import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
-    import "iview/dist/styles/iview.css";
+//    import "iview/dist/styles/iview.css";
 
     import Store from "./vQueryStore";
     import QueryString from "./queryString.vue"
