@@ -27,6 +27,7 @@ class Store {
       indexColWidth: 40,
       loadingText: '<i class="icon-loading ivu-icon ivu-icon-load-c"></i> Loading...', // 正在装入时显示的文本
       autoLoad: true, // 是否自动装入数据
+      parseUrl: true, // 是否从URL解析查询参数
       url: '', // 访问后台的URL
       param: {
       }, // 访问后台的URL所带参数
@@ -86,6 +87,8 @@ class Store {
         this.states[name] = options[name]
       }
     }
+
+    this.setParam(options.param)
 
     // 初始化states.param
     this.states.param.page = this.states.page
@@ -293,6 +296,22 @@ class Store {
         this.grid.$set(this.states, name, o[name])
       }
     }
+  }
+
+  /* 设置查询相关的参数，分别回填到对应的 page, pageSize, query 中作为初始值 */
+  setParam (p) {
+    if (!p) return
+    if (p.hasOwnProperty('page')) {
+      this.states.page = p.page
+      delete p.page
+    }
+    if (p.hasOwnProperty('pageSize')) {
+      this.states.pageSize = p.pageSize
+      delete p.pageSize
+    }
+
+    if (this.states.query)
+      this.states.query.value = Object.assign({}, p)
   }
 
 }
