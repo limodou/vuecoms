@@ -1,6 +1,6 @@
 <template>
     <div class="u-query">
-        <template v-if="selected.length>0">
+        <template v-if="showSelected&&selected.length>0">
             <Row align="middle">
                 <Col span="1">
                 <span style="font-size: 14px; font-weight: bold; color: rgb(70, 76, 91);">已选:</span>
@@ -18,11 +18,11 @@
             <template v-for="(tags, index) in formLayout">
                 <Row v-show="((index+1)>showLineNum?isShow:true)" justify="start" align="middle" type="flex">
                     <template v-for="(tag, _index) in tags">
-                        <Col span="8">
-                        <FormItem :label="getLabel(tag)">
+
+                        <FormItem :label="getLabel(tag)" :label-width="labelWidth?labelWidth:200">
                             <component :is="getType(tag)" :store="store" :tagName="tag" :key="tag"></component>
                         </FormItem>
-                        </Col>
+
                     </template>
                     <div>
                         <Row type="flex" align="middle" v-if="((index+1)==showLineNum)&&isShowInlineBtn">
@@ -140,7 +140,7 @@
 <script>
     import Vue from "vue";
     import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
-//    import "iview/dist/styles/iview.css";
+    import "iview/dist/styles/iview.css";
 
     import Store from "./vQueryStore";
     import QueryString from "./queryString.vue"
@@ -154,7 +154,7 @@
 
 
     export default {
-        props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line", "choices"],
+        props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line", "choices","show-selected", "label-width"],
         mixins: [Emitter],
         components: {
             "str": QueryString,
