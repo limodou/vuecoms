@@ -75,6 +75,7 @@ export default {
 
       .u-generic-input-text {
         font-size: 14px;
+        color: #333;
       }
 
       .u-layout-cell-help {

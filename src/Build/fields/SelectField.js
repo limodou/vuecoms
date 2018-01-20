@@ -9,7 +9,7 @@ export default class SelectField extends Field {
 
   _getValue (value, choices, callback) {
     let v = []
-    for (let c of choices) {
+    for (let c of (choices || [])) {
       if (Array.isArray(value)) {
         if (value.indexOf(c.value) > -1) {
           v.push(c.label)

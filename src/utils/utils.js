@@ -235,3 +235,20 @@ export const uuid = function () {
   })
   return uuid
 }
+
+// 格式化choices, 转对对象形式
+export const formatChoices = function (choices) {
+  let r = []
+  let d
+  for(let item of (choices || [])) {
+    if (Array.isArray(item)) {
+      d = {value: item[0], label: item[1]}
+    } else if (typeof item === 'object'){
+      d = item
+    } else {
+      d = {value: item, label: item}
+    }
+    r.push(d)
+  }
+  return r
+}

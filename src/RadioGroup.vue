@@ -6,45 +6,12 @@
 
 <script>
 import {RadioGroup, Radio} from 'iview'
-
-// 格式化choices, 转对对象形式
-const formatChoices = function (choices) {
-  let r = []
-  let d
-  for(let item of (choices || [])) {
-    if (Array.isArray(item)) {
-      d = {value: item[0], label: item[1]}
-    } else if (typeof item === 'object'){
-      d = item
-    } else {
-      d = {value: item, label: item}
-    }
-    r.push(d)
-  }
-  return r
-}
+import {formatChoices} from '@/utils/utils.js'
 
 export default {
   name: 'uRadioGroup',
   data () {
-    return {data: this.value}
-  },
-  computed: {
-    items () {
-      let r = []
-      let d
-      for(let item of (this.choices || [])) {
-        if (Array.isArray(item)) {
-          d = {value: item[0], label: item[1]}
-        } else if (typeof item === 'object'){
-          d = item
-        } else {
-          d = {value: item, label: item}
-        }
-        r.push(d)
-      }
-      return r
-    }
+    return {data: this.value, items: []}
   },
   props: [
     'value', 'choices'
