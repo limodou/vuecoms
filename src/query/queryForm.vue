@@ -20,7 +20,7 @@
                     <template v-for="(tag, _index) in tags">
 
                         <FormItem :label="getLabel(tag)" :label-width="labelWidth?labelWidth:200">
-                            <component :is="getType(tag)" style="min-width:180px" :store="store" :tagName="tag" :key="tag"></component>
+                            <component :is="getType(tag)" style="min-width:180px;max-width:300px" :store="store" :tagName="tag" :key="tag"></component>
                         </FormItem>
 
                     </template>
