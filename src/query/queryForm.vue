@@ -29,7 +29,7 @@
                             <Col style="margin:5px; text-align:right" span="24">
                             <Button type="primary" @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}
                             </Button>
-                            <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
+                            <Button v-if="btnOpt.hasOwnProperty('clear')" type="default"
                                     @click="btnClear">{{btnOpt.clear.label ||'清除' }}
                             </Button>
                             </Col>
@@ -48,7 +48,7 @@
             <Row :justify="btnJustify" v-if="!isShowInlineBtn">
                 <Col style="margin:5px; text-align:center" span="24">
                 <Button type="primary"  @click="btnSubmit">{{ btnOpt.submit.label || '查询' }}</Button>
-                <Button v-if="btnOpt.hasOwnProperty('clear')" type="error"
+                <Button v-if="btnOpt.hasOwnProperty('clear')" type="default"
                         @click="btnClear">{{btnOpt.clear.label ||'清除' }}
                 </Button>
                 </Col>
