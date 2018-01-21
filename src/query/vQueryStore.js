@@ -10,6 +10,18 @@ function Store(form, fields, value, choices) {
 		choices:{}
 	};
 
+	this.states = {
+		fields: [],
+		value: {},
+		choices:{}
+	}
+
+	if (fields) this.states.fields = fields
+	if (value) this.states.value = value
+	if (choices) this.states.choices = choices
+
+
+/*
 	//put filed name to default's value
 	for (let i = 0, len = fields.length; i < len; i++) {
 		//defaultStates['value'][fields[i]['name']] = null;
@@ -20,18 +32,19 @@ function Store(form, fields, value, choices) {
 		} else {
 			defaultStates['value'][fields[i]['name']] = "";
 		}
-		
+
 		if(fields[i]['type'] == 'iselect' || fields[i]['type'] == 'radio' || fields[i]['type'] == 'checkbox'){
 			defaultStates['choices'][fields[i]['name']] = []
 		}
-		
+
 	}
 	//combin defaultState's value and parameter's value to defaultStates's value
 	defaultStates['value'] = Object.assign(defaultStates['value'], value);
-	
-	
+
+
 	//combin all parameters to states
 	this.states = Object.assign(defaultStates, {fields: fields, choices:choices});
+*/
 
 	if (!form) {
 		throw new Error('QueryForm object is Required!')

@@ -19,6 +19,7 @@ export default {
   name: 'Build',
   data () {
     return {
+      fields: {},
       validating: false,
       validateResult: {} //保存校验结果
     }
@@ -119,14 +120,23 @@ export default {
 
     //生成校验结构
     makeValidateResult () {
-      for(let b of this.data) {
-        for(let field of (b.fields || [])) {
-          if (!this.validateResult[field.name]) {
-            let rule = this.getRule(field)
-            this.$set(this.validateResult, field.name, {error: '', validateState: '', rule: rule})
-          }
+      for(let name in this.fields) {
+        let field = this.fields[name]
+        if (!this.validateResult[name]) {
+          let rule = this.getRule(field)
+          this.$set(this.validateResult, name, {error: '', validateState: '', rule: rule})
         }
       }
+    },
+
+    makeFields () {
+      var fs = {}
+      for(let row of this.data) {
+        for(let field of (row.fields || [])) {
+          fs[field.name] = field
+        }
+      }
+      this.fields = fs
     },
 
     getRule (field) {
@@ -151,7 +161,7 @@ export default {
       // 添加必填校验
       if (field.required) {
         if (field.type !== 'checkbox') {
-          rule.splice(0, 0, {required:true, fullField: field.label})
+          rule.splice(0, 0, {required:true, fullField: field.label, type: field.multiple ? 'array' : 'string'})
         } else {
           field.required = false
         }
@@ -182,6 +192,7 @@ export default {
   },
 
   created () {
+    this.makeFields()
     this.makeValidateResult()
     this.mergeRules()
     this.mergeErrors()

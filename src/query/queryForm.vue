@@ -224,6 +224,16 @@
         return this.btnOpt && this.btnOpt.hasOwnProperty("align") ? this.btnOpt["align"] : "center";
       }
     },
+
+    watch: {
+      value: {
+        handler: function (v) {
+          this.store.states.value = v
+        },
+        deep: true
+      }
+    },
+    
     mounted(){
       //create selected tag
       this.createSelectedTag();
@@ -356,11 +366,14 @@
         this.$emit("input", this.store.getVal())
       },
       btnClear(){
-        if (typeof this.changed == "function" && this.changed({})) {
-          this.selected = [];
-          this.store.delVal();
-          this.$emit("clear", {});
-        }
+        this.store.states.value = {}
+        this.$emit('input', this.store.getVal())
+        // if (typeof this.changed == "function" && this.changed({})) {
+        //   this.selected = [];
+        //   this.store.states.value = {}
+        //   // this.store.delVal();
+        //   this.$emit("clear", {});
+        // }
       },
       showHideSwitch(){
         this.isShow = !this.isShow;

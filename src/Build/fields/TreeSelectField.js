@@ -3,7 +3,7 @@ import Field from './Field'
 export default class TreeSelectField extends Field {
   constructor (options) {
     super(options)
-    this.component = 'Treeselect'
+    this.component = 'tree-select'
     this.options.multiple = this.multiple
     this.events = ['close']
   }

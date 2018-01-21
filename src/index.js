@@ -6,9 +6,6 @@ import uSelect from './Select'
 import uRadioGroup from './RadioGroup'
 import uCheckboxGroup from './CheckboxGroup'
 import {Build, Layout, FormCell, GenericInput} from './Build'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.min.css'
-import './styles/treeselect.fix.css'
 import './styles/iview.fix.css'
 
 const vuecoms = {
@@ -23,8 +20,7 @@ const vuecoms = {
   Build,
   Layout,
   FormCell,
-  GenericInput,
-  Treeselect
+  GenericInput
 }
 
 const install = function () {
