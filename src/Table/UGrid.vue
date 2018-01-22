@@ -1,11 +1,11 @@
 <template>
   <div class="u-grid-wrapper">
     <Query ref="query" v-if="query" v-bind="query" @input="handleQuerySubmit"></Query>
-    <div class="u-grid-tools" slot="tools">
-      <div class="u-grid-tools-left" v-if="buttons.length">
+    <div class="u-grid-tools" slot="tools" v-if="buttons.length>0 || rightButtons.length>0">
+      <div class="u-grid-tools-left" v-if="buttons.length>0">
         <Buttons :buttons="buttons" :data="store" :target="this"></Buttons>
       </div>
-      <div class="u-grid-tools-right" v-if="rightButtons.length">
+      <div class="u-grid-tools-right" v-if="rightButtons.length>0">
         <Buttons :buttons="rightButtons" :data="store" :target="this"></Buttons>
       </div>
     </div>

@@ -56,9 +56,7 @@ Store.prototype.getDefaultValue = function (type) {
 }
 
 Store.prototype.setVal = function (key, val) {
-	if (this.states.value.hasOwnProperty(key)) {
-		this.states.value[key] = val;
-	}
+	this.form.$set(this.states.value, key, val);
 };
 
 Store.prototype.getVal = function (key) {
