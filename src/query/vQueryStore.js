@@ -20,7 +20,14 @@ function Store(form, fields, value, choices) {
 	if (value) this.states.value = value
 	if (choices) this.states.choices = choices
 
-
+	for(var field of this.states.fields) {
+		if (typeof this.states.value[field.name] === 'undefined') {
+			if (field.multiple)
+				this.states.value[field.name] = []
+			else
+				this.states.value[field.name] = ""
+		}
+	}
 /*
 	//put filed name to default's value
 	for (let i = 0, len = fields.length; i < len; i++) {

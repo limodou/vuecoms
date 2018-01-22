@@ -68,6 +68,7 @@ class Store {
       loadingLeft: 0,
       loadingTop: 0,
       selected: {}, // 记录选中结果，可以跨页保存
+      selectedRows: {},
 
       // 分页相关参数
       prev: '上一页',
@@ -118,6 +119,7 @@ class Store {
       this.grid.$set(row, '_selected', true)
       let id = row[this.states.idField]
       this.grid.$set(this.states.selected, id, id)
+      this.grid.$set(this.states.selectedRows, id, row)
     }
   }
 
@@ -143,6 +145,7 @@ class Store {
     if (deselectable) {
       this.grid.$set(row, '_selected', false)
       this.grid.$delete(this.states.selected, row[this.states.idField])
+      this.grid.$delete(this.states.selectedRows, row[this.states.idField])
     }
   }
 
@@ -163,12 +166,7 @@ class Store {
   }
 
   getSelectedRows () {
-    let rows = []
-    for(let row of this.states.data) {
-      if (row._selected)
-        rows.push(row)
-    }
-    return rows
+    return Object.values(this.states.selectedRows)
   }
 
   setSelection (selection) {
