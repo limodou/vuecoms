@@ -84,7 +84,7 @@ export default {
         for(let k in this.validateResult) {
           let r = this.validateResult[k]
           if (r.rule && r.rule.length > 0) {
-            if (!r.validateState) {
+            if (!r.validateState && !this.fields[k].static) {
               validateRule(this.value, k, this.validateResult)
               result.pending.push(r)
             } else if (r.validateState === 'validating') {
@@ -122,7 +122,7 @@ export default {
     makeValidateResult () {
       for(let name in this.fields) {
         let field = this.fields[name]
-        if (!this.validateResult[name]) {
+        if (!this.validateResult[name] && !field.static) {
           let rule = this.getRule(field)
           this.$set(this.validateResult, name, {error: '', validateState: '', rule: rule})
         }
@@ -134,6 +134,7 @@ export default {
       for(let row of this.data) {
         for(let field of (row.fields || [])) {
           fs[field.name] = field
+          field.static = field.static || row.static || false
         }
       }
       this.fields = fs
@@ -228,6 +229,15 @@ export default {
             }
           }
         }
+      },
+      deep: true
+    },
+
+    data: {
+      handler () {
+        this.makeFields()
+        this.makeValidateResult()
+        this.mergeRules()
       },
       deep: true
     }

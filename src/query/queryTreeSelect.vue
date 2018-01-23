@@ -6,6 +6,7 @@
 
 <script>
 import {TreeSelect} from 'iview'
+import Emitter from '@/mixins/emitter.js'
 
 export default {
     data: function () {
@@ -16,9 +17,12 @@ export default {
         val, options, multiple
       }
     },
+    mixins: [Emitter],
     watch: {
-      val: function (v) {
+      val: function (v, ov) {
         this.store.setVal(this.tagName, v)
+        let d = {name: this.tagName, old: ov, value: v}
+        this.dispatch('Query', 'on-query-change', d)
       },
       "store.states.value": {
         handler: function (o, v) {

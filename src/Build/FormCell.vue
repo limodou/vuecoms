@@ -9,7 +9,7 @@
         :display="display"
         :staticSuffix="staticSuffix"
         @on-validate="handleValidate"></GenericInput>
-      <div class="u-layout-cell-help" v-if="col.help">{{col.help}}</div>
+      <div class="u-layout-cell-help" v-if="col.help && !col.static">{{col.help}}</div>
       <div class="u-layout-cell-error" v-if="error">{{error}}</div>
     </div>
   </div>
@@ -41,7 +41,7 @@ export default {
     },
     error: {
       get () {
-        return this.validateResult[this.col.name].error
+        return (this.validateResult[this.col.name] && this.validateResult[this.col.name].error) || ''
       },
       set (v) {
         this.$set(this.validateResult[this.col.name], 'error', v)
@@ -65,7 +65,8 @@ export default {
 
   methods: {
     validate (type, callback = function () {}) {
-      validateRule(this.value, this.col.name, this.validateResult)
+      if (!this.col.static)
+        validateRule(this.value, this.col.name, this.validateResult)
     },
 
     handleValidate () {

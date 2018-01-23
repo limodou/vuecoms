@@ -1,6 +1,6 @@
 <template>
   <div class="u-grid-wrapper">
-    <Query ref="query" v-if="query" v-bind="query" @input="handleQuerySubmit"></Query>
+    <Query ref="query" v-if="query" v-bind="query" @input="handleQuerySubmit" @on-query-change="handleQueryChange"></Query>
     <div class="u-grid-tools" slot="tools" v-if="buttons.length>0 || rightButtons.length>0">
       <div class="u-grid-tools-left" v-if="buttons.length>0">
         <Buttons ref="buttons" :buttons="buttons" :data="store" :target="this"></Buttons>
@@ -350,6 +350,11 @@ export default {
         this.$set(this.store.states.param, 'pageSize', size)
         this.loadData()
       })
+    },
+
+    handleQueryChange (change) {
+      console.log('1111111')
+      this.$emit('on-query-change', change)
     },
 
     // 生成缺省的行编辑按钮

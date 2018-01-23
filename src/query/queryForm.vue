@@ -150,10 +150,11 @@
   import QueryCheckbox from "./queryCheckbox.vue"
   import QueryTreeSelect from "./queryTreeSelect.vue"
   import Emitter from '@/mixins/emitter.js'
-  import {QueryURL} from "../utils/utils"
+  import {QueryURL, mapState} from "@/utils/utils"
 
 
   export default {
+    name: 'Query',
     props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line", "choices","show-selected", "label-width"],
     mixins: [Emitter],
     components: {
@@ -233,7 +234,7 @@
         deep: true
       }
     },
-    
+
     mounted(){
       //create selected tag
       this.createSelectedTag();
@@ -366,7 +367,20 @@
         this.$emit("input", this.store.getVal())
       },
       btnClear(){
-        this.store.states.value = {}
+        for(let k in this.store.states.value) {
+          let v = this.store.states.value[k]
+          let new_value
+          if (Array.isArray(v)) {
+            new_value = []
+          } else if (typeof v === 'boolean') {
+            new_value = false
+          } else if (typeof v === 'number') {
+            new_value = 0
+          } else {
+            new_value = ''
+          }
+          this.store.states.value[k] = new_value
+        }
         this.$emit('input', this.store.getVal())
         // if (typeof this.changed == "function" && this.changed({})) {
         //   this.selected = [];
