@@ -233,7 +233,7 @@
         deep: true
       }
     },
-    
+
     mounted(){
       //create selected tag
       this.createSelectedTag();
@@ -367,7 +367,7 @@
       },
       btnClear(){
         this.store.states.value = {}
-        this.$emit('input', this.store.getVal())
+        //this.$emit('input', this.store.getVal())
         // if (typeof this.changed == "function" && this.changed({})) {
         //   this.selected = [];
         //   this.store.states.value = {}
