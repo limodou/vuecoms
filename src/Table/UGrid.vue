@@ -353,7 +353,6 @@ export default {
     },
 
     handleQueryChange (change) {
-      console.log('1111111')
       this.$emit('on-query-change', change)
     },
 

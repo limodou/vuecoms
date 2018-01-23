@@ -382,12 +382,6 @@
           this.store.states.value[k] = new_value
         }
         this.$emit('input', this.store.getVal())
-        // if (typeof this.changed == "function" && this.changed({})) {
-        //   this.selected = [];
-        //   this.store.states.value = {}
-        //   // this.store.delVal();
-        //   this.$emit("clear", {});
-        // }
       },
       showHideSwitch(){
         this.isShow = !this.isShow;

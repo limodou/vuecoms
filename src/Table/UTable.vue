@@ -278,7 +278,7 @@ export default {
     // 单元格样式：
     //    文字对齐
     cellStyles (col) {
-      return {textAlign: col.align || 'center', height: `${this.rowHeight}px`}
+      return {textAlign: col.align || 'center', height: `${this.rowHeight}px`, overflow:'hidden'}
     },
 
     /*
