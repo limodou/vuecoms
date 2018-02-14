@@ -7,6 +7,7 @@ import uRadioGroup from './RadioGroup'
 import uCheckboxGroup from './CheckboxGroup'
 import {Build, Layout, FormCell, GenericInput} from './Build'
 import './styles/iview.fix.css'
+import List from "@/utils/list.js"
 
 const vuecoms = {
   Box,
@@ -27,6 +28,7 @@ const install = function () {
     Object.keys(vuecoms).forEach((key) => {
         Vue.component(key, vuecoms[key])
     })
+    Vue.prototype.$list = List
 }
 
 // auto install

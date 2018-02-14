@@ -30,7 +30,8 @@ export default {
   },
 
   index(list, items, idField='id') {
-    return this._index(list, items, idField) || -1
+    let r = this._index(list, items, idField)
+    return r>=0? r:-1
   },
 
   get(list, items, idField='id') {
