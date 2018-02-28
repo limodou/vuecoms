@@ -141,7 +141,6 @@
   import Vue from "vue";
   import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
 //  import "iview/dist/styles/iview.css";
-
   import Store from "./vQueryStore";
   import QueryString from "./queryString.vue"
   import QuerySelect from "./querySelect.vue"
@@ -150,7 +149,7 @@
   import QueryCheckbox from "./queryCheckbox.vue"
   import QueryTreeSelect from "./queryTreeSelect.vue"
   import Emitter from '@/mixins/emitter.js'
-  import {QueryURL, mapState} from "@/utils/utils"
+  import {QueryURL, mapState, mapMethod} from "@/utils/utils"
 
 
   export default {
@@ -240,7 +239,7 @@
       this.createSelectedTag();
     },
     methods: {
-
+      ...mapMethod('getField'),
       getLabel(tag){
         for (let i = 0, len = this.fields.length; i < len; i++) {
           if (this.fields[i]['name'] == tag) {
@@ -380,6 +379,13 @@
             new_value = ''
           }
           this.store.states.value[k] = new_value
+          let field = this.getField(k)
+          if (field.type === 'treeselect') {
+            if (field.multiple)
+              field.options.label = []
+            else
+              field.options.label = ''
+          }
         }
         this.$emit('input', this.store.getVal())
       },
