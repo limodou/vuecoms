@@ -17,10 +17,10 @@
     <Form :label-width="80">
       <template v-for="(tags, index) in formLayout">
         <Row v-show="((index+1)>showLineNum?isShow:true)">
-          <template v-for="(tag, _index) in tags">
+          <template v-for="(field, _index) in tags">
 
-            <FormItem :label="getLabel(tag)" :label-width="labelWidth?labelWidth:200" style="float:left">
-              <component :is="getType(tag)" style="min-width:180px;max-width:300px" :store="store" :tagName="tag" :key="tag"></component>
+            <FormItem :label="field.label" :label-width="labelWidth?labelWidth:200" style="float:left">
+              <component :is="field.type" style="min-width:180px;max-width:300px" :store="store" :tagName="field.name" :key="field.name"></component>
             </FormItem>
 
           </template>
@@ -57,99 +57,14 @@
 
   </div>
 </template>
-<style lang="less">
-  .selectedTag:hover {
-    border-color: #da2626 !important;
 
-  i.ivu-icon-ios-close-empty:before {
-    color: #ffffff;
-    opacity: 1;
-  }
-
-  i.ivu-icon-ios-close-empty {
-    z-index: 1;
-  }
-
-  }
-  .selectedTag:hover:after {
-    background-color: #da2626 !important;
-    width: 22px;
-    right: 0;
-  }
-
-  .u-query {
-    padding: 15px;
-
-  .ivu-form-item {
-    margin: 5px;
-  }
-
-  .line {
-    height: 1px;
-  }
-
-  &:before {
-     content: "";
-     display: block;
-     width: 100%;
-     height: 1px;
-     background: #eee;
-     /*position: absolute;*/
-     /*top: 10px;*/
-     /*left: 0;*/
-     box-sizing: border-box;
-   }
-
-  .collapse-line {
-    text-align: center;
-    border-top: 1px solid #eee;
-    height: 24px;
-    margin-bottom: 10px;
-
-  .showMoreBtn {
-    position: absolute;
-    border-top: 1px solid white;
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    padding: 1px 10px;
-    -moz-border-radius-bottomleft: 5px;
-    -moz-border-radius-bottomright: 5px;
-    cursor: pointer;
-    margin: 0 auto;
-    margin-top: -1px;
-    font-size: 12px;
-    color: #0000008f;
-    left: 50%;
-  }
-
-  &:hover {
-     border-top: 1px solid red;
-
-  .showMoreBtn {
-    color: #ff5d4b;
-    border-color: #ff5d4b;
-    border-top: 1px solid white;
-  }
-
-  }
-
-  }
-  }
-</style>
 <script>
-  import Vue from "vue";
-  import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview";
-//  import "iview/dist/styles/iview.css";
-  import Store from "./vQueryStore";
-  import QueryString from "./queryString.vue"
-  import QuerySelect from "./querySelect.vue"
-  import QueryDatepicker from "./queryDatepicker.vue"
-  import QueryRadio from "./queryRadio.vue"
-  import QueryCheckbox from "./queryCheckbox.vue"
-  import QueryTreeSelect from "./queryTreeSelect.vue"
+  import Vue from "vue"
+  import {Form, Row, Col, FormItem, Button, Card, Tag, Icon} from "iview"
+  import Store from "./vQueryStore"
+  import fields from './fieldMapping.js'
   import Emitter from '@/mixins/emitter.js'
-  import {QueryURL, mapState, mapMethod} from "@/utils/utils"
+  import {QueryURL, mapState, mapMethod, formatDate} from "@/utils/utils"
 
 
   export default {
@@ -157,13 +72,7 @@
     props: ["fields", "layout", "value", "buttons", "changed", "submit", "show-line", "choices","show-selected", "label-width"],
     mixins: [Emitter],
     components: {
-      "str": QueryString,
-      "iselect": QuerySelect,
-      "date": QueryDatepicker,
-      "dateRange": QueryDatepicker,
-      "radio": QueryRadio,
-      "checkbox": QueryCheckbox,
-      "treeselect": QueryTreeSelect,
+      ...fields,
       Form, Row, Col, FormItem, Button, Card, Tag, Icon
     },
     data(){
@@ -177,6 +86,7 @@
         selected,
         isShow,
         scrollPos: 0,
+        _fields: {},
         ready: function () {
           this.$scrollSet()
         }
@@ -186,7 +96,13 @@
       formLayout: function () {
         let formLayout = [];
         if (this.layout) {
-          formLayout = this.layout;
+          for (let row of this.layout) {
+            let arr = []
+            for (let f of row) {
+              arr.push(this._fields[f])
+            }
+            formLayout.push(arr)
+          }
         } else {
           let arr = [];
           for (let i = 0, len = this.fields.length; i < len; i++) {
@@ -234,28 +150,25 @@
       }
     },
 
-    mounted(){
-      //create selected tag
-      this.createSelectedTag();
+    created () {
+      this.collectFields()
     },
+
+    mounted () {
+      //create selected tag
+      this.createSelectedTag()
+    },
+
     methods: {
       ...mapMethod('getField'),
-      getLabel(tag){
-        for (let i = 0, len = this.fields.length; i < len; i++) {
-          if (this.fields[i]['name'] == tag) {
-            return this.fields[i]['label']
-          }
+      collectFields () {
+        let fields = {}
+        for (let f of this.fields) {
+          fields[f.name] = f
         }
-        return "";
+        this._fields = fields
       },
-      getType(tag){
-        for (let i = 0, len = this.fields.length; i < len; i++) {
-          if (this.fields[i]['name'] == tag) {
-            return this.fields[i]['type']
-          }
-        }
-        return "";
-      },
+
       createSelectedTag(){
         //To create Selected Tag that base on store.value, just modify store.value, clear selected to blank and call on this method
         for (let k in this.store.getVal()) {
@@ -295,10 +208,10 @@
                 }
                 break;
               case "date":
-                if (typeof val == "string")val = new Date(val);
-                let format = field.hasOwnProperty("format") ? field['format'] : "yyyy-MM-dd",
-                  formattedVal = format.replace("yyyy", val.getFullYear()).replace("MM", ((val.getMonth() + 1) < 10) ? "0" + (val.getMonth() + 1) : (val.getMonth() + 1)).replace("dd", ((val.getDate()) < 10) ? "0" + (val.getDate()) : (val.getDate()))
-                this.selected.push({name: field['name'], label: field['label'], val: formattedVal});
+                this.selected.push({name: field['name'], label: field['label'], val: formatDate(val)});
+                break;
+              case "daterange":
+                this.selected.push({name: field['name'], label: field['label'], val: `${formatDate(val[0])} - ${formatDate(val[1])}`});
                 break;
               case "radio":
                 for (let c in field['choices']) {
@@ -395,3 +308,84 @@
     }
   }
 </script>
+
+<style lang="less">
+  .selectedTag:hover {
+    border-color: #da2626 !important;
+
+  i.ivu-icon-ios-close-empty:before {
+    color: #ffffff;
+    opacity: 1;
+  }
+
+  i.ivu-icon-ios-close-empty {
+    z-index: 1;
+  }
+
+  }
+  .selectedTag:hover:after {
+    background-color: #da2626 !important;
+    width: 22px;
+    right: 0;
+  }
+
+  .u-query {
+    padding: 15px;
+
+  .ivu-form-item {
+    margin: 5px;
+  }
+
+  .line {
+    height: 1px;
+  }
+
+  &:before {
+     content: "";
+     display: block;
+     width: 100%;
+     height: 1px;
+     background: #eee;
+     /*position: absolute;*/
+     /*top: 10px;*/
+     /*left: 0;*/
+     box-sizing: border-box;
+   }
+
+  .collapse-line {
+    text-align: center;
+    border-top: 1px solid #eee;
+    height: 24px;
+    margin-bottom: 10px;
+
+  .showMoreBtn {
+    position: absolute;
+    border-top: 1px solid white;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 1px 10px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-top: -1px;
+    font-size: 12px;
+    color: #0000008f;
+    left: 50%;
+  }
+
+  &:hover {
+     border-top: 1px solid red;
+
+  .showMoreBtn {
+    color: #ff5d4b;
+    border-color: #ff5d4b;
+    border-top: 1px solid white;
+  }
+
+  }
+
+  }
+  }
+</style>

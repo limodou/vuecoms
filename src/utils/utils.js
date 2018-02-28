@@ -252,3 +252,16 @@ export const formatChoices = function (choices) {
   }
   return r
 }
+
+export const formatDate = function (d, fmt='yyyy/mm/dd') {
+  if (typeof d === 'string') {
+    if (!d) return ''
+    else {
+      d = new Date(d)
+    }
+  }
+  let year = d.getFullYear() + ''
+  let mon = d.getMonth() + 1 < 10 ? `0${d.getMonth()+1}` : `${d.getMonth()+1}`
+  let day = d.getDate() < 10 ? `0${d.getDate()}` : `${d.getDate()}`
+  return fmt.replace('yyyy', year).replace('mm', mon).replace('dd', day)
+}
