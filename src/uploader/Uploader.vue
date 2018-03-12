@@ -1,8 +1,5 @@
 <template>
   <div class="upload">
-    <span v-show="$refs[ref] && $refs[ref].features.drag">支持拖拽上传</span>
-    <span v-show="$refs[ref] && $refs[ref].features.directory">支持文件夹上传</span>
-    <span v-show="$refs[ref] && $refs[ref].features.html5">支持HTML5</span>
     <Row>
       <Col span="24">
       <div v-if="mode=='edit'" class="v-fileupload-operation margin-bottom-15">
