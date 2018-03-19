@@ -13,7 +13,8 @@
           :thread="1"
           v-model="files"
           @input-file="inputHandler"
-        >上传附件</file-upload>
+        >上传附件
+        </file-upload>
       </div>
       </Col>
     </Row>
@@ -56,7 +57,51 @@
           width: 60,
           align: 'center'
         },
-        {title: '文件名', key: 'name'},
+        {
+          title: '文件名', key: 'name', render: function (createElement, params) {
+          return createElement('a', {
+            on: {
+              click: function () {
+                var atchSN = params.row.sn
+                var _reqData = {};
+                _reqData.OPER_CODE = window.OPER_CODE;
+                _reqData.OPER_NAME = window.OPER_FULL_NAME;
+
+                _reqData.atchSN = atchSN;
+                var req = P2.simpleTx("A09022015", _reqData, function(){}, function(){});
+                req.success(function(data){
+                  var relativePath = "resp";
+                  var filename = data._COMMON.FILE_LIST_PACK.FILE_INFO.FILE_NAME;
+                  var dlname_arr = data.ATCH_NM.split("."), dlname;
+                  if (dlname_arr.length <= 2) {
+                    dlname = dlname_arr[0]
+                  } else {
+                    dlname_arr.pop()
+                    dlname = dlname_arr.join(".")
+                  }
+
+                  var url = "getLocalFile.action?openFile=false&charset=UTF8&relativePath=" + relativePath
+                    + "&fileName=" + encodeURIComponent(filename) + "&dlFileName="
+                    + encodeURIComponent(dlname);
+
+                  // window.open(url)
+                  location.href = url;
+                }).error(function(d, reason){
+                  if(reason != "abort") {
+
+                    if(d.BK_DESC_DETAIL && d.BK_DESC_DETAIL.indexOf('返回代码为=-2001') > 0) {
+                      P2.utils.showErrorMessage("下载失败，服务器上的文件不存在。", "error");
+                    } else {
+                      P2.utils.showErrorMessage("下载文件失败，请稍后重试。", "error");
+                    }
+
+                  }
+                })
+              }
+            }
+          }, params.row.name)
+        }
+        },
         {title: '上传日期', key: 'date'},
         {
           title: '文件大小', key: 'size', render: function (h, params) {
@@ -81,10 +126,10 @@
                 on: {
                   click: function () {
                     if (self.editMode_ == 'owner') {
-                      if (params.row['user_id'] == window.OPER_CODE) {
+                      if (!params.row['sn'] || params.row['user_id'] == window.OPER_CODE) {
                         self.$Modal.confirm({
                           title: "确认",
-                          content: "<p>确认删除"+params.row.name+"?</p>",
+                          content: "<p>确认删除" + params.row.name + "?</p>",
                           onOk: function () {
                             self.removeUploadedFile(params.row['id'])
                           },
@@ -100,7 +145,7 @@
                     if (self.editMode_ === 'free') {
                       self.$Modal.confirm({
                         title: "确认",
-                        content: "<p>确认删除"+params.row.name+"?</p>",
+                        content: "<p>确认删除" + params.row.name + "?</p>",
                         onOk: function () {
                           self.removeUploadedFile(params.row['id'])
                         },
@@ -152,13 +197,13 @@
             jsonData: JSON.stringify({
               OPER_CODE: window.OPER_CODE,
               OPER_NAME: window.OPER_FULL_NAME,
-              size: newFile.size,
+              //size: newFile.size,
               bsnName: this.bsnName || ''
             })
           })
           var data = Object.assign({}, post_data, {
             name: newFile.name,
-            size: newFile.size,
+            //size: newFile.size,
             type: newFile.type,
             lastModifieDate: new Date(),
           })
@@ -283,7 +328,7 @@
               self.uploadedFiles.push({
                 name: atchList[i]['ATCH_NM'],
                 date: atchList[i]['UDT_TM'],
-                size: self.renderSize(atchList[i]['ATCH_SZ']),
+                //size: self.renderSize(atchList[i]['ATCH_SZ']),
                 user: atchList[i]['UDT_PSN_NM'],
                 user_id: atchList[i]['UDT_PSN_ID'].trim(),
                 sn: atchList[i]['SN'],
