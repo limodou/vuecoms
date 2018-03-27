@@ -254,11 +254,9 @@ export const formatChoices = function (choices) {
 }
 
 export const formatDate = function (d, fmt='yyyy/mm/dd') {
+  if (!d) return ''
   if (typeof d === 'string') {
-    if (!d) return ''
-    else {
-      d = new Date(d)
-    }
+    d = new Date(d)
   }
   let year = d.getFullYear() + ''
   let mon = d.getMonth() + 1 < 10 ? `0${d.getMonth()+1}` : `${d.getMonth()+1}`

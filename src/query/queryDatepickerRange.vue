@@ -30,10 +30,16 @@ export default {
   props: ["store", "tagName"],
   watch: {
     val1: function(v) {
-      this.value[this.tagName][0] = formatDate(v)
+      if (!this.value[this.tagName]) {
+        this.$set(this.value, this.tagName, [formatDate(v), ''])
+      } else
+        this.value[this.tagName][0] = formatDate(v)
     },
     val2: function(v) {
-      this.value[this.tagName][1] = formatDate(v)
+      if (!this.value[this.tagName]) {
+        this.$set(this.value, this.tagName, ['', formatDate(v)])
+      } else
+        this.value[this.tagName][1] = formatDate(v)
     },
     'store.states.value': {
       handler: function(v) {
