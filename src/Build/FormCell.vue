@@ -5,8 +5,7 @@
       {{col.label}}
     </label>
     <div class="u-layout-cell-field">
-      <GenericInput v-bind="col" :value="value" @on-display-change="handleDisplay"
-        :display="display"
+      <GenericInput v-bind="col" :value="value"
         :staticSuffix="staticSuffix"
         @on-validate="handleValidate"></GenericInput>
       <div class="u-layout-cell-help" v-if="col.help && !col.static">{{col.help}}</div>
@@ -16,7 +15,7 @@
 </template>
 
 <script>
-import GenericInput from './GenericInput'
+import GenericInput from '../Fields'
 import {validateRule} from './validateUtil'
 
 export default {
@@ -58,11 +57,6 @@ export default {
     // }
   },
 
-  data () {
-    // 增加对 name_static 属性的支持，可以直接作为静态值进行显示
-    return {display: this.value[`${this.col.name}${this.staticSuffix}`] || ''}
-  },
-
   methods: {
     validate (type, callback = function () {}) {
       if (!this.col.static)
@@ -71,11 +65,8 @@ export default {
 
     handleValidate () {
       this.validate()
-    },
-
-    handleDisplay (v) {
-      this.display = v
     }
+
   }
 }
 </script>

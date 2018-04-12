@@ -1,16 +1,15 @@
 import Field from './Field'
 
-export default class TreeSelectField extends Field {
-  constructor (options) {
-    super(options)
-    this.component = 'tree-select'
-    this.options.multiple = this.multiple
-    this.events = ['close']
+export default class SelectField extends Field {
+  constructor (parent, options) {
+    super(parent, options)
+    this.component = 'u-select'
+    parent.$set(this.options, 'multiple', this.multiple)
   }
 
-  getStaticValue (value, callback) {
+  getStaticValue (value) {
     let v = []
-    for (let c of this.options.choices) {
+    for (let c of (this.options.choices)) {
       if (Array.isArray(value)) {
         if (value.indexOf(c.value) > -1) {
           v.push(c.label)
@@ -21,6 +20,6 @@ export default class TreeSelectField extends Field {
         if (this.multiple) break
       }
     }
-    callback(v.join(', '))
+    return v.join(', ')
   }
 }

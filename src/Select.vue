@@ -13,15 +13,7 @@ export default {
   data () {
     return {data: this.value, items: []}
   },
-  created () {
-    if (typeof this.choices === 'function' && !this.choices.choices) {
-      const callback = (choices) => {
-        this.choices.choices = choices
-        this.items = formatChoices(choices)
-      }
-      this.choices(callback)
-    }
-  },
+
   props: [
     'value', 'choices', 'multiple', 'clearable'
   ],

@@ -6,6 +6,7 @@ import TreeSelectField from './TreeSelectField'
 import RadioField from './RadioField'
 import CheckboxGroupField from './CheckboxGroupField'
 import CheckboxField from './CheckboxField'
+import StaticField from './StaticField'
 
 let fieldMapping = {
   string: InputField,
@@ -18,7 +19,13 @@ let fieldMapping = {
   checkbox: CheckboxField
 }
 
-export const getField = function (type) {
-  let input = fieldMapping[type] || type || InputField//如果没找到假设type就是自定义的Field类
-  return input
+let staticFieldMapping = {
+  static: StaticField
 }
+const getField = function (type, static_type='static') {
+  let input = fieldMapping[type] || type || InputField//如果没找到假设type就是自定义的Field类
+  let static_input = staticFieldMapping[static_type] || StaticField
+  return {field: input, static: static_input}
+}
+
+export default getField

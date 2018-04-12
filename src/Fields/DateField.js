@@ -2,8 +2,8 @@ import Field from './Field'
 import {isDate} from '@/utils/utils.js'
 
 export default class DateField extends Field {
-  constructor (options) {
-    super(options)
+  constructor (parent, options) {
+    super(parent, options)
     this.component = 'DatePicker'
     this.defaultOptions = {transfer: true}
     this.events = ['input']

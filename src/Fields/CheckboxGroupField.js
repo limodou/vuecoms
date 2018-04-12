@@ -1,12 +1,12 @@
 import Field from './Field'
 
 export default class CheckboxGroupField extends Field {
-  constructor (options) {
-    super(options)
+  constructor (parent, options) {
+    super(parent, options)
     this.component = 'u-checkbox-group'
   }
 
-  getStaticValue (value, callback) {
+  getStaticValue (value) {
     let v = []
     for (let c of this.options.choices) {
       if (Array.isArray(value)) {
@@ -17,6 +17,6 @@ export default class CheckboxGroupField extends Field {
         v.push(c.label)
       }
     }
-    callback(v.join(', '))
+    return v.join(', ')
   }
 }

@@ -1,12 +1,12 @@
 import Field from './Field'
 
 export default class RadioField extends Field {
-  constructor (options) {
-    super(options)
+  constructor (parent, options) {
+    super(parent, options)
     this.component = 'u-radio-group'
   }
 
-  getStaticValue (value, callback) {
+  getStaticValue (value) {
     let v = ''
     for (let c of this.options.choices) {
       if (c.value == value) {
@@ -14,6 +14,6 @@ export default class RadioField extends Field {
         break
       }
     }
-    callback(v)
+    return v
   }
 }

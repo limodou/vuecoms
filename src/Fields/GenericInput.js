@@ -1,4 +1,4 @@
-import {getField} from './fields/fieldMapping.js'
+import getField from './fieldMapping'
 
 export default {
   name: 'GenericInput',
@@ -19,38 +19,34 @@ export default {
       type: Boolean,
       default: false
     },
-    convert: {},
+    format: {}, //对静态内容进行转化处理
     placeholder: {},
     info: {},
     required: {
       type: Boolean,
       default: false
     },
-    display: {
-      type: String,
-      default: ''
-    },
     staticSuffix: {
       type: String,
       default: '_static'
     }
   },
+
   render (h, ctx) {
     let self = ctx.props
-    let InputClass = getField(self.type)
-    let input = new InputClass(ctx.props)
+    let static_name = `${self.name}${self.staticSuffix}`
+    let Input = getField(self.type)
+    let input = new Input.field(ctx.parent, ctx.props)
     if (self.static) {
-      let callback = (v) => {
-        ctx.listeners['on-display-change'] && ctx.listeners['on-display-change'](v)
-      }
       //判断是否有name_static值，如果有，则不再执行getStaticValue的方法
       let v = self.value[`${self.name}${self.staticSuffix}`]
-      if (!v) {
-        input.getStaticValue(self.value[self.name], callback)
-      } else {
-        callback(v)
-      }
+      if (!v)
+        input.setStaticValue(self.value[self.name])
     }
-    return input.render(h, ctx)
+    if (self.static) {
+      return h(Input.static, {props: ctx.props})
+    } else {
+      return input.render(h, ctx)
+    }
   }
 }

@@ -134,7 +134,13 @@ export default {
       for(let row of this.data) {
         for(let field of (row.fields || [])) {
           fs[field.name] = field
-          field.static = field.static || row.static || false
+          this.$set(field, 'static', field.static || row.static || false)
+          if (typeof field.options === 'undefined') {
+            this.$set(field, 'options', {})
+          }
+          this.$set(field.options, 'choices', field.options.choices || [])
+          if (!field.type)
+            this.$set(field, 'type', 'string') //如果没有设置type缺省为string
         }
       }
       this.fields = fs
