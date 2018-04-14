@@ -168,7 +168,11 @@ export default {
       // 添加必填校验
       if (field.required) {
         if (field.type !== 'checkbox') {
-          rule.splice(0, 0, {required:true, fullField: field.label, type: field.multiple ? 'array' : 'string'})
+          if (rule.length > 0) {
+            rule[0].required = true
+          } else {
+            rule.splice(0, 0, {required:true, fullField: field.label, type: field.multiple ? 'array' : 'string'})
+          }
         } else {
           field.required = false
         }
