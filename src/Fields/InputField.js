@@ -6,5 +6,4 @@ export default class InputField extends Field {
     this.component = 'Input'
     this.events = ['input', 'on-blur'] //记录哪些事件要抛出
   }
-
 }

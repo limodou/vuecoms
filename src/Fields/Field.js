@@ -1,7 +1,7 @@
 export default class Field {
   constructor (parent, options) {
     this.parent = parent //记录父结点
-    this.component = 'Input' //底层组件名
+    this.component = options.type //底层组件名,缺省使用type,后续定义的组件可以重定义这个值
     this.defaultOptions = {}
     this.value = options.value || {} //组件值
     this.events = ['input'] //记录哪些事件要捕获，当捕获时，自动触发on-validate事件，通知数据进行校验

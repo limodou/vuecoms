@@ -1,5 +1,5 @@
 <template>
-  <component :is="boxComponent" :title="title" class="u-layout">
+  <component v-if="boxComponent" :is="boxComponent" :title="title" v-bind="boxOptions" class="u-layout">
     <Row v-for="row in rows" class="u-layout-row">
       <Col v-for="col in row" :span="col.colspan">
         <FormCell :col="col" :value="value" :validateResult="validateResult" :staticSuffix="staticSuffix"></FormCell>
@@ -9,6 +9,13 @@
       <Buttons :buttons="btns" :data="value" :size="size" :target="$parent"></Buttons>
     </Row>
   </component>
+  <div v-else class="u-layout">
+    <Row v-for="row in rows" class="u-layout-row">
+      <Col v-for="col in row" :span="col.colspan">
+        <FormCell :col="col" :value="value" :validateResult="validateResult" :staticSuffix="staticSuffix"></FormCell>
+      </Col>
+    </Row>
+  </div>
 </template>
 
 <script>

@@ -23,6 +23,7 @@ export default {
       type: String,
       default: 'Box'
     },
+    boxOptions: {},
     value: Object,
     static: {
       type: Boolean,

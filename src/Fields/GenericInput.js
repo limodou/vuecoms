@@ -1,4 +1,5 @@
 import getField from './fieldMapping'
+import StaticField from './StaticField'
 
 export default {
   name: 'GenericInput',
@@ -35,18 +36,17 @@ export default {
   render (h, ctx) {
     let self = ctx.props
     let static_name = `${self.name}${self.staticSuffix}`
-    let Input = getField(self.type)
-    let input = new Input.field(ctx.parent, ctx.props)
+    let InputClass = getField(self.type)
+    let input = new InputClass(ctx.parent, ctx.props)
     if (self.static) {
-      //判断是否有name_static值，如果有，则不再执行getStaticValue的方法
+      //判断是否有name_static值，如果有，则不再执行setStaticValue的方法
       let v = self.value[`${self.name}${self.staticSuffix}`]
-      if (!v)
+      if (v === undefined || v === null)
         input.setStaticValue(self.value[self.name])
+
+      return h(StaticField, {props: ctx.props})
     }
-    if (self.static) {
-      return h(Input.static, {props: ctx.props})
-    } else {
-      return input.render(h, ctx)
-    }
+
+    return input.render(h, ctx)
   }
 }

@@ -1,31 +1,30 @@
+import Field from './Field'
 import InputField from './InputField'
 import SelectField from './SelectField'
 import DateField from './DateField'
+import DatetimeField from './DatetimeField'
 import TextField from './TextField'
 import TreeSelectField from './TreeSelectField'
 import RadioField from './RadioField'
 import CheckboxGroupField from './CheckboxGroupField'
 import CheckboxField from './CheckboxField'
-import StaticField from './StaticField'
 
 let fieldMapping = {
   string: InputField,
   select: SelectField,
   date: DateField,
+  datetime: DatetimeField,
   text: TextField,
   treeselect: TreeSelectField,
   radio: RadioField,
   checkboxgroup: CheckboxGroupField,
-  checkbox: CheckboxField
+  checkbox: CheckboxField,
 }
 
-let staticFieldMapping = {
-  static: StaticField
-}
-const getField = function (type, static_type='static') {
-  let input = fieldMapping[type] || type || InputField//如果没找到假设type就是自定义的Field类
-  let static_input = staticFieldMapping[static_type] || StaticField
-  return {field: input, static: static_input}
+const getField = function (type) {
+
+  let input = type ? fieldMapping[type] || Field : InputField//如果没找到假设type就是自定义的Field类
+  return input
 }
 
 export default getField

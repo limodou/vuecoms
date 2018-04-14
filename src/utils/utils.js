@@ -253,7 +253,7 @@ export const formatChoices = function (choices) {
   return r
 }
 
-export const formatDate = function (d, fmt='yyyy/mm/dd') {
+export const formatDate = function (d, fmt='yyyy/MM/dd') {
   if (!d) return ''
   if (typeof d === 'string') {
     d = new Date(d)
@@ -261,5 +261,9 @@ export const formatDate = function (d, fmt='yyyy/mm/dd') {
   let year = d.getFullYear() + ''
   let mon = d.getMonth() + 1 < 10 ? `0${d.getMonth()+1}` : `${d.getMonth()+1}`
   let day = d.getDate() < 10 ? `0${d.getDate()}` : `${d.getDate()}`
-  return fmt.replace('yyyy', year).replace('mm', mon).replace('dd', day)
+  let hour = d.getHours() < 10 ? `0${d.getHours()}` : `${d.getHours()}`
+  let minute = d.getMinutes() < 10 ? `0${d.getMinutes()}` : `${d.getMinutes()}`
+  let second = d.getSeconds() < 10 ? `0${d.getSeconds()}` : `${d.getSeconds()}`
+  return fmt.replace('yyyy', year).replace('MM', mon).replace('dd', day)
+    .replace('hh', hour).replace('mm', minute).replace('ss', second)
 }

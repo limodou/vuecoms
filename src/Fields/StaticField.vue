@@ -10,8 +10,10 @@ export default {
     display () {
       let static_name = `${this.name}${this.staticSuffix}`
       let v = this.value[static_name]
-      if (this.format) {
-        v = this.format(v)
+      if (v !== undefined && v !== null) {
+        if (this.format) {
+          v = this.format(v)
+        }
       }
       return v
     }

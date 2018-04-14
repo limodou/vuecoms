@@ -8,6 +8,7 @@ import uCheckboxGroup from './CheckboxGroup'
 import {Build, Layout, FormCell, GenericInput} from './Build'
 import './styles/iview.fix.css'
 import List from "@/utils/list.js"
+import Chart from './EChart'
 
 const vuecoms = {
   Box,
@@ -21,7 +22,8 @@ const vuecoms = {
   Build,
   Layout,
   FormCell,
-  GenericInput
+  GenericInput,
+  Chart
 }
 
 const install = function () {
