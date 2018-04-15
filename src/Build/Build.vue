@@ -168,6 +168,7 @@ export default {
       // 添加必填校验
       if (field.required) {
         if (field.type !== 'checkbox') {
+          // 如果有上一个校验规则，则将required合并到其中，否则插入新的规则
           if (rule.length > 0) {
             rule[0].required = true
           } else {

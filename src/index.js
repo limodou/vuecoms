@@ -9,6 +9,8 @@ import {Build, Layout, FormCell, GenericInput} from './Build'
 import './styles/iview.fix.css'
 import List from "@/utils/list.js"
 import Chart from './EChart'
+// import CKEditor from './Editor/CKEditor'
+import TinyMce from './Editor/TinyMce'
 
 const vuecoms = {
   Box,
@@ -23,7 +25,9 @@ const vuecoms = {
   Layout,
   FormCell,
   GenericInput,
-  Chart
+  Chart,
+//   ckeditor: CKEditor
+  tinymce: TinyMce
 }
 
 const install = function () {
