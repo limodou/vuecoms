@@ -10,7 +10,7 @@ import CheckboxGroupField from './CheckboxGroupField'
 import CheckboxField from './CheckboxField'
 
 let fieldMapping = {
-  string: InputField,
+  str: InputField,
   select: SelectField,
   date: DateField,
   datetime: DatetimeField,

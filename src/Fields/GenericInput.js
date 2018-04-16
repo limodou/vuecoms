@@ -8,7 +8,7 @@ export default {
     name: {},
     type: {
       type: String, // editor类型
-      default: 'string'
+      default: 'str'
     },
     value: {},  // 值
     static: {

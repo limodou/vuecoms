@@ -140,7 +140,7 @@ export default {
           }
           this.$set(field.options, 'choices', field.options.choices || [])
           if (!field.type)
-            this.$set(field, 'type', 'string') //如果没有设置type缺省为string
+            this.$set(field, 'type', 'str') //str
         }
       }
       this.fields = fs
