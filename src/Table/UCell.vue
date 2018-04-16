@@ -5,14 +5,14 @@
         :row="col.row" :render="col.column.render" :column="col.column"
         :value="col.value"></CellRender>
       <div v-if="columnType === 'normal'" v-html="value" class="u-cell-text" :class="{nowrap:nowrap}"></div>
-      <CellEditor v-if="columnType === 'editor'"
-        :col="col"
-        :display="value"
-        :row="col.row"
-        :nowrap="nowrap"
-        :editor-options="col.column.editorOptions"
-        :edit-row="savingRow"
-        :column="col.column"></CellEditor>
+      <GenericInput v-if="columnType === 'editor'" 
+        v-bind="col.column.editor"
+        :name="col.column.name"
+        :format="col.column.format"
+        :value="savingRow || col.row"
+        :static="!col.row._editting"
+      >
+      </GenericInput>
       <template v-if="columnType === 'check' && checkable">
         <i v-if="col.row._selected" class="ivu-icon ivu-icon-android-checkbox-outline u-cell-checkbox" @click.stop="handleCheckClick"></i>
         <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank u-cell-checkbox" @click.stop="handleCheckClick"></i>
@@ -31,6 +31,7 @@
 import {mapState, mapMethod} from '@/utils/utils.js'
 import CellRender from './UCellRender'
 import CellEditor from './UCellEditor'
+import GenericInput from '../Fields/GenericInput'
 
 export default {
   name: 'Cell',
@@ -42,7 +43,8 @@ export default {
 
   components: {
     CellRender,
-    CellEditor
+    CellEditor,
+    GenericInput
   },
 
   computed: {

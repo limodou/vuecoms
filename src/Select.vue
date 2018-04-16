@@ -1,5 +1,5 @@
 <template>
-  <Select v-model="data" :multiple="multiple" @input="handleInput" :clearable="clearable">
+  <Select v-model="data" :multiple="multiple" @input="handleInput" :clearable="clearable" transfer>
     <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">{{ item.label }}</Option>
   </Select>
 </template>

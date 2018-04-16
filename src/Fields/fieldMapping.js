@@ -11,6 +11,7 @@ import CheckboxField from './CheckboxField'
 
 let fieldMapping = {
   str: InputField,
+  string: InputField,
   select: SelectField,
   date: DateField,
   datetime: DatetimeField,
