@@ -60,7 +60,7 @@ import getField from '../Fields/fieldMapping'
 export default {
   name: 'Query',
   props: {
-    data: {
+    fields: {
       type: Array,
       default () {
         return []
@@ -123,7 +123,7 @@ export default {
     }
 
     return {
-      fields: {},  // fields
+      f: {},  // fields
       current_value: {},
       old_value: {}, //保存上一次的值,用于数据比较
       isShow: false,
@@ -140,7 +140,7 @@ export default {
       for (let row of this.layout) {
         for (let k of row) {
           let value
-          let field = this.fields[k]
+          let field = this.f[k]
           let InputClass = getField(field.type)
           let options = Object.assign({}, field, {value: this.value, staticSuffix: this.staticSuffix})
           let input = new InputClass(this, options)
@@ -171,7 +171,7 @@ export default {
             name = col
           }
           let width = 100 / 24 * span
-          let f = this.fields[name]
+          let f = this.f[name]
           if (!f) throw Error(`Can't find field ${name} in fields, please check if the name is not correct between layout and fields`)
           let field = Object.assign({colspan: span,
             labelWidth: this.labelWidth,
@@ -197,7 +197,7 @@ export default {
       handler (v) {
         for(let c in this.value) {
           let name = `${c}${this.staticSuffix}`
-          if (this.value[c] === v[c] && this.fields.hasOwnProperty(c) && this.value[name] != v[name]) {
+          if (this.value[c] === v[c] && this.f.hasOwnProperty(c) && this.value[name] != v[name]) {
             this.$set(this.value, name, v[name])
           }
         }
@@ -216,7 +216,7 @@ export default {
     choices: {
       immediate: true,
       handler () {
-        for(let field of (this.data)) {
+        for(let field of (this.fields)) {
           let choices = this.choices[field.name]
           if (choices) {
             if (!field.options) {
@@ -241,10 +241,10 @@ export default {
   methods: {
     makeFields () {
       let fields = {}
-      for (let f of this.data) {
+      for (let f of this.fields) {
         fields[f.name] = f
       }
-      this.fields = fields
+      this.f = fields
     },
     handleTagClose(e, name){
       this.$set(this.current_value, name, reset(this.current_value[name]))

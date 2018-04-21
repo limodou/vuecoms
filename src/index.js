@@ -1,6 +1,6 @@
 import Box from './Box'
 import {Grid, Buttons} from './Table'
-import {Query} from './query'
+import Query from './query'
 import Uploader from './uploader'
 import uSelect from './Select'
 import uRadioGroup from './RadioGroup'
