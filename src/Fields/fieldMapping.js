@@ -3,6 +3,7 @@ import InputField from './InputField'
 import SelectField from './SelectField'
 import DateField from './DateField'
 import DatetimeField from './DatetimeField'
+import DatepickerRangeField from './DatepickerRangeField'
 import TextField from './TextField'
 import TreeSelectField from './TreeSelectField'
 import RadioField from './RadioField'
@@ -15,6 +16,7 @@ let fieldMapping = {
   select: SelectField,
   date: DateField,
   datetime: DatetimeField,
+  datepickerrange: DatepickerRangeField,
   text: TextField,
   treeselect: TreeSelectField,
   radio: RadioField,

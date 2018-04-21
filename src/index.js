@@ -12,6 +12,7 @@ import List from "@/utils/list.js"
 import Chart from './EChart'
 // import CKEditor from './Editor/CKEditor'
 import TinyMce from './Editor/TinyMce'
+import DatepickerRange from './DatepickerRange'
 
 const vuecoms = {
   Box,
@@ -28,7 +29,8 @@ const vuecoms = {
   GenericInput,
   Chart,
 //   ckeditor: CKEditor
-  tinymce: TinyMce
+  tinymce: TinyMce,
+  DatepickerRange
 }
 
 const install = function () {

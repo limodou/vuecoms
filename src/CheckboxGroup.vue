@@ -6,6 +6,7 @@
 
 <script>
 import {CheckboxGroup, Checkbox} from 'iview'
+import {formatChoices} from '@/utils/utils.js'
 
 export default {
   name: 'uCheckboxGroup',
@@ -14,25 +15,7 @@ export default {
     Checkbox
   },
   data () {
-    return {data: this.value}
-  },
-  computed: {
-    items () {
-      let r = []
-      let d
-      for(let item of (this.choices || [])) {
-        if (Array.isArray(item)) {
-          // 当数组只有一维时，label和value一致
-          d = {value: item[0], label: item[1] || item[0]}
-        } else if (typeof item === 'object'){
-          d = item
-        } else {
-          d = {value: item, label: item}
-        }
-        r.push(d)
-      }
-      return r
-    }
+    return {data: this.value, items: []}
   },
   props: [
     'value', 'choices'
@@ -42,6 +25,24 @@ export default {
     handleInput () {
       this.$emit('input', this.data)
     }
+  },
+  watch: {
+    value: {
+      handler (v) {
+        this.data = v
+      },
+      deep: true
+    },
+    choices: {
+      immediate: true,
+      handler () {
+        if (typeof this.choices !== 'function') {
+          this.items = formatChoices(this.choices)
+        }
+      },
+      deep: true
+    }
   }
+
 }
 </script>

@@ -297,7 +297,7 @@ export const isEmpty = function (v) {
   if (Array.isArray(v)) {
     return v.length === 0
   } else if (v instanceof Object) {
-    for (let v in v) {
+    for (let c in v) {
       return false
     }
     return true
@@ -462,7 +462,7 @@ export const deepCompare = function (x, y) {
 
   leftChain = []
   rightChain = []
-  
+
   for (let k in x) {
     if (!compare2Objects(x[k], y[k])) {
       result[k] = {value: x[k], old_value: y[k]}

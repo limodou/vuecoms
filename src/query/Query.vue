@@ -25,7 +25,7 @@
       <Button v-for="btn of buttons" v-bind="btn" @click="handleClick(btn)" style="margin-right:5px">{{btn.label}}</Button>
     </Row>
     <!-- 生成多行条件 -->
-    <Row v-if="row.length > 1 && isShow" v-for="(row, index) in rows" class="u-layout-row">
+    <Row v-if="rows.length > 1 && isShow" v-for="(row, index) in rows" class="u-layout-row" :key="index">
       <Col v-for="col in row" :span="col.colspan">
         <FormCell :col="col" :value="current_value" :staticSuffix="staticSuffix" :root="Query"></FormCell>
       </Col>
