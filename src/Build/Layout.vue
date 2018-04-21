@@ -2,7 +2,8 @@
   <component v-if="boxComponent" :is="boxComponent" :title="title" v-bind="boxOptions" class="u-layout">
     <Row v-for="row in rows" class="u-layout-row">
       <Col v-for="col in row" :span="col.colspan">
-        <FormCell :col="col" :value="value" :validateResult="validateResult" :staticSuffix="staticSuffix"></FormCell>
+        <FormCell :col="col" :value="value" :validateResult="validateResult" 
+          :staticSuffix="staticSuffix" root="Build"></FormCell>
       </Col>
     </Row>
     <Row v-if="buttons" slot="footer">
@@ -12,7 +13,8 @@
   <div v-else class="u-layout">
     <Row v-for="row in rows" class="u-layout-row">
       <Col v-for="col in row" :span="col.colspan">
-        <FormCell :col="col" :value="value" :validateResult="validateResult" :staticSuffix="staticSuffix"></FormCell>
+        <FormCell :col="col" :value="value" :validateResult="validateResult" 
+          :staticSuffix="staticSuffix" :root="Build"></FormCell>
       </Col>
     </Row>
   </div>
@@ -38,87 +40,98 @@ export default {
 
 <style lang="less">
 
-.u-layout {
-  .u-layout-row {
-    min-height: 34px;
-    padding-bottom: 4px;
-    margin-bottom: 12px;
+.u-layout-row {
+  min-height: 34px;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
 
-    &:after {
-      content: "";
+  &:after {
+    content: "";
 /*      display: block; */
-      height: 0;
-      clear: both;
-      overflow: hidden;
-      visibility: hidden
-    }
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden
+  }
+}
 
-    .u-layout-cell-label {
-      display: table-cell;
-      text-align: right;
-      margin-right: 10px;
-      vertical-align: top;
-      font-weight: bold;
-      margin-bottom: 0;
-      padding-right: 10px;
-      font-size: 14px;
+.u-layout-cell-label {
+  display: table-cell;
+  text-align: right;
+  margin-right: 10px;
+  vertical-align: top;
+  font-weight: bold;
+  margin-bottom: 0;
+  padding-right: 10px;
+  font-size: 14px;
 
-      &:after {
-        content: ":";
-        display: inline-block;
-        margin-right: 4px;
-        line-height: 1;
-        font-family: SimSun;
-        font-size: 12px;
-        color: black;
-      }
-    }
+  &:after {
+    content: ":";
+    display: inline-block;
+    margin-right: 4px;
+    line-height: 1;
+    font-family: SimSun;
+    font-size: 12px;
+    color: black;
+  }
+}
 
-    .u-layout-cell-field {
-      display: table-cell;
-      width: 2000px;
-      vertical-align: bottom;
-      /* border-bottom: 1px solid #ccc; */
+.u-layout-cell-field {
+  display: table-cell;
+  width: 2000px;
+  vertical-align: bottom;
+  /* border-bottom: 1px solid #ccc; */
 
-      .u-generic-input-text {
-        font-size: 14px;
-        color: #333;
-      }
+  .u-generic-input-text {
+    font-size: 14px;
+    color: #333;
+  }
 
-      .u-layout-cell-help {
-        display: block;
-        color: #9ea7b4;
-        font-size: 12px;
-        margin-top: 5px;
-        margin-left: 2px;
-      }
-    }
+  .u-layout-cell-help {
+    display: block;
+    color: #9ea7b4;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 2px;
+  }
+}
 
-    .u-layout-required {
-      .u-layout-cell-label:before {
-        content: "*";
-        display: inline-block;
-        margin-right: 4px;
-        line-height: 1;
-        font-family: SimSun;
-        font-size: 12px;
-        color: #ed3f14;
-      }
-    }
+.u-layout-compact {
+  .u-layout-cell-label {
+    display: inline-block;
+    margin-right: 0px;
+    padding-right: 0px;
+  }
 
-    .u-layout-error {
-      .u-layout-cell-error {
-        display: block;
-        color: #ed3f14;
-        font-size: 12px;
-        margin-top: 5px;
-        margin-left: 2px;
-      }
+  .u-layout-cell-field {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
 
-      .ivu-input, .ivu-select-selection, .vue-treeselect__control {
-        border: 1px solid #ed3f14;
-      }
-    }
+.u-layout-required {
+  .u-layout-cell-label:before {
+    content: "*";
+    display: inline-block;
+    margin-right: 4px;
+    line-height: 1;
+    font-family: SimSun;
+    font-size: 12px;
+    color: #ed3f14;
+  }
+}
+
+.u-layout-error {
+  .u-layout-cell-error {
+    display: block;
+    color: #ed3f14;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 2px;
+  }
+
+  .ivu-input, .ivu-select-selection, .vue-treeselect__control {
+    border: 1px solid #ed3f14;
   }
 }
 </style>

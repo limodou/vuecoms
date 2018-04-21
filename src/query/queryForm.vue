@@ -344,8 +344,6 @@
      content: "";
      display: block;
      width: 100%;
-     height: 1px;
-     background: #eee;
      /*position: absolute;*/
      /*top: 10px;*/
      /*left: 0;*/

@@ -1,3 +1,5 @@
+import {findParent} from '../utils/utils'
+
 export default class Field {
   constructor (parent, options) {
     this.parent = parent //记录父结点
@@ -15,6 +17,7 @@ export default class Field {
     this.to = options.to //从控件值转为value值的方法
     this.staticSuffix = options.staticSuffix
     this.static_name = `${this.name}${this.staticSuffix}`
+    this.root = options.root
     if (options.placeholder) {
       this.options.placeholder = options.placeholder
     }
@@ -44,8 +47,14 @@ export default class Field {
         ctx.parent.$set(self.value, self.name, x)
         this.setStaticValue(x)
         ctx.parent.$nextTick(() => {
-          if (this.events.indexOf('input') > -1)
+          if (this.events.indexOf('input') > -1) {
             ctx.listeners['on-validate'] && ctx.listeners['on-validate']()
+          }
+          // 触发on-field-change事件
+          let v = {name: self.name, old: value, value: x}
+          let p = findParent(ctx.parent, self.root)
+          if (p)
+            p.$emit('on-field-change', v)
         })
       }
     }

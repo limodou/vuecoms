@@ -1,6 +1,5 @@
-/**
- * Created by HoseaLee on 17/12/5.
- */
-import QueryForm from './queryForm'
+import Query from './Query'
 
-export default QueryForm
+module.exports = {
+  Query
+}

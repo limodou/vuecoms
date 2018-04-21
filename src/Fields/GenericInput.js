@@ -30,7 +30,8 @@ export default {
     staticSuffix: {
       type: String,
       default: '_static'
-    }
+    },
+    root: String // 用于change事件发送的父控件的名字
   },
 
   render (h, ctx) {
@@ -38,12 +39,10 @@ export default {
     let static_name = `${self.name}${self.staticSuffix}`
     let InputClass = getField(self.type)
     let input = new InputClass(ctx.parent, ctx.props)
+    if (self.value[self.name] !== undefined) {
+      input.setStaticValue(self.value[self.name])
+    }
     if (self.static) {
-      //判断是否有name_static值，如果有，则不再执行setStaticValue的方法
-      let v = self.value[`${self.name}${self.staticSuffix}`]
-      if (v === undefined || v === null)
-        input.setStaticValue(self.value[self.name])
-
       return h(StaticField, {props: ctx.props})
     }
 

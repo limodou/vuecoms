@@ -4,10 +4,11 @@
       <i class="ivu-icon ivu-icon-ios-help-outline" v-if="col.info" :title="col.info"></i>
       {{col.label}}
     </label>
-    <div class="u-layout-cell-field">
+    <div class="u-layout-cell-field" :style="fieldStyle">
       <GenericInput v-bind="col" :value="value"
         :staticSuffix="staticSuffix"
-        @on-validate="handleValidate"></GenericInput>
+        @on-validate="handleValidate"
+        :root="root"></GenericInput>
       <div class="u-layout-cell-help" v-if="col.help && !col.static">{{col.help}}</div>
       <div class="u-layout-cell-error" v-if="error">{{error}}</div>
     </div>
@@ -17,26 +18,58 @@
 <script>
 import GenericInput from '../Fields'
 import {validateRule} from './validateUtil'
+import { deepCopy } from '../utils/utils';
+import Emitter from '@/mixins/emitter.js'
 
 export default {
   name: 'FormCell',
+  mixins: {Emitter},
   props: {
     col:{},
     value: {},
-    validateResult: {},
+    fieldStyle: {},
+    labelPosition: {
+      type: String,
+      default: 'right'
+    },
+    validateResult: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
     staticSuffix: {
       type: String,
       default: '_static'
-    }
+    },
+    compact: {
+      type: Boolean,
+      default: false
+    },
+    root: String
   },
   computed: {
     classes () {
       return {'u-layout-cell': true, 'u-layout-required': this.col.required && !this.col.static,
-        'u-layout-error': this.error
+        'u-layout-error': this.error, 'u-layout-compact': this.compact
       }
     },
     labelStyle () {
-      return {minWidth: `${this.col.labelWidth}px`}
+      if (this.compact) return {}
+
+      let s = {minWidth: `${this.col.labelWidth}px`}
+      switch (this.labelPosition) {
+        case 'left':
+          s['textAlign'] = 'left'
+          break
+        case 'right':
+          s['textAlign'] = 'right'
+          break
+        case 'top':
+          s['display'] = 'block'
+          break
+      }
+      return s
     },
     error: {
       get () {

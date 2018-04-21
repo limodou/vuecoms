@@ -10,7 +10,6 @@ function resolve (dir) {
 module.exports = {
   entry: {
     vuecoms: './src/index.js',
-    app: './src/main.js'
   },
   output: {
     path: config.build.assetsRoot,

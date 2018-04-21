@@ -1,11 +1,12 @@
 import Box from './Box'
 import {Grid, Buttons} from './Table'
-import QueryForm from './query'
+import {Query} from './query'
 import Uploader from './uploader'
 import uSelect from './Select'
 import uRadioGroup from './RadioGroup'
 import uCheckboxGroup from './CheckboxGroup'
-import {Build, Layout, FormCell, GenericInput} from './Build'
+import {Build, Layout, FormCell} from './Build'
+import GenericInput from './Fields'
 import './styles/iview.fix.css'
 import List from "@/utils/list.js"
 import Chart from './EChart'
@@ -16,7 +17,7 @@ const vuecoms = {
   Box,
   Grid,
   Buttons,
-  QueryForm,
+  Query,
   Uploader,
   uSelect,
   uRadioGroup,
