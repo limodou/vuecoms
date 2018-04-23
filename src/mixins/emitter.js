@@ -1,4 +1,4 @@
-import findParent from '../utils/utils'
+import {findParent} from '../utils/utils'
 
 /* This is comes from iview */
 function broadcast(componentName, eventName, params) {
