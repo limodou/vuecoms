@@ -9,7 +9,7 @@
             <col v-for="(column, index) in columns" :style="getColumnStyle(column)" :key="column.name">
           </colgroup>
           <thead>
-            <tr :style="trStyle" v-for="cols in drawColumns">
+            <tr :style="headerTrStyle" v-for="cols in drawColumns">
               <th v-for="(column, index) in cols" :key="column.name" :style="thStyles(column)"
                 :rowspan="column.rowspan" :colspan="column.colspan"
               >
@@ -27,7 +27,7 @@
         </colgroup>
         <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
-            :style="trStyle"
+            :style="bodyTrStyle"
             :key="getRowId(row.row)"
             :class="{selected:row.row._selected, hover:row.row._hover}"
             @mouseenter="handleTrMouseEnter(row.row)"
@@ -107,23 +107,35 @@ export default {
       return this.cols || this.store.states.columns
     },
 
+    // 合并字段的定义需要是一个二维数组，可以用于多组合并的定义
     combineColsIndex () {
-      let index = []
-      let pos
-      this.columns.forEach( (col, j) => {
-        pos = this.combineCols.indexOf(col.name)
-        if (pos > -1) {
-          index.push(j)
+      let index = {}
+      let i
+      let first = true
+      let last_columns_set = []
+      for(let cc of this.combineCols) {
+        let last_columns = []
+        last_columns_set.push(last_columns)
+        i = 0
+        for(let c of cc) {
+          this.columns.forEach( (col, j) => {
+            if (col.name === c) {
+              index[j] = {index: i, last_columns: last_columns, first: first}
+              ++i
+              first = false
+            }
+          })
         }
-      })
-      return index
+      }
+      return {index: index, last_columns_set: last_columns_set}
     },
 
     rows () {
       let rows = []
       let item
-      let last_columns = [], _col
-      let index
+      let _col
+      let c
+      let {index, last_columns_set} = this.combineColsIndex
 
       this.data.forEach( (row, i) => {
         let new_row = {row: row, columns: []}
@@ -137,22 +149,27 @@ export default {
             new_row.columns.push(item)
           } else {
             // 非合并字段
-            index = this.combineColsIndex.indexOf(j)
-            if (index === -1) {
+            c = index[j]
+            if (!c) {
               new_row.columns.push(item)
             } else {
-              _col = last_columns[index]
+              _col = c.last_columns[c.index]
               if (!_col) {
                 new_row.columns.push(item)
-                last_columns.push(item)
+                c.last_columns.push(item)
               } else {
                 // 检查是否相同
                 if (_col.value === item.value) {
                   _col.rowspan ++
                 } else {
-                  last_columns.splice(index)
+                  c.last_columns.splice(c.index)
                   new_row.columns.push(item)
-                  last_columns.push(item)
+                  c.last_columns.push(item)
+                  if (c.first) {
+                    for (let i=1, len=last_columns_set.length; i<len; i++) {
+                      last_columns_set[i].splice(0)
+                    }
+                  }
                 }
               }
             }
@@ -189,7 +206,13 @@ export default {
       return {height: h}
     },
 
-    trStyle () {
+    // 表头行样式
+    headerTrStyle () {
+      return {height: `${this.rowHeight}px`}
+    },
+
+    // 表体行样式
+    bodyTrStyle () {
       return {height: `${this.rowHeight}px`}
     },
 

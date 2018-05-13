@@ -59,7 +59,7 @@ export default {
   },
 
   data () {
-    const store = new Store(this, this.data)
+    const store = new Store(this, this.data, this.value)
     return {
       store
     }
@@ -68,8 +68,14 @@ export default {
   props: {
     data: {
       type: Object,
-      default: function () {
+      default () {
         return {}
+      }
+    },
+    value: {
+      type: Array,
+      default () {
+        return []
       }
     }
   },

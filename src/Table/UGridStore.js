@@ -2,7 +2,7 @@ import List from '@/utils/list.js'
 import {uuid} from '@/utils/utils.js'
 
 class Store {
-  constructor (grid, options) {
+  constructor (grid, options, value) {
     this.grid = grid
     this.states = {
       columns: [],
@@ -87,6 +87,10 @@ class Store {
       if (options.hasOwnProperty(name) && this.states.hasOwnProperty(name)) {
         this.states[name] = options[name]
       }
+    }
+
+    if (value && value.length > 0) {
+      this.states['data'] = value
     }
 
     this.setParam(options.param)
