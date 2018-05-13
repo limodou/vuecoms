@@ -1,5 +1,5 @@
 <template>
-  <div class="u-sort" :class="{up:dir==='asc', down:dir==='desc'}" @click.stop.prevent="handleSort" :style="getStyles">
+  <div class="u-sort" :class="{up:dir==='asc', down:dir==='desc'}" @click.stop.prevent="handleSort">
     <i class="ivu-icon ivu-icon-android-arrow-dropup u-sort-up"></i>
     <i class="ivu-icon ivu-icon-android-arrow-dropdown u-sort-down"></i>
   </div>
@@ -10,9 +10,6 @@ import {mapState} from '@/utils/utils.js'
 
 export default {
   name: 'Sort',
-  data () {
-    return {top: 0, right: 8}
-  },
 
   props: {
     store: Object,
@@ -28,10 +25,6 @@ export default {
         } else {
           return ''
         }
-    },
-
-    getStyles () {
-      return {top: `${this.top}px`, right: `${this.right}px`}
     }
   },
 
@@ -62,18 +55,21 @@ export default {
   .u-sort {
     position: absolute;
     width: 7px;
-    height: 28px;
+    height: 10px;
     color: #999;
     cursor: pointer;
+    top: 50%;
+    right: 8px;
+    transform: translate(0,-50%);
 
     .u-sort-up {
       position: absolute;
-      top: 4px;
+      top: -5px;
     }
 
     .u-sort-down {
       position: absolute;
-      top: 10px;
+      bottom: -5px;
     }
 
     &.up {

@@ -4,6 +4,8 @@
 
       <div class="u-table-header-cell-title" :class="{nowrap:nowrap}" v-html="column.title"></div>
 
+      <Sort v-if="column.sortable && column.leaf" :store="store" :column="column"></Sort>
+
       <div v-if="resizable && column.resizable && column.leaf" class="u-table-header-cell-resizer"
         @mousedown.stop.prevent="handleMouseDown(column, $event)">
       </div>
@@ -21,9 +23,6 @@
     <div v-if="column.type === 'index'">
       <span v-if="column.title">{{column.title}}</span>
     </div>
-
-    <Sort v-if="column.sortable && column.leaf" :store="store" :column="column"></Sort>
-
   </div>
 </template>
 
