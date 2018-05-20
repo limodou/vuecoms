@@ -1,6 +1,6 @@
 <template>
   <div :class="classes">
-    <label class="u-layout-cell-label" :style="labelStyle">
+    <label class="u-layout-cell-label" :style="labelStyle" v-if="col.label">
       <i class="ivu-icon ivu-icon-ios-help-outline" v-if="col.info" :title="col.info"></i>
       {{col.label}}
     </label>

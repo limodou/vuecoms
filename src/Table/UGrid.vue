@@ -81,7 +81,7 @@ export default {
   },
 
   computed: {
-    ...mapState('columns', 'columnResizing', 'checkCol',
+    ...mapState('columns', 'columnResizing', 'checkCol', 'indexCol',
       'gridWidth', 'width', 'resizable', 'columnPosition', 'guiderHeight',
       'defaultColWidth', 'leftWidth', 'checkColTitle', 'checkColWidth',
       'indexColWidth', 'indexColTitle', 'scrollLeft', 'total', 'pageSizeOpts',
@@ -525,6 +525,12 @@ export default {
       handler: function () {
         this.store.states.columns = this.makeCols()
         this.resize()
+      },
+      deep: true
+    },
+    value: {
+      handler: function (value) {
+        this.store.states.data = value
       },
       deep: true
     }

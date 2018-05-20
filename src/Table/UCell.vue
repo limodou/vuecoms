@@ -89,7 +89,7 @@ export default {
     },
 
     checkable () {
-      let c = this.col.row._checkable
+      let c = this.col.row._checkable === undefined ? true : this.col.row._checkable
       if (this.onCheckable) {
         c = this.onCheckable(this.col.row)
         this.$set(this.col.row, '_checkable', c)
