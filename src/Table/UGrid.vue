@@ -123,7 +123,7 @@ export default {
 
     resize () {
       if (this.width === 'auto') {
-        this.store.states.gridWidth = this.$el.clientWidth
+        this.store.states.gridWidth = this.$el.clientWidth === 0 ? this.$parent.$el.clientWidth : this.$el.clientWidth
       } else {
         this.store.states.gridWidth = this.width
       }
