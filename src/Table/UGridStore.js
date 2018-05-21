@@ -274,7 +274,13 @@ class Store {
 
   addRow (row, position) {
     if (!row) {
-      row = {}
+      row = {_new: true}
+      for(let c of this.states.columns) {
+        let v = ''
+        if (c.type === 'column') {
+          row[c.name] = ''
+        }
+      }
     }
     if (!row[this.states.idField]) {
       row[this.states.idField] = uuid()
@@ -288,7 +294,6 @@ class Store {
     let n_row = this.addRow(row)
     this.grid.$set(n_row, '_editRow', Object.assign({}, n_row))
     this.grid.$set(n_row, '_editting', true)
-    this.grid.$set(n_row, '_new', true)
     return n_row
   }
 
