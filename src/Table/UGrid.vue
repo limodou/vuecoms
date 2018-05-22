@@ -119,7 +119,7 @@ export default {
 
   methods: {
     ...mapMethod('getSelection', 'showLoading', 'setSelection', 'removeRow',
-      'setComment', 'removeComment', 'getSelectedRows'),
+      'setComment', 'removeComment', 'getSelectedRows', 'getColumn'),
 
     resize () {
       if (this.width === 'auto') {
@@ -396,6 +396,7 @@ export default {
                       copyDataRow(row, row._editRow)
                       this.removeComment(row)
                       this.$set(row, '_editting', !row._editting)
+                      this.$set(row, '_new', false) //保存之后，将_new置为false
                       delete row._editRow
                     } else {
                       for(let key in data) {
@@ -531,6 +532,12 @@ export default {
     value: {
       handler: function (value) {
         this.store.states.data = value
+      },
+      deep: true
+    },
+    'store.states.data': {
+      handler: function (value) {
+        this.$emit('input', value)
       },
       deep: true
     }

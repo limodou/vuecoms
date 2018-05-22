@@ -1,5 +1,7 @@
 <template>
-  <Select v-model="data" :multiple="multiple" @input="handleInput" :clearable="clearable" transfer>
+  <Select v-model="data" :multiple="multiple" @input="handleInput" 
+    :clearable="clearable" :filterable="filterable" transfer :remote="remote"
+    :loading="loading" :remote-method="handleRemote">
     <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">{{ item.label }}</Option>
   </Select>
 </template>
@@ -11,16 +13,26 @@ import {formatChoices} from '@/utils/utils.js'
 export default {
   name: 'uSelect',
   data () {
-    return {data: this.value, items: []}
+    return {data: this.value, items: [], loading: false}
   },
 
   props: [
-    'value', 'choices', 'multiple', 'clearable'
+    'value', 'choices', 'multiple', 'clearable', 'filterable', 'remote', 'remoteMethod'
   ],
 
   methods: {
     handleInput () {
       this.$emit('input', this.data)
+    },
+    handleRemote (query) {
+      this.loading = true
+      const callback = items => {
+        this.items = formatChoices(items)
+        this.loading = false
+      }
+      if (this.remoteMethod) {
+        this.remoteMethod(query, callback)
+      }
     }
   },
 

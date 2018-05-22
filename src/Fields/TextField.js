@@ -5,7 +5,7 @@ export default class TextField extends Field {
   constructor (parent, options) {
     super(parent, options)
     this.component = 'Input'
-    this.defaultOptions = {type: 'textarea', autosize: true, rows: 4}
+    this.defaultOptions = {type: 'textarea', autosize: {minRows: 5}}
   }
 
   getStaticValue (value, callback) {

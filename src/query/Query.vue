@@ -90,7 +90,12 @@ export default {
       type: Number,
       default: 1
     },
-    choices: Object,
+    choices: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
     showSelected: {
       type: Boolean,
       default: false

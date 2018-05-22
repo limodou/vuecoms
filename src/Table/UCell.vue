@@ -30,7 +30,6 @@
 <script>
 import {mapState, mapMethod} from '@/utils/utils.js'
 import CellRender from './UCellRender'
-import CellEditor from './UCellEditor'
 import GenericInput from '../Fields/GenericInput'
 
 export default {
@@ -43,7 +42,6 @@ export default {
 
   components: {
     CellRender,
-    CellEditor,
     GenericInput
   },
 

@@ -272,9 +272,10 @@ class Store {
     }
   }
 
+  // 新加记录有一个 _new 属性
   addRow (row, position) {
     if (!row) {
-      row = {_new: true}
+      row = {}
       for(let c of this.states.columns) {
         let v = ''
         if (c.type === 'column') {
@@ -282,6 +283,7 @@ class Store {
         }
       }
     }
+    row['_new'] = true
     if (!row[this.states.idField]) {
       row[this.states.idField] = uuid()
     }
@@ -302,6 +304,13 @@ class Store {
       if (this.states.hasOwnProperty(name)) {
         this.grid.$set(this.states, name, o[name])
       }
+    }
+  }
+
+  // 获得指定表头字段
+  getColumn (name) {
+    for (let col of this.states.columns) {
+      if (col.name === name) return col
     }
   }
 

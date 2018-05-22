@@ -5,7 +5,8 @@ export default class TreeSelectField extends Field {
   constructor (parent, options) {
     super(parent, options)
     this.component = 'tree-select'
-    parent.$set(this.options, 'multiple', this.multiple)
+    if (this.multiple !== undefined)
+      parent.$set(this.options, 'multiple', this.multiple)
     this.events = ['close']
   }
 

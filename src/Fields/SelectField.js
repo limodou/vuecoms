@@ -5,7 +5,8 @@ export default class SelectField extends Field {
   constructor (parent, options) {
     super(parent, options)
     this.component = 'u-select'
-    parent.$set(this.options, 'multiple', this.multiple)
+    if (this.multiple !== undefined)
+      parent.$set(this.options, 'multiple', this.multiple)
   }
 
   getStaticValue (value) {
