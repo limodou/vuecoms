@@ -27,7 +27,7 @@ export default class SelectField extends Field {
 
   beforeRender (props) {
     if (this.options.remote) {
-      let v = this.value[this.selectedName] || this.value[self.name]
+      let v = this.value[this.selectedName] || this.value[this.name]
       props['value'] = v
       props['rich'] = true
     }
@@ -37,6 +37,10 @@ export default class SelectField extends Field {
     let v
     if (this.options.remote) {
       v = this.value[this.selectedName]
+      //如果富格式，则视为options的值
+      if (!v && this.options.rich) {
+        v = this.value[this.name]
+      }
       if (!v) return ''
       if (this.multiple) {
         return v.map(x => x.label).join(', ')

@@ -14,7 +14,8 @@ import {formatChoices, findChoices, isEmpty} from '@/utils/utils.js'
 export default {
   name: 'uSelect',
   data () {
-    return {data: null, items: [], loading: false, selectedValue: null}
+    let d = this.initValue(this.value)
+    return {data: d.data, items: [], loading: false, selectedValue: d.selectedValue}
   },
 
   props: {
@@ -58,10 +59,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-
-  created () {
-    this.initValue(this.value)
   },
 
   mounted () {
@@ -151,6 +148,7 @@ export default {
       }
     },
     initValue (v) {
+      let d = {}
       if (!v) {
         if (this.multiple) {
           v = []
@@ -160,7 +158,7 @@ export default {
       } else {
         if (this.rich) {
           if (this.remote)
-            this.selectedValue = v
+            d.selectedValue = v
           if (Array.isArray(v)) {
             v = v.map( x => x.value)
           } else if (v instanceof Object) {
@@ -168,8 +166,8 @@ export default {
           }
         }
       }
-      this.data = v
-      return v
+      d.data = v
+      return d
     }
   },
 
