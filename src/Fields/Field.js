@@ -39,9 +39,11 @@ export default class Field {
     return value
   }
 
+  beforeRender (props) {}
+
   render (h, ctx) {
     let self = ctx.props
-    let value = this.convert_value(self.value[self.name])
+    let value = self.value[self.name]
     let props = Object.assign({}, this.defaultOptions, {value}, this.options)
     let events = {
       input: (x) => {
@@ -58,7 +60,7 @@ export default class Field {
           if (p)
             p.$emit('on-field-change', v)
         })
-      }
+      },
     }
     for(let e_name of this.events) {
       if (e_name === 'input') continue
@@ -66,6 +68,8 @@ export default class Field {
         ctx.listeners['on-validate'] && ctx.listeners['on-validate']()
       }
     }
+
+    this.beforeRender(props)
 
     return h(this.component, {
       props,

@@ -89,7 +89,7 @@ export const getOffset = function (el) {
 
 export const copyDataRow = function (s, o) {
   for (let name in o) {
-    if (s.hasOwnProperty(name) && name[0] !== '_') {
+    if (name[0] !== '_') {
       s[name] = o[name]
     }
   }
@@ -251,6 +251,23 @@ export const formatChoices = function (choices) {
     r.push(d)
   }
   return r
+}
+
+// 从choices中找到与value匹配的值， 返回为数组，每项值为 {value: xxx, label: xxx}
+export const findChoices = function (choices, value, multiple) {
+  let v = []
+  for (let c of formatChoices(choices)) {
+    if (Array.isArray(value)) {
+      if (value.indexOf(c.value) > -1) {
+        v.push(c)
+        if (!multiple) break
+      }
+    } else if (c.value == value) {
+      v.push(c)
+      if (multiple) break
+    }
+  }
+  return v
 }
 
 export const formatDate = function (d, fmt='yyyy/MM/dd') {
