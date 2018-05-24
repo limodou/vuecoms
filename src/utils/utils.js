@@ -254,17 +254,23 @@ export const formatChoices = function (choices) {
 }
 
 // 从choices中找到与value匹配的值， 返回为数组，每项值为 {value: xxx, label: xxx}
-export const findChoices = function (choices, value, multiple) {
+export const findChoices = function (choices, value) {
   let v = []
-  for (let c of formatChoices(choices)) {
-    if (Array.isArray(value)) {
-      if (value.indexOf(c.value) > -1) {
+  if (Array.isArray(value)) {
+    let x = value.slice()
+    for (let c of formatChoices(choices)) {
+      if (x.length === 0) break
+      let p = x.indexOf(c.value)
+      if (p > -1) {
         v.push(c)
-        if (!multiple) break
+        x.splice(p, 1)
       }
-    } else if (c.value == value) {
-      v.push(c)
-      if (multiple) break
+    }
+  } else {
+    for (let c of formatChoices(choices)) {
+      if (c.value == value) {
+        v.push(c)
+      }
     }
   }
   return v

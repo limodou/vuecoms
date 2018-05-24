@@ -9,6 +9,7 @@ import {Build, Layout, FormCell} from './Build'
 import GenericInput from './Fields'
 import './styles/iview.fix.css'
 import List from "@/utils/list.js"
+import {findParent} from "@/utils/utils.js"
 import Chart from './EChart'
 // import CKEditor from './Editor/CKEditor'
 import TinyMce from './Editor/TinyMce'
@@ -38,6 +39,7 @@ const install = function () {
         Vue.component(key, vuecoms[key])
     })
     Vue.prototype.$list = List
+    Vue.prototype.$findParent = findParent
 }
 
 // auto install

@@ -122,11 +122,7 @@ export default {
           v = {}
         }
       } else {
-        if (!isEmpty(this.$refs.select.options.length)) {
-          v = findChoices(this.$refs.select.options, this.data, this.multiple)        
-        } else {
-          v = findChoices(this.selectedValue, this.data, this.multiple)
-        }
+        v = findChoices((this.selectedValue || []).concat(this.$refs.select.options), this.data, this.multiple)        
         if (!this.multiple) {
           if (v.length > 0) v = v[0]
           else v = {}
