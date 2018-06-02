@@ -87,7 +87,7 @@ export default {
 
     dropdownStyles () {
       if (this.showPageSize) {
-        return {display: 'block', position: 'absolute', marginLeft: '-12px', marginTop: '2px'}
+        return {display: 'block', position: 'absolute', marginLeft: '-6px', marginTop: '2px'}
       } else {
         return {display: 'none'}
       }

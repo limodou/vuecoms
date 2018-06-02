@@ -122,7 +122,16 @@ export default {
           v = {}
         }
       } else {
-        v = findChoices((this.selectedValue || []).concat(this.$refs.select.options), this.data, this.multiple)        
+        let s
+        if (isEmpty(this.selectedValue)) {
+          s = []
+        } else {
+          if (this.selectedValue instanceof Object)
+            s = [this.selectedValue]
+          else
+            s = this.selectedValue
+        }
+        v = findChoices((s || []).concat(this.$refs.select.options), this.data, this.multiple)        
         if (!this.multiple) {
           if (v.length > 0) v = v[0]
           else v = {}
