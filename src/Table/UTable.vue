@@ -1,5 +1,5 @@
 <template>
-  <div class="u-table" :class="tableClass" :style="{width:width+'px'}" >
+  <div class="u-table" :class="[tableClass, height==='auto' ? 'auto-height' : '']" :style="{width:width+'px'}" >
     <div class="u-table-header-wrapper"> <!-- Wrapper -->
       <div class="u-table-header-scroll" :style="headerScrollStyles" ref="header"
         @scroll="handleHeaderScroll"
@@ -439,6 +439,14 @@ export default {
           border-right: 1px solid #ddd;
           border-bottom: 1px solid #d2d2d2;
         }
+      }
+    }
+  }
+
+  &.auto-height {
+    .u-table-body-scroll {
+      tr:last-child td {
+        border-bottom: none;
       }
     }
   }

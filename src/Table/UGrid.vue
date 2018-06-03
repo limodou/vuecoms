@@ -1,5 +1,5 @@
 <template>
-  <div class="u-grid-wrapper">
+  <div class="u-grid-wrapper" :class="themeClass">
     <Query ref="query" v-if="query" v-bind="query" @input="handleQuerySubmit" @on-query-change="handleQueryChange"></Query>
     <div class="u-grid-tools" slot="tools" v-if="buttons.length>0 || rightButtons.length>0">
       <div class="u-grid-tools-left" v-if="buttons.length>0">
@@ -88,7 +88,7 @@ export default {
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
-      'onSaveRow', 'onDeleteRow', 'onLoadData', 'query'
+      'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme'
     ),
 
     columnDraggerStyles () {
@@ -96,6 +96,10 @@ export default {
         left: (this.columnPosition - 7) + 'px',
         height: this.guiderHeight + 'px'
       }
+    },
+
+    themeClass () {
+      return `theme-${this.theme}`
     },
 
     tableWidth () {
@@ -619,6 +623,21 @@ label {
 
       .u-table-body-scroll {
         overflow: hidden;
+      }
+    }
+  }
+
+  &.theme-simple {
+    .u-table {
+      border: none;
+      .u-table-header-wrapper .u-table-header-scroll table.u-table-header th {
+        border: none;
+        border-bottom: 1px solid #eee;
+        background-color: #eee;
+      }
+      .u-table-body-scroll table tr td {
+        border: none;
+        border-bottom: 1px solid #eee;        
       }
     }
   }

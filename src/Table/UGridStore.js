@@ -12,6 +12,7 @@ class Store {
       nowrap: false,
       width: 'auto',
       height: 'auto',
+      theme: 'default', // 表格theme
       gridWidth: 0,
       checkCol: false,
       checkColWidth: 30,

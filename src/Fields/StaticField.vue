@@ -20,3 +20,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.u-generic-input-text {
+  padding: 0 4px;
+}
+</style>
