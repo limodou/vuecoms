@@ -1,27 +1,43 @@
 <template>
-  <div class="upload">
-    <Row>
-      <Col span="24">
-      <div v-if="mode=='edit'" class="v-fileupload-operation margin-bottom-15">
+    <div class="upload" :style="styleObj">
+      <template v-if="mode=='edit'||mode=='view'">
+        <Row>
+          <Col span="24">
+            <div v-if="mode=='edit'" class="v-fileupload-operation margin-bottom-15">
+              <file-upload
+                class="btn btn-primary btn-xs btn-flat"
+                name="upload"
+                :ref="ref"
+                post-action="ecpJson.action"
+                :multiple="false"
+                :directory="false"
+                :thread="1"
+                v-model="files"
+                @input-file="inputHandler"
+              >上传附件
+              </file-upload>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Table :columns="columns" :data="uploadedFiles"></Table>
+        </Row>
+      </template>
+      <template v-else-if="mode=='single'">
         <file-upload
-          class="btn btn-primary btn-xs btn-flat"
-          name="upload"
-          :ref="ref"
-          post-action="ecpJson.action"
-          :multiple="false"
-          :directory="false"
-          :thread="1"
-          v-model="files"
-          @input-file="inputHandler"
-        >上传附件
+                class="btn btn-primary btn-xs btn-flat"
+                name="upload"
+                :ref="ref"
+                post-action="ecpJson.action"
+                :multiple="false"
+                :directory="false"
+                :thread="1"
+                v-model="files"
+                @input-file="inputHandler"
+        >{{btnText||'上传附件'}}
         </file-upload>
-      </div>
-      </Col>
-    </Row>
-    <Row>
-      <Table :columns="columns" :data="uploadedFiles"></Table>
-    </Row>
-  </div>
+      </template>
+    </div>
 </template>
 <script>
 
@@ -29,7 +45,7 @@
   import {Table, Row, Col} from "iview"
 
   export default {
-    props: ['category', 'bsnId', 'bsnType', 'bsnName', 'mode', 'editMode'],
+    props: ['category', 'bsnId', 'bsnType', 'bsnName', 'mode', 'editMode', 'btnText', 'done', 'error', 'atchTplItmId'],
     components: {
       FileUpload,
       Table,
@@ -47,9 +63,9 @@
       var initFormData = {
         _fw_service_id: "simpleTransaction",//
         transFlag: "p8_rp",//
-        remotePath: "default/" + (new Date().getFullYear()) + "_" + (new Date().getMonth() + 1) + "_" + (new Date().getDate()),//
+        remotePath: (this.category || "default")+ "/" + (new Date().getFullYear()) + "_" + (new Date().getMonth() + 1) + "_" + (new Date().getDate()),//
         transaction_id: "A09022011",//
-        jsonData: JSON.stringify(reqData)//
+        jsonData: JSON.stringify(reqData)
       }
       var columns = [
         {
@@ -167,7 +183,12 @@
         _bsnType = this.bsnType || '',
         _bsnName = this.bsnName || '',
         _mode = this.mode || 'view',
-        _editMode = this.edtiMode || 'owner'
+        _editMode = this.edtiMode || 'owner',
+              _atchTplItmId = this.atchTplItmId || ''
+
+      var styleObj = {}
+      if(this.mode == 'single')
+              styleObj['display'] = 'inline-block'
       return {
         files: [],
         uploadedFiles: [],
@@ -180,11 +201,13 @@
         'bsnType_': _bsnType,
         'bsnName_': _bsnName,
         'mode_': _mode,
-        'editMode_': _editMode
+        'editMode_': _editMode,
+        'atchTplItmId_':this.atchTplItmId,
+         styleObj:styleObj
       }
     },
     mounted: function () {
-      if (this.bsnId_ && this.bsnType_) {
+      if (this.mode!='single' && this.bsnId_ && this.bsnType_) {
         this.load()
       }
     },
@@ -197,8 +220,10 @@
             jsonData: JSON.stringify({
               OPER_CODE: window.OPER_CODE,
               OPER_NAME: window.OPER_FULL_NAME,
-              //size: newFile.size,
-              bsnName: this.bsnName || ''
+              atchTplItmId:this.atchTplItmId,
+              bsnNm:this.bsnName,
+              bsnType: this.bsnType,
+              bsnId: this.bsnId
             })
           })
           var data = Object.assign({}, post_data, {
@@ -209,8 +234,10 @@
           })
           this.$refs[this.ref].update(newFile, {data: data})
           this.$refs[this.ref].active = true
-          this.uploadedFiles.push(newFile)
-          this.modifyUploadedFile(newFile.id, {state: "上传中..."})
+          if(this.mode!='single'){
+            this.uploadedFiles.push(newFile)
+            this.modifyUploadedFile(newFile.id, {state: "上传中..."})
+          }
         }
         if (newFile && oldFile) {
           // update
@@ -219,7 +246,8 @@
             // error
             // 监控到错误, 置active为false, 终止上传, 并处理错误
             this.$refs[this.ref].active = false
-            this.modifyUploadedFile(newFile.id, {state: "上传失败"})
+            if(this.mode!='single')
+              this.modifyUploadedFile(newFile.id, {state: "上传失败"})
           }
 
           if (newFile.progress !== oldFile.progress) {
@@ -242,16 +270,26 @@
 
             if (resp['BK_STATUS'] == "00") {
               //上传成功
-              this.modifyUploadedFile(newFile.id, {state: "已上传"})
-              this.modifyUploadedFile(newFile.id, {user: resp['ATCH_GRP']['ATCH_VDO'][0]['UDT_PSN_NM']})
-              this.modifyUploadedFile(newFile.id, {user_id: resp['ATCH_GRP']['ATCH_VDO'][0]['UDT_PSN_ID']})
-              this.modifyUploadedFile(newFile.id, {date: resp['ATCH_GRP']['ATCH_VDO'][0]['UDT_TM']})
-              this.modifyUploadedFile(newFile.id, {sn: resp['ATCH_GRP']['ATCH_VDO'][0]['SN']})
+              if(this.mode!='single'){
+                this.modifyUploadedFile(newFile.id, {state: "已上传"})
+                this.modifyUploadedFile(newFile.id, {user: resp['ATCH_GRP']['ATCH_VDO'][0]['UDT_PSN_NM']})
+                this.modifyUploadedFile(newFile.id, {user_id: resp['ATCH_GRP']['ATCH_VDO'][0]['UDT_PSN_ID']})
+                this.modifyUploadedFile(newFile.id, {date: resp['ATCH_GRP']['ATCH_VDO'][0]['UDT_TM']})
+                this.modifyUploadedFile(newFile.id, {sn: resp['ATCH_GRP']['ATCH_VDO'][0]['SN']})
+              }
+              this.$emit("done", resp)
+              if(this.done)
+                      this.done(resp)
             } else {
               //后端返回错误信息
               this.$refs[this.ref].update(newFile, {error: true})
               this.$refs[this.ref].update(newFile, {success: ""})
-              this.modifyUploadedFile(newFile.id, {state: "上传失败"})
+              if(this.mode!='single') {
+                this.modifyUploadedFile(newFile.id, {state: "上传失败"});
+              }
+              this.$emit("error", resp)
+              if(this.error)
+                      this.error(resp)
             }
           }
 
