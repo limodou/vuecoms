@@ -4,13 +4,15 @@
       <CellRender v-if="columnType === 'render'"
         :row="col.row" :render="col.column.render" :column="col.column"
         :value="col.value"></CellRender>
-      <div v-if="columnType === 'normal'" v-html="value" class="u-cell-text" :class="{nowrap:nowrap}"></div>
+      <div v-if="columnType === 'normal' && col.column.showTitle" v-html="value" :title="value" class="u-cell-text" :class="{nowrap:nowrap}"></div>
+      <div v-if="columnType === 'normal' && !col.column.showTitle" v-html="value" class="u-cell-text" :class="{nowrap:nowrap}"></div>
       <GenericInput v-if="columnType === 'editor'" 
         v-bind="col.column.editor"
         :name="col.column.name"
         :format="col.column.format"
         :value="savingRow || col.row"
-        :static="!col.row._editting"
+        :static="col.column.editor.static || !col.row._editting"
+        :show-title="col.column.showTitle"
       >
       </GenericInput>
       <template v-if="columnType === 'check' && checkable">
@@ -46,7 +48,7 @@ export default {
   },
 
   computed: {
-    ...mapState('nowrap', 'start', 'editRow', 'editMode', 'onCheckable'),
+    ...mapState('nowrap', 'start', 'editRow', 'editMode', 'onCheckable', 'cellTitle'),
     value () {
       let value = this.col.value
       if (this.col.column.format) {

@@ -14,6 +14,7 @@ import Chart from './EChart'
 // import CKEditor from './Editor/CKEditor'
 import TinyMce from './Editor/TinyMce'
 import DatepickerRange from './DatepickerRange'
+import uTemplate from "v-runtime-template"
 
 const vuecoms = {
   Box,
@@ -31,7 +32,8 @@ const vuecoms = {
   Chart,
 //   ckeditor: CKEditor
   tinymce: TinyMce,
-  DatepickerRange
+  DatepickerRange,
+  uTemplate
 }
 
 const install = function () {

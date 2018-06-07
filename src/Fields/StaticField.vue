@@ -1,11 +1,12 @@
 <template>
-  <div class="u-generic-input-text" v-html="display"></div>
+  <div v-if="showTitle" class="u-generic-input-text" v-html="display" :title="display"></div>
+  <div v-else class="u-generic-input-text" v-html="display"></div>
 </template>
 
 <script>
 export default {
   name: 'StaticField',
-  props: ['value', 'format', 'name', 'staticSuffix'],
+  props: ['value', 'format', 'name', 'staticSuffix', 'showTitle'],
   computed: {
     display () {
       let static_name = `${this.name}${this.staticSuffix}`

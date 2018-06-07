@@ -17,6 +17,7 @@ class Store {
       checkCol: false,
       checkColWidth: 30,
       checkColTitle: '',
+      cellTitle: true, // 单元格显示title属性
       idField: 'id',
       data: [],
       multiSelect: false,

@@ -31,7 +31,16 @@ export default {
       type: String,
       default: '_static'
     },
-    root: String // 用于change事件发送的父控件的名字
+    root: String, // 用于change事件发送的父控件的名字,
+    staticComponent: {
+      default () {
+        return StaticField
+      }
+    },
+    showTitle: {
+      type: Boolean,
+      default: false
+    }
   },
 
   render (h, ctx) {
@@ -43,7 +52,7 @@ export default {
       input.setStaticValue(self.value[self.name])
     }
     if (self.static) {
-      return h(StaticField, {props: ctx.props})
+      return h(self.staticComponent, {props: ctx.props})
     }
 
     return input.render(h, ctx)

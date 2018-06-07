@@ -88,7 +88,7 @@ export default {
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
-      'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme'
+      'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle'
     ),
 
     columnDraggerStyles () {
@@ -262,6 +262,16 @@ export default {
     },
 
     getDefaultColumn (options) {
+      // 如果column设置了showTitle，则使用column的值，否则使用全局的cellTitle属性
+      let show
+      if (this.cellTitle === undefined) {
+        show = true
+      } else {
+        show = this.cellTitle
+      }
+      if (options.showTitle !== undefined) {
+        show = options.showTitle
+      }
       return Object.assign({
         name: 'title',
         width: 0,
@@ -271,7 +281,8 @@ export default {
         fixed: '',
         resizable: true,
         type: 'column',
-        editorOptions: {}
+        editorOptions: {},
+        showTitle: show
       }, options || {})
     },
 
@@ -316,13 +327,12 @@ export default {
 
       this.data.columns.forEach(col => {
         if (!col.hidden) {
-          let d = this.getDefaultColumn()
+          let d = this.getDefaultColumn(col)
           // 增加行编辑操作列的render函数
           if (this.editMode === 'row' && col.name === this.actionColumn) {
             d.render = this.editActionRender
           }
           if (!d.title) d.title = d.name
-          Object.assign(d, col)
           cols.push(d)
         }
       })

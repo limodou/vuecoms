@@ -167,6 +167,7 @@ export default {
     border: 0;
     border-radius: 2px;
     transition: border .2s ease-in-out,color .2s ease-in-out;
+    margin-top: 0;
 
     > a {
       margin: 0;
