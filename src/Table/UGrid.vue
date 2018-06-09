@@ -330,7 +330,7 @@ export default {
           let d = this.getDefaultColumn(col)
           // 增加行编辑操作列的render函数
           if (this.editMode === 'row' && col.name === this.actionColumn) {
-            d.render = this.editActionRender
+            d.render = col.render || this.editActionRender
           }
           if (!d.title) d.title = d.name
           cols.push(d)
