@@ -420,7 +420,7 @@ export default {
                     }
                     this.$set(row, '_saving', false)
                   }
-                  this.onSaveRow.call(this, row._editRow, callback)
+                  this.onSaveRow.call(this, row._editRow, callback, row)
                 } else {
                   copyDataRow(row, row._editRow)
                   delete row._editRow
@@ -456,7 +456,7 @@ export default {
           }
         }
         if (this.onDeleteRow){
-          this.onDeleteRow(row, callback)
+          this.onDeleteRow.call(this, row, callback)
         } else {
           this.removeRow(row)
         }
