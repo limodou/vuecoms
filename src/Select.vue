@@ -3,7 +3,9 @@
     :clearable="clearable" :filterable="filterable" transfer :remote="remote"
     :placeholder="placeholder"
     :loading="loading" :remote-method="handleRemote">
-    <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">{{ item.label }}</Option>
+    <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">
+      <span v-html="renderLabel(item)"></span>
+    </Option>
   </Select>
 </template>
 
@@ -58,7 +60,8 @@ export default {
     rich: {
       type: Boolean,
       default: false
-    }
+    },
+    onRenderLabel: {}
   },
 
   mounted () {
@@ -126,10 +129,10 @@ export default {
         if (isEmpty(this.selectedValue)) {
           s = []
         } else {
-          if (this.selectedValue instanceof Object)
-            s = [this.selectedValue]
-          else
+          if (Array.isArray(this.selectedValue))
             s = this.selectedValue
+          else
+            s = [this.selectedValue]
         }
         v = findChoices((s || []).concat(this.$refs.select.options), this.data, this.multiple)        
         if (!this.multiple) {
@@ -173,6 +176,10 @@ export default {
       }
       d.data = v
       return d
+    },
+    renderLabel (item) {
+      if (this.onRenderLabel) return this.onRenderLabel(item)
+      return item.label
     }
   },
 
