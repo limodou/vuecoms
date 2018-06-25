@@ -187,6 +187,9 @@ export default {
       if (!this.fixed && this.hscroll) {
         style.marginRight = `${scrollbar}px`
         style.borderRight = '1px solid #ddd'
+      } else {
+        style.marginRight = '0'
+        style.borderRight = 'none'
       }
       return style
     },
@@ -222,6 +225,12 @@ export default {
       return this.store.states.start - 1
     }
 
+  },
+
+  updated () {
+    this.$nextTick(() => {
+      this.checkScroll()
+    })
   },
 
   methods: {
@@ -291,8 +300,6 @@ export default {
         this.store.states.scrollLeft = this.$refs.body.scrollLeft
         if (this.$refs.body && this.$refs.content) {
           this.store.states.hscroll = this.$refs.body.scrollHeight > this.$refs.body.clientHeight
-        }
-        if (this.$refs.body && this.$refs.content) {
           this.store.states.xscroll = this.$refs.body.scrollWidth > this.$refs.body.clientWidth
         }
       }
