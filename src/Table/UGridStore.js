@@ -61,10 +61,12 @@ class Store {
       columnPosition: 0,
       checkAll: false,
       fixedColumns: [],
-      leftWidth: 0, // 左则固定列宽度
+      leftWidth: 0, // 左侧固定列宽度
+      rightWidth: 0, // 右侧固定列宽度
       hscroll: false,
       xscroll: false,
       scrollLeft: 0, // 记录横向滚动条偏移量，用于显示左侧固定列的特殊样式
+      isScrollRight: false,
       guiderHeight: 0, // 拖动指示器的高度
       loading: false, // 是否显示loading信息
       loadingLeft: 0,

@@ -13,7 +13,7 @@
       <u-table v-if="leftWidth"
         :store="store"
         :width="leftWidth"
-        :table-width="leftWidth"
+        :table-width="tableWidth"
         :table-class="leftTableClass"
         fixed="left"
         ref="left">
@@ -26,6 +26,15 @@
         ref="table"
         @scroll="handleScroll"
         ></u-table>
+
+      <u-table v-if="rightWidth"
+        :store="store"
+        :width="rightWidth"
+        :table-width="tableWidth"
+        :table-class="rightTableClass"
+        fixed="right"
+        ref="right">
+      </u-table>
 
       <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
       <div ref="loading" class="loading" v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
@@ -83,12 +92,13 @@ export default {
   computed: {
     ...mapState('columns', 'columnResizing', 'checkCol', 'indexCol',
       'gridWidth', 'width', 'resizable', 'columnPosition', 'guiderHeight',
-      'defaultColWidth', 'leftWidth', 'checkColTitle', 'checkColWidth',
+      'defaultColWidth', 'leftWidth', 'rightWidth', 'checkColTitle', 'checkColWidth',
       'indexColWidth', 'indexColTitle', 'scrollLeft', 'total', 'pageSizeOpts',
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
-      'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle'
+      'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
+      'isScrollRight'
     ),
 
     columnDraggerStyles () {
@@ -116,6 +126,14 @@ export default {
       return cls
     },
 
+    rightTableClass () {
+      let cls = 'u-grid-body u-table-right'
+      if (!this.isScrollRight) {
+        cls += ' dark'
+      }
+      return cls
+    },
+
     loadingStyles () {
       return {top: `${this.loadingTop}px`, left: `${this.loadingLeft}px`}
     }
@@ -137,6 +155,7 @@ export default {
       let cols = []
       let w = this.gridWidth
       let hasLeftFixed = false
+      let hasRightFixed = false
       let max_level = 0
 
       for (let col of this.columns) {
@@ -147,8 +166,13 @@ export default {
         } else {
           cols.push(col)
         }
-        if (col.fixed === 'left') {
-          hasLeftFixed = true
+        switch(col.fixed) {
+          case 'left':
+            hasLeftFixed = true
+            break
+          case 'right':
+            hasRightFixed = true
+            break
         }
       }
 
@@ -172,21 +196,26 @@ export default {
       }
 
       // 处理左侧固定列
-      if (hasLeftFixed) {
+      if (hasLeftFixed || hasRightFixed) {
         let leftCols = []
+        let rightCols = []
         let restCols = []
         this.store.states.leftWidth = 0
+        this.store.states.rightWidth = 0
 
         for (let i = 0, len = this.columns.length; i < len; i++) {
           let col = this.columns[i]
-          if (col.type === 'check' || col.type === 'index' || col.fixed === 'left') {
+          if (col.fixed === 'left') {
             leftCols.push(col)
             this.store.states.leftWidth += col.width
+          } else if (col.fixed === 'right') {
+            rightCols.push(col)
+            this.store.states.rightWidth += col.width
           } else {
             restCols.push(col)
           }
         }
-        this.store.states.columns = leftCols.concat(restCols)
+        this.store.states.columns = leftCols.concat(restCols).concat(rightCols)
       }
       this.store.states.drawColumns = this.parse_header(this.columns, max_level)
     },
@@ -307,7 +336,8 @@ export default {
           resizable: false,
           width: this.checkColWidth,
           title: this.checkColTitle,
-          align: 'center'
+          align: 'center',
+          fixed: 'left'
         })
         cols.push(d)
       }
@@ -320,7 +350,8 @@ export default {
           resizable: false,
           width: this.indexColWidth,
           title: this.indexColTitle,
-          align: 'center'
+          align: 'center',
+          fixed: 'left'
         })
         cols.push(d)
       }
@@ -355,6 +386,9 @@ export default {
     handleScroll (left, top) {
       if (this.leftWidth) {
         this.$refs.left.$refs.body.scrollTop = top
+      }
+      if (this.rightWidth) {
+        this.$refs.right.$refs.body.scrollTop = top
       }
     },
 
@@ -618,7 +652,7 @@ label {
       z-index: 9999;
     }
 
-    .u-table-left {
+    .u-table-left, .u-table-right {
       position: absolute;
       top: 0;
       left: 0;
@@ -633,6 +667,18 @@ label {
 
       .u-table-body-scroll {
         overflow: hidden;
+      }
+    }
+
+    .u-table-right {
+      top: 0;
+      right: 0;
+      left: auto;
+      border-left: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+
+      &.dark {
+        box-shadow: -1px 0px 2px #999;
       }
     }
   }

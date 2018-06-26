@@ -1,10 +1,10 @@
 <template>
-  <div class="u-table" :class="[tableClass, height==='auto' ? 'auto-height' : '']" :style="{width:width+'px'}" >
+  <div class="u-table" :class="[tableClass, height==='auto' ? 'auto-height' : '']" :style="wrapStyles" >
     <div class="u-table-header-wrapper"> <!-- Wrapper -->
       <div class="u-table-header-scroll" :style="headerScrollStyles" ref="header"
         @scroll="handleHeaderScroll"
       >
-        <table cellspaceing="0" cellpadding="0" border="0" :style="{width:tableWidth+'px'}" class="u-table-header">
+        <table cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" class="u-table-header">
           <colgroup>
             <col v-for="(column, index) in columns" :style="getColumnStyle(column)" :key="column.name">
           </colgroup>
@@ -21,9 +21,9 @@
       </div>
     </div>
     <div class="u-table-body-scroll" :style="bodyStyles" @scroll="handleBodyScroll" ref="body">
-      <table cellspaceing="0" cellpadding="0" border="0" :style="{width:tableWidth+'px'}" ref="content">
+      <table cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" ref="content">
         <colgroup>
-          <col v-for="(column, index) in columns" :style="getColumnStyle(column)" :key="column.name">
+          <col v-for="(column, index) in columns"  :style="getColumnStyle(column)" :key="column.name">
         </colgroup>
         <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
@@ -97,15 +97,11 @@ export default {
   },
 
   computed: {
-    ...mapState('data', 'nowrap', 'selected', 'idField',
+    ...mapState('data', 'nowrap', 'selected', 'idField', 'columns',
       'hscroll', 'xscroll', 'rowHeight', 'height', 'columnResizing',
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
-      'multiSelect', 'drawColumns', 'combineCols', 'draggable'
+      'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth'
     ),
-
-    columns () {
-      return this.cols || this.store.states.columns
-    },
 
     // 合并字段的定义需要是一个二维数组，可以用于多组合并的定义
     combineColsIndex () {
@@ -191,6 +187,23 @@ export default {
       return style
     },
 
+    wrapStyles () {
+      let s = {width: `${this.width}px`}
+      let scrollbar = measureScrollbar()
+      if (this.fixed === 'right' && this.hscroll) {
+        s.right =  `${scrollbar}px`
+      }
+      return s
+    },
+
+    tableStyles () {
+      let s = {width: `${this.tableWidth}px`}
+      if (this.fixed === 'right') {
+        s.marginLeft =  `${this.width - this.tableWidth}px`
+      }
+      return s
+    },
+
     bodyStyles () {
       let scrollbar = measureScrollbar()
       let h = this.height === 'auto' ? 'auto' : this.height + 'px'
@@ -258,20 +271,35 @@ export default {
         document.documentElement.removeEventListener('mouseup', this.handleMouseUp, true)
         this.$nextTick(() => {
           this.checkScroll()
-          this.calLeftWidth(this.dragging_col, this.dragging_col_new_width, oldWidth)
+          this.calWidth(this.dragging_col, this.dragging_col_new_width, oldWidth)
         })
       }
     },
 
-    calLeftWidth (col, newWidth, width) {
-      if (col.fixed === 'left') {
-        this.store.states.leftWidth = this.store.states.leftWidth + newWidth - width
+    calWidth (col, newWidth, width) {
+      switch (col.fixed) {
+        case 'left':
+          this.leftWidth += newWidth - width
+          break
+        case 'right':
+          this.rightWidth += newWidth - width
+          break
       }
     },
 
     thStyles (col) {
       // return {textAlign: col.align || 'left'}
-      return {textAlign: 'center'}
+      let s = {textAlign: 'center'}
+      if (this.fixed === 'left') {
+        if (col.fixed !== 'left') {
+          s['visibility'] = 'hidden'
+        }
+      } else if (this.fixed === 'right') {
+        if (col.fixed !== 'right') {
+          s['visibility'] = 'hidden'
+        }
+      }
+      return s
     },
 
 
@@ -289,10 +317,10 @@ export default {
       if (!this.fixed) {
         this.$refs.header.scrollLeft = this.$refs.body.scrollLeft
         this.store.states.scrollLeft = this.$refs.body.scrollLeft
+        this.store.states.isScrollRight = this.$refs.body.scrollLeft && (this.$refs.body.scrollLeft + 
+          this.$refs.body.clientWidth === this.$refs.content.clientWidth)
         if (this.$refs.body && this.$refs.content) {
           this.store.states.hscroll = this.$refs.body.scrollHeight > this.$refs.body.clientHeight
-        }
-        if (this.$refs.body && this.$refs.content) {
           this.store.states.xscroll = this.$refs.body.scrollWidth > this.$refs.body.clientWidth
         }
       }
@@ -301,7 +329,17 @@ export default {
     // 单元格样式：
     //    文字对齐
     cellStyles (col) {
-      return {textAlign: col.align || 'center', height: `${this.rowHeight}px`, overflow:'hidden'}
+      let s = {textAlign: col.align || 'center', height: `${this.rowHeight}px`, overflow:'hidden'}
+      if (this.fixed === 'left') {
+        if (col.fixed !== 'left') {
+          s['visibility'] = 'hidden'
+        }
+      } else if (this.fixed === 'right') {
+        if (col.fixed !== 'right') {
+          s['visibility'] = 'hidden'
+        }
+      }
+      return s
     },
 
     /*
@@ -403,7 +441,7 @@ export default {
             padding: 0;
             border: none;
             border-right: 1px solid #ddd;
-            border-bottom: 1px solid #d2d2d2;
+            border-bottom: 1px solid #ddd;
           }
         }
       }
@@ -437,7 +475,7 @@ export default {
           padding: 0;
           border: none;
           border-right: 1px solid #ddd;
-          border-bottom: 1px solid #d2d2d2;
+          border-bottom: 1px solid #ddd;
         }
       }
     }
