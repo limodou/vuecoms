@@ -122,6 +122,14 @@ export default {
     handleClose () {
       this.showPageSize = false
     }
+  },
+
+  watch: {
+    'store.states.page': {
+      handler: function (val) {
+        this.current = val
+      }
+    }
   }
 }
 </script>

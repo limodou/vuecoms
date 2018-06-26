@@ -98,7 +98,7 @@ export default {
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
-      'isScrollRight'
+      'isScrollRight', 'page', 'start', 'pageSize'
     ),
 
     columnDraggerStyles () {
@@ -395,6 +395,8 @@ export default {
     handlePage (page) {
       this.$nextTick( () => {
         this.$set(this.store.states.param, 'page', page)
+        this.page = page
+        this.start = (page - 1) * this.pageSize + 1
         this.loadData()
       })
     },
@@ -402,6 +404,8 @@ export default {
     handlePageSize (size) {
       this.$nextTick( () => {
         this.$set(this.store.states.param, 'pageSize', size)
+        this.pageSize = size
+        this.start = (this.page - 1) * size + 1
         this.loadData()
       })
     },
@@ -548,6 +552,7 @@ export default {
     handleQuerySubmit (data) {
       this.param = Object.assign(this.param, data)
       this.page = 1
+      this.start = 1
       this.$set(this.param, 'page', 1)
       this.loadData()
     }
