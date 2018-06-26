@@ -194,7 +194,8 @@ export default {
       let s = {width: `${this.width}px`}
       let scrollbar = measureScrollbar()
       if (this.fixed === 'right' && this.hscroll) {
-        s.right =  `${scrollbar}px`
+        s.width = `${this.width + 2}px`
+        s.right = `${scrollbar - 2}px`
       }
       return s
     },
