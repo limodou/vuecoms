@@ -27,6 +27,7 @@
         </colgroup>
         <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
+            v-if="!row.row._hidden"
             :style="bodyTrStyle"
             :key="getRowId(row.row)"
             :class="{selected:row.row._selected, hover:row.row._hover}"
@@ -100,7 +101,8 @@ export default {
     ...mapState('data', 'nowrap', 'selected', 'idField', 'columns',
       'hscroll', 'xscroll', 'rowHeight', 'height', 'columnResizing',
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
-      'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth'
+      'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth',
+      'tree', 'parentField', 'expandField', 'defaultExpanded'
     ),
 
     // 合并字段的定义需要是一个二维数组，可以用于多组合并的定义
@@ -132,9 +134,53 @@ export default {
       let _col
       let c
       let {index, last_columns_set} = this.combineColsIndex
+      let parents_expanded = {}
+      let parents_show = {}
+      let parents_level = {}
+      let parents_rows = {}
+      let parent, expanded, pshow, show, level, prow
 
       this.data.forEach( (row, i) => {
         let new_row = {row: row, columns: []}
+        // 增加对父结点是否可见的判断
+        if (this.tree) {
+          parent = row[this.parentField]
+          if (parent !== undefined) {
+            expanded = parents_expanded[parent]
+            pshow = parents_show[parent]
+            level = parents_level[parent]
+            if (expanded === undefined) {
+              expanded = this.defaultExpanded
+            }
+            if (pshow === undefined) {
+              pshow = true
+            }
+            if (level === undefined) {
+              level = 0
+            } else level ++
+            prow = parents_rows[parent]
+            if (prow === undefined) {
+              prow = null
+            }
+          } else {
+            expanded = true
+            pshow = true
+            level = 0
+            prow = null
+          }
+          if (pshow && expanded) show = true
+          else show = false
+          this.$set(row, '_hidden', !show)
+          this.$set(row, '_level', level)
+          //自动设置父结点是已装入状态
+          if (prow) {
+            this.$set(prow, '_loaded', true)
+          }
+          parents_expanded[row[this.idField]] = row[this.expandField] === undefined ? this.defaultExpanded : row[this.expandField]
+          parents_show[row[this.idField]] = show
+          parents_level[row[this.idField]] = level
+          parents_rows[row[this.idField]] = row
+        }
         rows.push(new_row)
         this.columns.forEach( (col, j) => {
           let item = {value: row[col.name], rowspan: 1, colspan: 1,

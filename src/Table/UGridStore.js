@@ -44,8 +44,20 @@ class Store {
       deleteRowConfirm: true, // 删除前是否先确认
       query: null, // 查询条件对象
 
+      // tree 相关的参数
+      tree: false, // 是否treegrid
+      defaultExpanded: false, // 缺省折叠状态
+      parentField: 'parent', // 父列名
+      treeField: '', // 展示树结构的列名
+      isParentField: '_isParent', // 标识是否父结点列名
+      expandField: '_expand', // 标识折叠状态列名
+      openedIcon: 'ivu-icon ivu-icon-arrow-down-b', // 树结点展开的图标
+      closedIcon: 'ivu-icon ivu-icon-arrow-right-b',
+      indentWidth: 20, // 子结点缩近宽度
+      iconWidth: 14, // icon所占宽度
+
       // 回调
-      onLoadData: null, // 装入数据回调函数，将传入 function (url, param, callback)
+      onLoadData: null, // 装入数据回调函数，将传入 function (url, param, callback)，当树型结构时，会传入parent字段
       onSelect: null, // 在选择行前执行，返回为True，则允许选中
       onDeselect: null, // 在取消选择行前执行，返回为True，则允许取消选中
       onCheckable: null, // 是否显示checkbox
@@ -332,6 +344,26 @@ class Store {
 
     if (this.states.query)
       this.states.query.value = Object.assign({}, p)
+  }
+
+  getDefaultRow (row) {
+    return Object.assign({
+      _selected: false,
+      _hover: false,
+      _selectable: true, // 可被选中
+      _checkable: true, // 可显示checkbox
+      _editting: false,
+      _hidden: false,
+      _level: 0
+    }, row)
+  }
+
+  makeRows (data) {
+    var rows = []
+    data.forEach(row => {
+      rows.push(this.getDefaultRow(row))
+    })
+    return rows
   }
 
 }

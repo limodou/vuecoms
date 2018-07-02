@@ -98,7 +98,7 @@ export default {
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
-      'isScrollRight', 'page', 'start', 'pageSize'
+      'isScrollRight', 'page', 'start', 'pageSize', 'nowrap'
     ),
 
     columnDraggerStyles () {
@@ -141,7 +141,8 @@ export default {
 
   methods: {
     ...mapMethod('getSelection', 'showLoading', 'setSelection', 'removeRow',
-      'setComment', 'removeComment', 'getSelectedRows', 'getColumn'),
+      'setComment', 'removeComment', 'getSelectedRows', 'getColumn', 'getDefaultRow',
+      'makeRows'),
 
     resize () {
       if (this.width === 'auto') {
@@ -315,16 +316,6 @@ export default {
       }, options || {})
     },
 
-    getDefaultRow (row) {
-      return Object.assign({
-        _selected: false,
-        _hover: false,
-        _selectable: true, // 可被选中
-        _checkable: true, // 可显示checkbox
-        _editting: false
-      }, row)
-    },
-
     makeCols () {
       var cols = []
 
@@ -371,14 +362,6 @@ export default {
       return cols
     },
 
-    makeRows (data) {
-      var rows = []
-      data.forEach(row => {
-        rows.push(this.getDefaultRow(row))
-      })
-      return rows
-    },
-
     handleResize () {
       this.resize()
     },
@@ -416,8 +399,10 @@ export default {
 
     // 生成缺省的行编辑按钮
     editActionRender (h, param) {
+      let cls = 'u-cell-text'
+      if (this.nowrap) cls += ' nowrap'
       return h('div', {
-        'class': 'u-cell-text'
+        'class': cls
       },
       [
         this.defaultEditRender(h, param.row),
@@ -534,7 +519,9 @@ export default {
       let param = this.param
       // data 为数据行， others 为其它信息，如total
       let callback = (data, others) => {
-        this.store.states.data = this.makeRows(data)
+        if (data) {
+          this.store.states.data = this.makeRows(data)
+        }
         if (others && (others instanceof Object)) {
           this.store.mergeStates(others)
         }
