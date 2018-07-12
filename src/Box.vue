@@ -1,15 +1,19 @@
 <template>
-  <div class="box" :class="[boxType, headerStyle]">
+  <div v-if="!removed" class="box" :class="[boxType, headerStyle]">
     <div v-if="title" class="box-header" :class="{'with-border':withBorder}">
       <h3 class="box-title">{{title}}</h3>
 
       <div class="box-tools pull-right">
         <slot name="tools"></slot>
-        <button v-if="collapse" type="button" class="btn btn-box-tool" data-widget="collapse"
+        <button v-if="collapse" type="button" class="box-tool"
           @click.prevent="toggle"
-        ><i class="fa fa-minus"></i>
+        >
+            <Icon v-if="open" type="ios-minus-empty" :size="20"></Icon>
+            <Icon v-else type="ios-plus-empty" :size="20"></Icon>
         </button>
-        <button v-if="remove" type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        <button v-if="removable" type="button" class="box-tool"
+          @click.prevent="removed=true"
+        ><Icon type="ios-close-empty" :size="20"></Icon></button>
       </div>
     </div>
 
@@ -36,7 +40,8 @@ export default {
 
   data() {
     return {
-      open: true
+      open: true,
+      removed: false
     }
   },
 
@@ -61,7 +66,7 @@ export default {
       default: true
     },
 
-    remove: {
+    removable: {
       type: Boolean,
       default: false
     },
@@ -271,7 +276,7 @@ export default {
     color: #fff
 }
 
-.box.box-solid>.box-header>.box-tools .btn {
+.box.box-solid>.box-header>.box-tools {
     border: 0;
     box-shadow: none
 }
@@ -374,20 +379,25 @@ export default {
     color: #444!important
 }
 
-.btn-box-tool {
+.box-tool {
     padding: 5px;
     font-size: 12px;
     background: transparent;
     color: #97a0b3;
     box-shadow: none;
     border: 1px solid transparent;
+    cursor: pointer;
 }
 
-.open .btn-box-tool,.btn-box-tool:hover {
+.box-tool:focus {
+    outline:0;
+}
+
+.open .box-tool,.box-tool:hover {
     color: #606c84
 }
 
-.btn-box-tool.btn:active {
+.box-tool:active {
     box-shadow: none
 }
 
