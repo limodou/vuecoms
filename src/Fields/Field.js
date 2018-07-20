@@ -6,6 +6,7 @@ export default class Field {
     this.component = options.type //底层组件名,缺省使用type,后续定义的组件可以重定义这个值
     this.defaultOptions = {}
     this.value = options.value || {} //组件值
+    this.onChange = options.onChange
     this.events = ['input'] //记录哪些事件要捕获，当捕获时，自动触发on-validate事件，通知数据进行校验
     this.name = options.name
     this.label = options.label
@@ -60,6 +61,11 @@ export default class Field {
           if (p)
             p.$emit('on-field-change', v)
         })
+
+        // 增加对listenser的处理
+        if (this.onChange) {
+          this.onChange(x, self.value)
+        }
       },
     }
     for(let e_name of this.events) {

@@ -109,8 +109,8 @@ export default {
             _check_pending(r.pending, false)
           }, 10)
         } else {
-          this.validating = true
-          this.$emit('validating', true)
+          this.validating = false
+          this.$emit('validating', false)
           callback()
         }
       }

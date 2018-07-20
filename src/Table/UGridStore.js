@@ -209,6 +209,11 @@ class Store {
     }
   }
 
+  //编辑完成后， 发送事件
+  sendInputEvent () {
+    this.grid.$emit('input', this.states.data)
+  }
+
   removeRow (row) {
     let removed = List.remove(this.states.data, row, this.states.idField)
     for(let i of removed) {

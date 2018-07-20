@@ -142,7 +142,7 @@ export default {
   methods: {
     ...mapMethod('getSelection', 'showLoading', 'setSelection', 'removeRow',
       'setComment', 'removeComment', 'getSelectedRows', 'getColumn', 'getDefaultRow',
-      'makeRows'),
+      'makeRows', 'sendInputEvent'),
 
     resize () {
       if (this.width === 'auto') {
@@ -435,6 +435,7 @@ export default {
                       this.$set(row, '_editting', !row._editting)
                       this.$set(row, '_new', false) //保存之后，将_new置为false
                       delete row._editRow
+                      this.sendInputEvent()
                     } else {
                       for(let key in data) {
                         let v = data[key]
@@ -449,6 +450,7 @@ export default {
                   delete row._editRow
                   this.$set(row, '_editting', false)
                   this.$set(row, '_saving', false)
+                  this.sendInputEvent()
                 }
               }
             }
@@ -461,6 +463,7 @@ export default {
         if (row._editting) {
           this.$set(row, '_editting', false)
           this.$delete(row, '_editRow')
+          this.removeComment(row)
           if (row._new) {
             this.removeRow(row)
           }
@@ -470,6 +473,7 @@ export default {
         let callback = (flag, data) => {
           if (flag === 'ok') {
             this.removeRow(row)
+            this.sendInputEvent()
           } else {
             for(let key in data) {
               let v = data[key]
@@ -534,6 +538,7 @@ export default {
         this.showLoading(true)
         this.onLoadData(_url, param, callback)
       }
+      this.sendInputEvent()
     },
 
     handleQuerySubmit (data) {
@@ -575,12 +580,12 @@ export default {
       },
       deep: true
     },
-    'store.states.data': {
-      handler: function (value) {
-        this.$emit('input', value)
-      },
-      deep: true
-    }
+    // 'store.states.data': {
+    //   handler: function (value) {
+    //     this.$emit('input', value)
+    //   },
+    //   deep: true
+    // }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <Select ref="select" v-model="data" :multiple="multiple" @input="handleInput" 
-    :clearable="clearable" :filterable="filterable" transfer :remote="remote"
+    :clearable="clearable" :filterable="filterable" :transfer="transfer" :remote="remote"
     :placeholder="placeholder"
     :loading="loading" :remote-method="handleRemote">
     <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">
@@ -46,6 +46,10 @@ export default {
     },
     remoteMethod: {},
     remoteSelected: {}, //获取selected值的回调，返回应为 [{label: xxx, value: yyy}], 如果是单选，则不是数组
+    transfer: {
+      type: Boolean,
+      default: true
+    },
     placeholder: {
       type: String,
       default () {

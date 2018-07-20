@@ -14,7 +14,8 @@ export default {
     static: {
       type: Boolean,
       default: false
-    }, //是否表态展示
+    }, //是否静态展示
+    onChange: {},
     options: Object, // 编辑控件选项
     multiple: {
       type: Boolean,
