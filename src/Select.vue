@@ -92,17 +92,21 @@ export default {
       }
     },
     setSelected (selected) {
+      let v
       this.selectedValue = selected
       if (this.multiple) {
         this.$refs.select.selectedMultiple = selected
       } else {
-        if (selected instanceof Object) {
-          this.$refs.select.selectedSingle = selected.label
-        } else if (Array.isArray(selected) && selected.length > 0) {
-          this.$refs.select.selectedSingle = selected[0].label
+        if (Array.isArray(selected) && selected.length > 0) {
+          v = selected[0].label
+        } else if (selected instanceof Object) {
+          v = selected.label
         } else {
-          this.$refs.select.selectedSingle = selected || ''
+          v = selected || ''
         }
+        this.$refs.select.selectedSingle = v
+        this.$refs.select.query = v
+        this.$refs.select.lastQuery = v
       }
     },
     fireSelected () {
