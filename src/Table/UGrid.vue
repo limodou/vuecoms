@@ -39,7 +39,7 @@
       <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
       <div ref="loading" class="loading" v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
     </div>
-    <Pagination v-if="pagination" :store="store"
+    <Pagination v-if="pagination && store.states.data.length > 0" :store="store"
       @on-page="handlePage"
       @on-page-size="handlePageSize">
       <Buttons ref="bottomButtons" :buttons="bottomButtons" :target="this" :data="store"></Buttons>

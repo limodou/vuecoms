@@ -21,7 +21,8 @@
       </div>
     </div>
     <div class="u-table-body-scroll" :style="bodyStyles" @scroll="handleBodyScroll" ref="body">
-      <table cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" ref="content">
+      <div class="u-table-no-data" :style="noDataStyles" v-if="data.length===0 && !fixed">{{noData}}</div>
+      <table v-else cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" ref="content">
         <colgroup>
           <col v-for="(column, index) in columns"  :style="getColumnStyle(column)" :key="column.name">
         </colgroup>
@@ -102,7 +103,8 @@ export default {
       'hscroll', 'xscroll', 'rowHeight', 'height', 'columnResizing',
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
       'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth',
-      'tree', 'parentField', 'expandField', 'defaultExpanded'
+      'tree', 'parentField', 'expandField', 'defaultExpanded', 'noData',
+      'noDataHeight'
     ),
 
     // 合并字段的定义需要是一个二维数组，可以用于多组合并的定义
@@ -261,6 +263,13 @@ export default {
         h = (this.height - scrollbar) + 'px'
       }
       let options = {height: h, width: this.width + 'px'}
+      return options
+    },
+
+    noDataStyles () {
+      let scrollbar = measureScrollbar()
+      let h = this.height === 'auto' ? this.noDataHeight : this.height
+      let options = {height: `${h}px`, width: `${this.width}px`, line: `${h}px`, lineHeight: `${h}px`}
       return options
     },
 
@@ -534,6 +543,11 @@ export default {
           border-bottom: 1px solid #ddd;
         }
       }
+    }
+
+    .u-table-no-data {
+      margin: 0 auto;
+      text-align: center;
     }
   }
 

@@ -43,6 +43,8 @@ class Store {
       actionColumn: '', // 行编辑时，显示编辑按钮的列名,将缺省显示['编辑', '删除']
       deleteRowConfirm: true, // 删除前是否先确认
       query: null, // 查询条件对象
+      noData: '暂无数据', //无数据时显示内容
+      noDataHeight: 40, //无数据显示的高度
 
       // tree 相关的参数
       tree: false, // 是否treegrid
