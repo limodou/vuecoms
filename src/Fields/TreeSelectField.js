@@ -8,7 +8,7 @@ export default class TreeSelectField extends Field {
     if (this.multiple !== undefined)
       parent.$set(this.options, 'multiple', this.multiple)
     this.events = ['close']
-    // this.defaultOptions = {transfer: true}
+    this.defaultOptions = {transfer: true}
   }
 
   getStaticValue (value) {
