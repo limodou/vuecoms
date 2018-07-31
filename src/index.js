@@ -8,13 +8,16 @@ import uCheckboxGroup from './CheckboxGroup'
 import {Build, Layout, FormCell} from './Build'
 import GenericInput from './Fields'
 import './styles/iview.fix.css'
+import './styles/common.css'
 import List from "@/utils/list.js"
 import {findParent} from "@/utils/utils.js"
 import Chart from './EChart'
 // import CKEditor from './Editor/CKEditor'
 import TinyMce from './Editor/TinyMce'
 import DatepickerRange from './DatepickerRange'
+//third-party plugin
 import uTemplate from "v-runtime-template"
+import VueScrollTo from 'vue-scrollto'
 
 const vuecoms = {
   Box,
@@ -48,5 +51,6 @@ const install = function () {
 if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
+window.VueScrollTo = VueScrollTo
 
 module.exports = vuecoms

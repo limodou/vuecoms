@@ -28,6 +28,7 @@
         </colgroup>
         <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
+            ref="rows"
             v-if="!row.row._hidden"
             :style="bodyTrStyle"
             :key="getRowId(row.row)"

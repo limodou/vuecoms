@@ -1,6 +1,8 @@
 <template>
   <div class="u-grid-wrapper" :class="themeClass">
+    <slot name="beforeQuery"></slot>
     <Query ref="query" v-if="query" v-bind="query" @input="handleQuerySubmit" @on-query-change="handleQueryChange"></Query>
+    <slot name="afterQuery"></slot>
     <div class="u-grid-tools" slot="tools" v-if="buttons.length>0 || rightButtons.length>0">
       <div class="u-grid-tools-left" v-if="buttons.length>0">
         <Buttons ref="buttons" :buttons="buttons" :data="store" :target="this"></Buttons>
@@ -9,6 +11,7 @@
         <Buttons ref="rightButtons" :buttons="rightButtons" :data="store" :target="this"></Buttons>
       </div>
     </div>
+    <slot name="beforeTable"></slot>
     <div class="u-grid">
       <u-table v-if="leftWidth"
         :store="store"
@@ -44,6 +47,7 @@
       @on-page-size="handlePageSize">
       <Buttons ref="bottomButtons" :buttons="bottomButtons" :target="this" :data="store"></Buttons>
     </Pagination>
+    <slot name="afterTable"></slot>
   </div>
 </template>
 
@@ -98,7 +102,7 @@ export default {
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
-      'isScrollRight', 'page', 'start', 'pageSize', 'nowrap'
+      'isScrollRight', 'page', 'start', 'pageSize', 'nowrap', 'addAutoScrollTo'
     ),
 
     columnDraggerStyles () {

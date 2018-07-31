@@ -1,5 +1,6 @@
 import List from '@/utils/list.js'
 import {uuid} from '@/utils/utils.js'
+import VueScrollTo from 'vue-scrollto'
 
 class Store {
   constructor (grid, options, value) {
@@ -45,6 +46,7 @@ class Store {
       query: null, // 查询条件对象
       noData: '暂无数据', //无数据时显示内容
       noDataHeight: 40, //无数据显示的高度
+      addAutoScrollTo: true, //行编辑在添加新行时，自动滚动到新加行
 
       // tree 相关的参数
       tree: false, // 是否treegrid
@@ -314,11 +316,42 @@ class Store {
     return row
   }
 
-  /* 生成新的可编辑行 */
-  addEditRow (row) {
+  /* 生成新的可编辑行
+   options 为滚动属性
+  */
+  addEditRow (row, options) {
     let n_row = this.addRow(row)
     this.grid.$set(n_row, '_editRow', Object.assign({}, n_row))
     this.grid.$set(n_row, '_editting', true)
+    if (options === undefined) return
+
+    this.grid.$nextTick(() => {
+      let el = this.grid.$refs.table.$refs.rows[this.states.data.length-1]
+      function findParent(e) {
+        let p = e.parentNode
+        while (p) {
+          if (p.scrollHeight > p.clientHeight) break
+          p = p.parentNode
+        }
+        return p
+      }
+      // var container = el.offsetParent.offsetParent
+      var _options = {
+        easing: 'ease-in',
+        offset: 0,
+        cancelable: false,
+        x: false,
+        y: true
+      }
+      if (options === true) options = {}
+      else if (typeof options === 'string') options = {container: options}
+      let opts = Object.assign({}, _options, options)
+      if (!opts.container) {
+        opts.container = findParent(el) || 'body'
+      }
+      VueScrollTo.scrollTo(el, 1, opts)
+    })
+
     return n_row
   }
 
