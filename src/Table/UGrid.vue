@@ -40,7 +40,7 @@
       </u-table>
 
       <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
-      <div ref="loading" class="loading" v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
+      <div ref="loading" class="loading" v-if="loadingText" v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
     </div>
     <Pagination v-if="pagination && store.states.data.length > 0" :store="store"
       @on-page="handlePage"
@@ -316,7 +316,8 @@ export default {
         resizable: true,
         type: 'column',
         editorOptions: {},
-        showTitle: show
+        showTitle: show,
+        html: true
       }, options || {})
     },
 
@@ -536,13 +537,13 @@ export default {
         this.$nextTick( () => {
           this.showLoading(false)
           this.setSelection(this.selected)
+          this.sendInputEvent()
         })
       }
       if (this.onLoadData) {
         this.showLoading(true)
         this.onLoadData(_url, param, callback)
       }
-      this.sendInputEvent()
     },
 
     handleQuerySubmit (data) {
