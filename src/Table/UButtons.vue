@@ -1,7 +1,9 @@
 <template>
   <div class="u-buttons">
     <ButtonGroup v-for="btnGroup in buttons" :size="size">
-      <Button v-for="btn in btnGroup" :type="btn.type || 'default'"
+      <Button v-for="btn in btnGroup" 
+        :type="btn.type || 'default'"
+        :ghost="btn.ghost || false"
         :disabled="btn.disabled || disabled"
         :shape="btn.shape"
         :size="btn.size"

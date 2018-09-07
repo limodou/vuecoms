@@ -123,7 +123,7 @@ export default {
     ]
     if (this.resetText) {
       buttons.push(
-        {label: this.resetText, type:'ghost', name: 'reset'}
+        {label: this.resetText, type:'default', name: 'reset'}
       )
     }
 
