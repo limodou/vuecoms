@@ -29,7 +29,7 @@ const vuecoms = {
   uRadioGroup,
   uCheckboxGroup,
   Build,
-  Layout,
+  BuildLayout: Layout,
   FormCell,
   GenericInput,
   Chart,

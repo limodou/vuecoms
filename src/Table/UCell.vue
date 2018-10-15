@@ -5,9 +5,9 @@
         class="u-cell-tree-field-icon" 
         :style="iconStyles"
         @click="handleExpandClick">
-        <i :class="openedIcon" v-if="!col.row._loading && (col.row[expandField] || defaultExpanded)"></i>
-        <i :class="closedIcon" v-if="!col.row._loading && !col.row[expandField]"></i>
-        <i v-if="col.row._loading" class="ivu-icon ivu-icon-load-c ivu-load-loop"></i>
+        <i :class="openedIcon" v-if="!col.row._loading && (col.row[expandField] || defaultExpanded)" style="font-size:18px"></i>
+        <i :class="closedIcon" v-if="!col.row._loading && !col.row[expandField]" style="font-size:18px"></i>
+        <i v-if="col.row._loading" class="ivu-icon ivu-icon-ios-loading ivu-load-loop"></i>
       </span>
       <CellRender v-if="columnType === 'render'"
         :row="col.row" :render="col.column.render" :column="col.column"

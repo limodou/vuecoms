@@ -1,7 +1,7 @@
 <template>
   <div class="u-build">
     <component v-for="item in data"
-      :is="item.component || 'Layout'"
+      :is="item.component || 'BuildLayout'"
       v-bind="item"
       :value="value"
       :labelWidth="item.labelWidth || labelWidth"
