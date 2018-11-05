@@ -85,8 +85,6 @@ class Store {
       isScrollRight: false,
       guiderHeight: 0, // 拖动指示器的高度
       loading: false, // 是否显示loading信息
-      loadingLeft: 0,
-      loadingTop: 0,
       selected: {}, // 记录选中结果，可以跨页保存
       selectedRows: {},
 
@@ -194,9 +192,16 @@ class Store {
   }
 
   setSelection (selection) {
+    let flag
     for(let row of this.states.data) {
+      flag = false
       let id = row[this.states.idField]
-      if (this.states.selected.hasOwnProperty(id)) {
+      if (Array.isArray(selection)) {
+        flag = selection.indexOf(id) > -1
+      } else {
+        flag = this.states.selected.hasOwnProperty(id)
+      }
+      if (flag) {
         this.grid.$set(row, '_selected', true)
       }
     }
@@ -206,10 +211,6 @@ class Store {
     this.states.loading = loading
     if (text) {
       this.states.loadingText = text
-    }
-    if (loading) {
-      this.states.loadingTop = this.grid.$refs.table.$el.clientHeight/2-this.states.rowHeight/2
-      this.states.loadingLeft = this.grid.$refs.table.$el.clientWidth/2-100/2
     }
   }
 

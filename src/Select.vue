@@ -142,7 +142,8 @@ export default {
           else
             s = [this.selectedValue]
         }
-        v = findChoices((s || []).concat(this.$refs.select.options), this.data, this.multiple)        
+        // v = findChoices((s || []).concat(this.$refs.select.options), this.data, this.multiple) 
+        v = findChoices((s || []).concat(this.items), this.data, this.multiple)        
         if (!this.multiple) {
           if (v.length > 0) v = v[0]
           else v = {}

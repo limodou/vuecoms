@@ -40,7 +40,7 @@
       </u-table>
 
       <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
-      <div ref="loading" class="loading" v-if="loadingText" v-show="loading" v-html="loadingText" :style="loadingStyles"></div>
+      <div ref="loading" class="loading" v-if="loadingText" v-show="loading" v-html="loadingText"></div>
     </div>
     <Pagination v-if="pagination && store.states.data.length > 0" :store="store"
       @on-page="handlePage"
@@ -74,7 +74,8 @@ export default {
   data () {
     const store = new Store(this, this.data, this.value)
     return {
-      store
+      store,
+      autoloaded: false
     }
   },
 
@@ -136,10 +137,6 @@ export default {
         cls += ' dark'
       }
       return cls
-    },
-
-    loadingStyles () {
-      return {top: `${this.loadingTop}px`, left: `${this.loadingLeft}px`}
     }
   },
 
@@ -643,13 +640,15 @@ label {
 
     > .loading {
       position: absolute;
+      top: 50%;
+      left: 50%;
       margin: auto;
       height: 34px;
       text-align: center;
       color: black;
       line-height: 34px;
       border: 1px solid gray;
-      width: 100px;
+      min-width: 100px;
       background-color: antiquewhite;
       z-index: 9999;
     }
