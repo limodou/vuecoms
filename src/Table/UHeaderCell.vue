@@ -14,8 +14,8 @@
 
     <div v-if="column.type === 'check'">
       <template v-if="multiSelect">
-        <i v-if="checkAll" class="ivu-icon ivu-icon-android-checkbox-outline u-cell-checkbox" @click.stop="handleCheckAll"></i>
-        <i v-else class="ivu-icon ivu-icon-android-checkbox-outline-blank u-cell-checkbox" @click.stop="handleCheckAll"></i>
+        <i v-if="checkAll" class="ivu-icon ivu-icon-ios-checkbox-outline u-cell-checkbox" @click.stop="handleCheckAll"></i>
+        <i v-else class="ivu-icon ivu-icon-ios-square-outline u-cell-checkbox" @click.stop="handleCheckAll"></i>
       </template>
       <span v-if="column.title">{{column.title}}</span>
     </div>

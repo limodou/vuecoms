@@ -70,6 +70,8 @@ class Store {
       onSaveCol: null,  // 保存单元格时调用 function (value, callback), callback(flag, data)
                         // flag 为 'ok'表示成功，data 为最后的数据 'error'表示有错误, data为出错信息
       onDeleteRow: null,// 删除行的确认 function (row, callback), callback(flag, data)
+      onRowEditRender: null, // 判断某行编辑列重定义 function (h, row) 返回 null 表示使用缺省的编辑render，
+                              // 否则应返回一个自定义的render, h为create函数
 
       // 内部变量
       drawColumns: [], // 用于绘制的表头

@@ -103,7 +103,8 @@ export default {
       'autoLoad', 'url', 'param', 'buttons', 'rightButtons', 'bottomButtons',
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
-      'isScrollRight', 'page', 'start', 'pageSize', 'nowrap', 'addAutoScrollTo'
+      'isScrollRight', 'page', 'start', 'pageSize', 'nowrap', 'addAutoScrollTo',
+      'onRowEditRender'
     ),
 
     columnDraggerStyles () {
@@ -401,15 +402,20 @@ export default {
 
     // 生成缺省的行编辑按钮
     editActionRender (h, param) {
-      let cls = 'u-cell-text'
-      if (this.nowrap) cls += ' nowrap'
-      return h('div', {
-        'class': cls
-      },
-      [
-        this.defaultEditRender(h, param.row),
-        this.defaultDeleteRender(h, param.row)
-      ])
+      if (this.onRowEditRender) {
+        let render = this.onRowEditRender(h, param.row)
+        if (render) return render
+        
+        let cls = 'u-cell-text'
+        if (this.nowrap) cls += ' nowrap'
+        return h('div', {
+          'class': cls
+        },
+        [
+          this.defaultEditRender(h, param.row),
+          this.defaultDeleteRender(h, param.row)
+        ])
+      }
     },
 
     defaultEditRender (h, row) {
