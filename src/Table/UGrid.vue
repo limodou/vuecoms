@@ -104,7 +104,7 @@ export default {
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
       'isScrollRight', 'page', 'start', 'pageSize', 'nowrap', 'addAutoScrollTo',
-      'onRowEditRender'
+      'onRowEditRender', 'static'
     ),
 
     columnDraggerStyles () {
@@ -144,7 +144,9 @@ export default {
   methods: {
     ...mapMethod('getSelection', 'showLoading', 'setSelection', 'removeRow',
       'setComment', 'removeComment', 'getSelectedRows', 'getColumn', 'getDefaultRow',
-      'makeRows', 'sendInputEvent'),
+      'makeRows', 'sendInputEvent', 'deselectAll', 'selectAll', 'select', 'deselect',
+      'toggle', 'getComment', 'getClass', 'removeClass', 'setClass', 'addRow',
+      'addEditRow'),
 
     resize () {
       if (this.width === 'auto') {
@@ -358,7 +360,9 @@ export default {
             d.render = col.render || this.editActionRender
           }
           if (!d.title) d.title = d.name
-          cols.push(d)
+          // 静态模式下，隐藏操作列
+          if (!this.static && col.name === this.actionColumn || col.name !== this.actionColumn)
+            cols.push(d)
         }
       })
 
@@ -404,18 +408,17 @@ export default {
     editActionRender (h, param) {
       if (this.onRowEditRender) {
         let render = this.onRowEditRender(h, param.row)
-        if (render) return render
-        
-        let cls = 'u-cell-text'
-        if (this.nowrap) cls += ' nowrap'
-        return h('div', {
-          'class': cls
-        },
-        [
-          this.defaultEditRender(h, param.row),
-          this.defaultDeleteRender(h, param.row)
-        ])
+        if (render) return render        
       }
+      let cls = 'u-cell-text'
+      if (this.nowrap) cls += ' nowrap'
+      return h('div', {
+        'class': cls
+      },
+      [
+        this.defaultEditRender(h, param.row),
+        this.defaultDeleteRender(h, param.row)
+      ])
     },
 
     defaultEditRender (h, row) {
@@ -582,12 +585,17 @@ export default {
       },
       deep: true
     },
+
     value: {
       handler: function (value) {
         this.store.states.data = value
       },
       deep: true
     },
+    'store.states.static': function (value) {
+        this.store.states.columns = this.makeCols()
+        this.resize()
+    }
     // 'store.states.data': {
     //   handler: function (value) {
     //     this.$emit('input', value)

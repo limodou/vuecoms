@@ -41,11 +41,12 @@ export default {
   },
 
   computed: {
-    ...mapState('nowrap', 'resizable', 'multiSelect', 'checkAll', 'rowHeight')
+    ...mapState('nowrap', 'resizable', 'multiSelect', 'checkAll', 'rowHeight', 'static')
   },
 
   methods: {
     handleCheckAll () {
+      if (this.static) return
       this.store.states.checkAll = !this.store.states.checkAll
       if (this.checkAll) {
         this.store.selectAll()
