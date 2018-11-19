@@ -5,7 +5,7 @@
           <Col span="24">
             <div v-if="mode=='edit'" class="v-fileupload-operation margin-bottom-15">
               <file-upload
-                class="btn btn-primary btn-xs btn-flat"
+                :class="[customClass?customClass:'btn btn-primary btn-xs btn-flat']"
                 name="upload"
                 :ref="ref"
                 post-action="ecpJson.action"
@@ -45,7 +45,7 @@
   import {Table, Row, Col} from "iview"
 
   export default {
-    props: ['category', 'bsnId', 'bsnType', 'bsnName', 'mode', 'editMode', 'btnText', 'done', 'error', 'atchTplItmId'],
+    props: ['category', 'bsnId', 'bsnType', 'bsnName', 'mode', 'editMode', 'btnText', 'done', 'error', 'atchTplItmId', 'customClass'],
     components: {
       FileUpload,
       Table,
