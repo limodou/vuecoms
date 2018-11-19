@@ -412,7 +412,7 @@ export default {
      * 行点击处理，如果clickSelect为true，则当前行选中
      */
     handleClick (row) {
-      if (this.clickSelect) {
+      if (this.clickSelect && !this.static) {
         this.store.toggle(row)
       }
     },

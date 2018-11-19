@@ -20,6 +20,7 @@ class Store {
       checkColTitle: '',
       cellTitle: true, // 单元格显示title属性
       idField: 'id',
+      static: false, // 是否静态，如果true，则行编辑将禁止，不能进行行选择，可以执行setSelection()
       data: [],
       multiSelect: false,
       clickSelect: false,  // 点击选中
@@ -204,7 +205,7 @@ class Store {
         flag = this.states.selected.hasOwnProperty(id)
       }
       if (flag) {
-        this.grid.$set(row, '_selected', true)
+        this._select(row)
       }
     }
   }

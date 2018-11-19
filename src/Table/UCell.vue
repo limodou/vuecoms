@@ -63,7 +63,7 @@ export default {
     ...mapState('nowrap', 'start', 'editRow', 'editMode', 'onCheckable', 'cellTitle',
       'tree', 'treeField', 'iconWidth', 'indentWidth', 'expandField', 'openedIcon',
       'closedIcon', 'isParentField', 'defaultExpanded', 'onLoadData', 'url', 'selected',
-      'idField'
+      'idField', 'static'
     ),
     value () {
       let value = this.col.value
@@ -98,7 +98,7 @@ export default {
       if (type === 'index') return 'index'
       if (type === 'check') return 'check'
       if (type === 'column') {
-        if (this.col.column.render) return 'render'
+        if (this.col.column.render && (!this.col.row._editting || !this.col.column.editor)) return 'render'
         if (this.col.column.editor) return 'editor'
         return 'normal'
       }
@@ -106,7 +106,7 @@ export default {
 
     checkable () {
       let c = this.col.row._checkable === undefined ? true : this.col.row._checkable
-      if (this.onCheckable) {
+      if (this.onCheckable && !this.static) {
         c = this.onCheckable(this.col.row)
         this.$set(this.col.row, '_checkable', c)
       }
@@ -145,6 +145,7 @@ export default {
   methods: {
     ...mapMethod('getComment', 'getClass', 'setSelection', 'makeRows'),
     handleCheckClick () {
+      if (this.static) return
       this.store.toggle(this.col.row)
     },
     handleExpandClick () {
