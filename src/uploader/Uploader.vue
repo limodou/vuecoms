@@ -14,7 +14,7 @@
                 :thread="1"
                 v-model="files"
                 @input-file="inputHandler"
-                :input-id="inputId"
+                :input-id="inputId||'upload'"
               >上传附件
               </file-upload>
             </div>
@@ -35,7 +35,7 @@
                 :thread="1"
                 v-model="files"
                 @input-file="inputHandler"
-                :input-id="inputId"
+                :input-id="inputId||'upload'"
         >{{btnText||'上传附件'}}
         </file-upload>
       </template>
