@@ -25,7 +25,7 @@
       </template>
       <template v-else-if="mode=='single'">
         <file-upload
-                class="btn btn-primary btn-xs btn-flat"
+                :class="[customClass?customClass:'ivu-btn ivu-btn-primary ivu-btn-small']"
                 name="upload"
                 :ref="ref"
                 post-action="ecpJson.action"
