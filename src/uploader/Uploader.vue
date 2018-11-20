@@ -14,6 +14,7 @@
                 :thread="1"
                 v-model="files"
                 @input-file="inputHandler"
+                :input-id="inputId"
               >上传附件
               </file-upload>
             </div>
@@ -27,13 +28,14 @@
         <file-upload
                 :class="[customClass?customClass:'ivu-btn ivu-btn-primary ivu-btn-small']"
                 name="upload"
-                :ref="ref"
+                ref="fileUploadComponent"
                 post-action="ecpJson.action"
                 :multiple="false"
                 :directory="false"
                 :thread="1"
                 v-model="files"
                 @input-file="inputHandler"
+                :input-id="inputId"
         >{{btnText||'上传附件'}}
         </file-upload>
       </template>
@@ -45,7 +47,7 @@
   import {Table, Row, Col} from "iview"
 
   export default {
-    props: ['category', 'bsnId', 'bsnType', 'bsnName', 'mode', 'editMode', 'btnText', 'done', 'error', 'atchTplItmId', 'customClass'],
+    props: ['category', 'bsnId', 'bsnType', 'bsnName', 'mode', 'editMode', 'btnText', 'done', 'error', 'atchTplItmId', 'customClass', 'inputId'],
     components: {
       FileUpload,
       Table,
