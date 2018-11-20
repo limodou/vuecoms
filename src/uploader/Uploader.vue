@@ -7,7 +7,7 @@
               <file-upload
                 :class="[customClass?customClass:'btn btn-primary btn-xs btn-flat']"
                 name="upload"
-                :ref="ref"
+                ref="fileUploadComponent"
                 post-action="ecpJson.action"
                 :multiple="false"
                 :directory="false"
@@ -234,8 +234,8 @@
             type: newFile.type,
             lastModifieDate: new Date(),
           })
-          this.$refs[this.ref].update(newFile, {data: data})
-          this.$refs[this.ref].active = true
+          this.$refs['fileUploadComponent'].update(newFile, {data: data})
+          this.$refs['fileUploadComponent'].active = true
           if(this.mode!='single'){
             this.uploadedFiles.push(newFile)
             this.modifyUploadedFile(newFile.id, {state: "上传中..."})
@@ -247,7 +247,7 @@
           if (newFile.error && !oldFile.error) {
             // error
             // 监控到错误, 置active为false, 终止上传, 并处理错误
-            this.$refs[this.ref].active = false
+            this.$refs['fileUploadComponent'].active = false
             if(this.mode!='single')
               this.modifyUploadedFile(newFile.id, {state: "上传失败"})
           }
@@ -261,7 +261,7 @@
           if (newFile.success && !oldFile.success) {
             // success
             // 监控到成功, 置active为false, 终止上传, 并处理成功
-            this.$refs[this.ref].active = false
+            this.$refs['fileUploadComponent'].active = false
             if (!this.isIE9) {
               var resp = JSON.parse(newFile.response)
             } else {
@@ -284,8 +284,8 @@
                       this.done(resp)
             } else {
               //后端返回错误信息
-              this.$refs[this.ref].update(newFile, {error: true})
-              this.$refs[this.ref].update(newFile, {success: ""})
+              this.$refs['fileUploadComponent'].update(newFile, {error: true})
+              this.$refs['fileUploadComponent'].update(newFile, {success: ""})
               if(this.mode!='single') {
                 this.modifyUploadedFile(newFile.id, {state: "上传失败"});
               }
