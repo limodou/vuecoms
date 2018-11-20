@@ -99,6 +99,7 @@ export default {
       if (type === 'check') return 'check'
       if (type === 'column') {
         if (this.col.column.render && (!this.col.row._editting || !this.col.column.editor)) return 'render'
+        if (this.col.column.format && (!this.col.row._editting || !this.col.column.editor)) return 'normal'
         if (this.col.column.editor) return 'editor'
         return 'normal'
       }
