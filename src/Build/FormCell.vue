@@ -32,6 +32,10 @@ export default {
       type: String,
       default: 'right'
     },
+    labelDir: {
+      type: String,
+      default: 'horizontal'
+    },
     validateResult: {
       type: Object,
       default () {
@@ -68,6 +72,10 @@ export default {
         case 'top':
           s['display'] = 'block'
           break
+      }
+      if (this.labelDir == 'vertical') {
+        s['textAlign'] = 'left'
+        s['display'] = 'block'
       }
       return s
     },

@@ -38,7 +38,11 @@ export default {
       type: Number,
       default: 150
     },
-    validateResult: {}
+    validateResult: {},
+    labelDir: { //标签排列方向，水平 horizontal 垂直 vertical
+      type: String,
+      default: 'horizontal'
+    }
   },
 
   computed: {

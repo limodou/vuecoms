@@ -370,6 +370,7 @@ export default {
     },
 
     handleResize () {
+      this.store.states.columns = this.makeCols()
       this.resize()
     },
 
