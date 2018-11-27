@@ -53,8 +53,8 @@
 <script>
 
 import {Icon} from "iview"
-import {measureScrollbar, mapState, getOffset, mapMethod} from '@/utils/utils.js'
-import Emitter from '@/mixins/emitter.js'
+import {measureScrollbar, mapState, getOffset, mapMethod} from '../utils/utils.js'
+import Emitter from '../mixins/emitter.js'
 import Cell from './UCell'
 import HeaderCell from './UHeaderCell'
 import Sortable from 'sortablejs'

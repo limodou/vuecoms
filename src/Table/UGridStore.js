@@ -41,7 +41,7 @@ class Store {
       comments: {}, // 记录单元格的注释，形式为 {row_id: {col_name:comment}}
       classes: {}, // 记录单元格的class
       combineCols: [], // 单元格合并列名
-      editMode: '', // 编辑模式 'full' 全屏模式 'row' 行模式
+      editMode: 'row', // 编辑模式 'full' 全屏模式 'row' 行模式
       actionColumn: '', // 行编辑时，显示编辑按钮的列名,将缺省显示['编辑', '删除']
       deleteRowConfirm: true, // 删除前是否先确认
       query: null, // 查询条件对象

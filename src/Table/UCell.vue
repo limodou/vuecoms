@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import {mapState, mapMethod} from '@/utils/utils.js'
+import {mapState, mapMethod} from '../utils/utils.js'
 import CellRender from './UCellRender'
 import GenericInput from '../Fields/GenericInput'
-import List from '@/utils/list.js'
+import List from '../utils/list.js'
 
 export default {
   name: 'Cell',

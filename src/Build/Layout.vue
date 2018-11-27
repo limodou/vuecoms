@@ -1,7 +1,7 @@
 <template>
   <component v-if="boxComponent" :is="boxComponent" :title="title" v-bind="boxOptions" class="u-layout">
-    <Row v-for="row in rows" class="u-layout-row">
-      <Col v-for="col in row" :span="col.colspan">
+    <Row v-for="(row, i) in rows" class="u-layout-row" :key="i">
+      <Col v-for="(col, j) in row" :span="col.colspan" :key="j">
         <FormCell :col="col" :value="value" :validateResult="validateResult"
           :labelDir="labelDir"
           :staticSuffix="staticSuffix" root="Build"></FormCell>
@@ -12,8 +12,8 @@
     </Row>
   </component>
   <div v-else class="u-layout">
-    <Row v-for="row in rows" class="u-layout-row">
-      <Col v-for="col in row" :span="col.colspan">
+    <Row v-for="(row, i) in rows" class="u-layout-row" :key="i">
+      <Col v-for="(col, j) in row" :span="col.colspan" :key="j">
         <FormCell :col="col" :value="value" :validateResult="validateResult" 
           :labelDir="labelDir"
           :staticSuffix="staticSuffix" :root="Build"></FormCell>
@@ -29,7 +29,7 @@ import {Row, Col} from 'iview'
 import Buttons from '../Table/UButtons'
 
 export default {
-  name: 'Layout',
+  name: 'BuildLayout',
   components: {
     FormCell,
     Row,

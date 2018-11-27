@@ -1,4 +1,4 @@
-import List from '@/utils/list.js'
+import List from '../utils/list.js'
 
 export default {
   props: {

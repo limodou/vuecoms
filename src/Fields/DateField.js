@@ -1,5 +1,5 @@
 import Field from './Field'
-import {isDate, formatDate} from '@/utils/utils.js'
+import {isDate, formatDate} from '../utils/utils.js'
 
 export default class DateField extends Field {
   constructor (parent, options) {

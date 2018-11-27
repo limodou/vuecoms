@@ -9,7 +9,7 @@
 <script>
 
 import {DatePicker} from "iview"
-import {formatDate} from '@/utils/utils.js'
+import {formatDate} from './utils/utils.js'
 
 export default {
   name: 'DatepickerRange',

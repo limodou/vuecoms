@@ -19,11 +19,12 @@
 import GenericInput from '../Fields'
 import {validateRule} from './validateUtil'
 import { deepCopy } from '../utils/utils';
-import Emitter from '@/mixins/emitter.js'
+import Emitter from '../mixins/emitter.js'
 
 export default {
   name: 'FormCell',
   mixins: {Emitter},
+  components: {GenericInput,},
   props: {
     col:{},
     value: {},

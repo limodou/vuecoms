@@ -1,4 +1,4 @@
-import {findParent} from '../utils/utils'
+import {isEmpty, findParent, deepCompare} from '../utils/utils'
 
 export default class Field {
   constructor (parent, options) {
@@ -49,6 +49,10 @@ export default class Field {
     let events = {
       input: (x) => {
         x = this.convert_value(x)
+        // 检查值是否发生变化
+        let old_value = self.value[self.name]
+        if (deepCompare(old_value, x)) return
+
         ctx.parent.$set(self.value, self.name, x)
         this.setStaticValue(x)
         ctx.parent.$nextTick(() => {

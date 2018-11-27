@@ -6,7 +6,7 @@
 
 <script>
 import {RadioGroup, Radio} from 'iview'
-import {formatChoices} from '@/utils/utils.js'
+import {formatChoices} from './utils/utils.js'
 
 export default {
   name: 'uRadioGroup',

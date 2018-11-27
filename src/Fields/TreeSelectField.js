@@ -1,5 +1,5 @@
 import Field from './Field'
-import {formatChoices} from '@/utils/utils.js'
+import {formatChoices} from '../utils/utils.js'
 
 export default class TreeSelectField extends Field {
   constructor (parent, options) {

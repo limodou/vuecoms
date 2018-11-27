@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {mapState} from '@/utils/utils.js'
+import {mapState} from '../utils/utils.js'
 import Sort from './USort'
 
 export default {

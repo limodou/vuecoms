@@ -1,5 +1,5 @@
 import AsyncValidator from 'async-validator';
-import AsyncValidatorLang from '@/locale/async-validator'
+import AsyncValidatorLang from '../locale/async-validator'
 
 export const validateRule = function (value, fieldname, validateResult) {
   let result = validateResult[fieldname]
@@ -11,12 +11,12 @@ export const validateRule = function (value, fieldname, validateResult) {
     validator.validate(value, { firstFields: true }, (errors, fields) => {
         result.validateState = !errors ? 'success' : 'error'
         result.error = errors ? errors[0].message : ''
-    }).then(() => {
+    }) /* .then(() => {
       result.validateState = 'success'
       result.error = ''
     }).catch(({errors, fields}) => {
       result.validateState = 'error'
       result.error = errors[0].message
-    })
+    }) */
   }
 }

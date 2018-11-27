@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {uuid} from '@/utils/utils'
+import {uuid} from '../utils/utils'
 
 const INIT = 1
 const CHANGE = 2

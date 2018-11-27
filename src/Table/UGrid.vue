@@ -56,8 +56,8 @@ import UTable from './UTable'
 import Store from './UGridStore'
 import Pagination from './pagination'
 import Buttons from './UButtons'
-import {mapState, mapMethod, copyDataRow} from '@/utils/utils.js'
-import Emitter from '@/mixins/emitter.js'
+import {mapState, mapMethod, copyDataRow} from '../utils/utils.js'
+import Emitter from '../mixins/emitter.js'
 import Query from '../query'
 
 export default {

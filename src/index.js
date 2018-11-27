@@ -5,7 +5,7 @@ import Uploader from './uploader'
 import uSelect from './Select'
 import uRadioGroup from './RadioGroup'
 import uCheckboxGroup from './CheckboxGroup'
-import {Build, Layout, FormCell} from './Build'
+import {Build, BuildLayout, FormCell} from './Build'
 import GenericInput from './Fields'
 import './styles/iview.fix.css'
 import './styles/common.css'
@@ -29,7 +29,7 @@ const vuecoms = {
   uRadioGroup,
   uCheckboxGroup,
   Build,
-  BuildLayout: Layout,
+  BuildLayout,
   FormCell,
   GenericInput,
   Chart,
@@ -51,6 +51,6 @@ const install = function () {
 if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
-window.VueScrollTo = VueScrollTo
+window.VueScrollTo = VueScrollTo;
 
-module.exports = vuecoms
+module.exports = vuecoms;

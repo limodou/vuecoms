@@ -22,6 +22,9 @@ var webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].js'),
+    library: 'vuecoms',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
     // chunkFilename: utils.assetsPath('js/[id].js')
   },
   plugins: [

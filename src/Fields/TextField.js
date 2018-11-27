@@ -1,5 +1,5 @@
 import Field from './Field'
-import {text2html} from '@/utils/utils.js'
+import {text2html} from '../utils/utils.js'
 
 export default class TextField extends Field {
   constructor (parent, options) {

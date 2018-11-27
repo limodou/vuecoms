@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import {clickoutside, mapState} from '@/utils/utils.js'
-import Emitter from '@/mixins/emitter.js'
+import {clickoutside, mapState} from '../utils/utils.js'
+import Emitter from '../mixins/emitter.js'
 
 export default {
   name: 'Pagination',

@@ -11,7 +11,7 @@
 
 <script>
 import {Select, Option} from 'iview'
-import {formatChoices, findChoices, isEmpty} from '@/utils/utils.js'
+import {formatChoices, findChoices, isEmpty, deepCompare} from './utils/utils.js'
 
 export default {
   name: 'uSelect',
@@ -166,7 +166,7 @@ export default {
     },
     initValue (v) {
       let d = {}
-      if (!v) {
+      if (isEmpty(v)) {
         if (this.multiple) {
           v = []
         } else {
@@ -193,13 +193,14 @@ export default {
   },
 
   watch: {
-    // value: {
-    //   handler (v) {
-    //     this.data = v
-    //     // this.fireSelected()
-    //   },
-    //   deep: true
-    // },
+    value: {
+      handler (v) {
+        let data = this.initValue(v).data
+        if (!deepCompare(data, this.data))
+          this.data = data
+      },
+      deep: true
+    },
     choices: {
       immediate: true,
       handler () {

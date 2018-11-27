@@ -209,7 +209,7 @@ export default {
 
         // 比较两个变量是否不同
         let result = {}
-        this.merge(result, deepCompare(this.old_value, this.current_value))
+        this.merge(result, deepCompare(this.old_value, this.current_value, true))
         if (!isEmpty(result)) {
           this.$emit('on-query-change', result)
         }
