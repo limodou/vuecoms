@@ -15,6 +15,10 @@ export default {
       type: Boolean,
       default: false
     }, //是否静态展示
+    enableOnChange: { // 是否允许确发onChange事件。主要用在Build中，因为有触发，所以需要禁掉input时的确发
+      type: Boolean,
+      default: true
+    },
     onChange: {},
     options: Object, // 编辑控件选项
     multiple: {

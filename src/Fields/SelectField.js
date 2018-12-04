@@ -52,6 +52,7 @@ export default class SelectField extends Field {
         }
       }
     }
+    if (this.options.rich && value instanceof Object) {}
     v = []
     for (let c of formatChoices(this.options.choices)) {
       if (Array.isArray(value)) {
@@ -59,9 +60,14 @@ export default class SelectField extends Field {
           v.push(c.label)
           if (!this.multiple) break
         }
-      } else if (c.value == value) {
-        v.push(c.label)
-        if (this.multiple) break
+      } else{
+        if (value instanceof Object && value.value == c.value){
+          v.push(value.label)
+          if (!this.multiple) break
+        } else if (c.value == value) {
+          v.push(c.label)
+          if (!this.multiple) break
+        }
       }
     }
     return v.join(', ')

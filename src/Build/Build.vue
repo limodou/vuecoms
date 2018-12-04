@@ -14,11 +14,13 @@
 
 <script>
 import {validateRule} from './validateUtil'
+import {deepCompare, deepCopy, isEmpty} from '../utils/utils'
 
 export default {
   name: 'Build',
   data () {
     return {
+      oldvalue: deepCopy(this.value),
       fields: {},
       validating: false,
       validateResult: {} //保存校验结果
@@ -135,6 +137,7 @@ export default {
         for(let field of (row.fields || [])) {
           fs[field.name] = field
           this.$set(field, 'static', field.static || row.static || false)
+          this.$set(field, 'enableOnChange', false) // 禁止Input确发onChange回调
           if (typeof field.options === 'undefined') {
             this.$set(field, 'options', {})
           }
@@ -211,13 +214,21 @@ export default {
   },
 
   watch: {
-    // data: {
-    //   handler () {
-    //     this.makeValidateResult()
-    //     this.mergeRules()
-    //   },
-    //   deep: true
-    // },
+    value: {
+      handler (newvalue) {
+        let v = deepCompare(newvalue, this.oldvalue, true)
+        if (!isEmpty(v)) {
+          this.oldvalue = deepCopy(newvalue)
+          for (let k in v) {
+            let field = this.fields[k]
+            if (field && field.onChange) {
+              field.onChange(v[k].value, newvalue)
+            }
+          }
+        }
+      },
+      deep: true
+    },
     errors: {
       handler () {
         this.mergeErrors()

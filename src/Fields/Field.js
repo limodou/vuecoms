@@ -7,6 +7,7 @@ export default class Field {
     this.defaultOptions = {}
     this.value = options.value || {} //组件值
     this.onChange = options.onChange
+    this.enableOnChange = options.enableOnChange
     this.events = ['input'] //记录哪些事件要捕获，当捕获时，自动触发on-validate事件，通知数据进行校验
     this.name = options.name
     this.label = options.label
@@ -67,7 +68,7 @@ export default class Field {
         })
 
         // 增加对listenser的处理
-        if (this.onChange) {
+        if (this.enableOnChange && this.onChange) {
           this.onChange(x, self.value)
         }
       },
