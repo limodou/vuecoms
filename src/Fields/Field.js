@@ -69,7 +69,9 @@ export default class Field {
 
         // 增加对listenser的处理
         if (this.enableOnChange && this.onChange) {
-          this.onChange(x, self.value)
+          ctx.parent.$nextTick(() => {
+            this.onChange(x, self.value)
+          })
         }
       },
     }

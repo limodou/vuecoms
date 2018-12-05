@@ -226,6 +226,7 @@ class Store {
     let removed = List.remove(this.states.data, row, this.states.idField)
     for(let i of removed) {
       this.deselect(i)
+      this.states.total -= 1
     }
   }
 
@@ -317,6 +318,7 @@ class Store {
       row[this.states.idField] = uuid()
     }
     List.add(this.states.data, row, position)
+    this.states.total += 1
     return row
   }
 

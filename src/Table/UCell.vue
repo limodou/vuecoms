@@ -21,7 +21,7 @@
         :name="col.column.name"
         :format="col.column.format"
         :value="savingRow || col.row"
-        :static="col.column.editor.static || !col.row._editting"
+        :static="col.column.fixed !== fixed || col.column.editor.static || !col.row._editting"
         :show-title="col.column.showTitle"
         :classes="nowrap ? 'nowrap' : ''"
       >
@@ -51,7 +51,8 @@ export default {
   props: {
     col: Object,
     store: Object,
-    row_index: Number
+    row_index: Number,
+    fixed: String // 记录是哪个面板
   },
 
   components: {

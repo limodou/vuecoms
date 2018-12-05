@@ -196,8 +196,9 @@ export default {
     value: {
       handler (v) {
         let data = this.initValue(v).data
-        if (!deepCompare(data, this.data))
+        if (!deepCompare(data, this.data)) {
           this.data = data
+        }
       },
       deep: true
     },

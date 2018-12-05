@@ -24,7 +24,7 @@
       <div class="u-table-no-data" :style="noDataStyles" v-if="data.length===0 && !fixed">{{noData}}</div>
       <table v-else cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" ref="content">
         <colgroup>
-          <col v-for="(column, index) in columns"  :style="getColumnStyle(column)" :key="column.name">
+          <col v-for="column in columns"  :style="getColumnStyle(column)" :key="column.name">
         </colgroup>
         <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
@@ -37,11 +37,12 @@
             @mouseleave="handleTrMouseLeave(row.row)"
             >
             <td v-for="(col, col_index) in row.columns"
+              :key="col_index"
               @click="handleClick(col.row)"
               :style="cellStyles(col.column)"
               :rowspan="col.rowspan"
               :colspan="col.colspan">
-              <Cell :store="store" :col="col" :row_index="row_index"></Cell>
+              <Cell :store="store" :col="col" :row_index="row_index" :fixed="fixed"></Cell>
             </td>
           </tr>
         </tbody>
@@ -96,7 +97,10 @@ export default {
     },
 
     // 传入指定的表头
-    fixed: String
+    fixed: {
+      type: String,
+      default: ''
+    }
   },
 
   computed: {
