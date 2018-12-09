@@ -46,7 +46,7 @@ export default class Field {
   render (h, ctx) {
     let self = ctx.props
     let value = self.value[self.name]
-    let props = Object.assign({}, this.defaultOptions, {value}, this.options)
+    let props = Object.assign({}, this.defaultOptions, {value: self.value[self.name]}, this.options)
     let events = {
       input: (x) => {
         x = this.convert_value(x)
@@ -61,7 +61,7 @@ export default class Field {
             ctx.listeners['on-validate'] && ctx.listeners['on-validate']()
           }
           // 触发on-field-change事件
-          let v = {name: self.name, old: value, value: x}
+          let v = {name: self.name, old: self.value[self.name], value: x}
           let p = findParent(ctx.parent, self.root)
           if (p)
             p.$emit('on-field-change', v)

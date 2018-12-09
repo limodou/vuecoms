@@ -174,8 +174,9 @@ export default {
         }
       } else {
         if (this.rich) {
-          if (this.remote)
+          if (this.remote) {
             d.selectedValue = v
+          }
           if (Array.isArray(v)) {
             v = v.map( x => x.value)
           } else if (v instanceof Object) {
@@ -195,9 +196,12 @@ export default {
   watch: {
     value: {
       handler (v) {
-        let data = this.initValue(v).data
+        let d = this.initValue(v)
+        let data = d.data
         if (!deepCompare(data, this.data)) {
           this.data = data
+          this.selectedValue = d.selectedValue
+          this.fireSelected()
         }
       },
       deep: true

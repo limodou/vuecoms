@@ -26,11 +26,11 @@ export default class SelectField extends Field {
   }
 
   beforeRender (props) {
-    if (this.options.remote) {
-      let v = this.value[this.selectedName] || this.value[this.name]
-      props['value'] = v
-      props['rich'] = true
-    }
+    // if (this.options.remote) {
+    //   let v = this.value[this.selectedName] || this.value[this.name]
+    //   props['value'] = v
+    //   props['rich'] = true
+    // }
   }
 
   getStaticValue (value) {
@@ -52,7 +52,6 @@ export default class SelectField extends Field {
         }
       }
     }
-    if (this.options.rich && value instanceof Object) {}
     v = []
     for (let c of formatChoices(this.options.choices)) {
       if (Array.isArray(value)) {
