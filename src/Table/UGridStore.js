@@ -183,6 +183,7 @@ class Store {
     this.states.data.forEach(row => {
       this._deselect(row)
     })
+    this.states.selected = {}
     this.grid.$emit('on-deselected-all')
   }
 
@@ -300,6 +301,12 @@ class Store {
         this.grid.$delete(r, col)
       }
     }
+  }
+
+  // 更新行
+  updateRow (row){
+    List.update(this.states.data, row)
+    return row
   }
 
   // 新加记录有一个 _new 属性

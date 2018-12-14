@@ -96,7 +96,7 @@ export default {
 
   computed: {
     ...mapState('columns', 'columnResizing', 'checkCol', 'indexCol',
-      'gridWidth', 'width', 'resizable', 'columnPosition', 'guiderHeight',
+      'gridWidth', 'width', 'height', 'resizable', 'columnPosition', 'guiderHeight',
       'defaultColWidth', 'leftWidth', 'rightWidth', 'checkColTitle', 'checkColWidth',
       'indexColWidth', 'indexColTitle', 'scrollLeft', 'total', 'pageSizeOpts',
       'pagination', 'loading', 'loadingText', 'loadingTop', 'loadingLeft',
@@ -155,12 +155,12 @@ export default {
       } else {
         this.store.states.gridWidth = this.width
       }
-      if (height) this.store.states.height = height
+      if (height) this.height = height
 
       // if (!this.resizable) return
       // let parentWidth = this.$el.clientWidth
       let cols = []
-      let w = this.gridWidth
+      let w = this.gridWidth - 2
       let hasLeftFixed = false
       let hasRightFixed = false
       let max_level = 0

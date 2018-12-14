@@ -244,11 +244,14 @@ export default {
     },
 
     wrapStyles () {
-      let s = {width: `${this.width}px`}
+      let s = {width: `${this.width - 2}px`}
       let scrollbar = measureScrollbar()
-      if (this.fixed === 'right' && this.hscroll) {
+      if (this.fixed === 'right') {
         s.width = `${this.width + 2}px`
-        s.right = `${scrollbar - 2}px`
+        if (this.hscroll) 
+          s.right = `${scrollbar}px`
+        else
+          s.right = '0'
       }
       return s
     },
@@ -264,17 +267,27 @@ export default {
     bodyStyles () {
       let scrollbar = measureScrollbar()
       let h = this.height === 'auto' ? 'auto' : this.height + 'px'
+      let width = this.width
+      if (!this.fixed) {
+      if (this.hscroll)
+        width = this.width - 3
+      else
+        width = this.width - 2
+      }
       if (this.fixed && this.height !== 'auto' && this.xscroll) {
         h = (this.height - scrollbar) + 'px'
       }
-      let options = {height: h, width: this.width + 'px'}
+      // if (!this.fixed && this.hscroll) {
+      //   width = this.width-scrollbar
+      // }
+      let options = {height: h, width: width + 'px'}
       return options
     },
 
     noDataStyles () {
       let scrollbar = measureScrollbar()
       let h = this.height === 'auto' ? this.noDataHeight : this.height
-      let options = {height: `${h}px`, width: `${this.width}px`, line: `${h}px`, lineHeight: `${h}px`}
+      let options = {height: `${h}px`, width: `${this.width - 2}px`, line: `${h}px`, lineHeight: `${h}px`}
       return options
     },
 
