@@ -141,7 +141,8 @@ export default {
           if (typeof field.options === 'undefined') {
             this.$set(field, 'options', {})
           }
-          this.$set(field.options, 'choices', field.options.choices || [])
+          if (field.options.hasOwnProperty('choices'))
+            this.$set(field.options, 'choices', field.options.choices)
           if (!field.type)
             this.$set(field, 'type', 'str') //str
         }

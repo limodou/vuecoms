@@ -91,6 +91,13 @@ export default {
       default () {
         return []
       }
+    },
+    // 用于选择控件设置choices
+    choices: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
 
@@ -365,6 +372,13 @@ export default {
           // 静态模式下，隐藏操作列
           if (!this.static && col.name === this.actionColumn || col.name !== this.actionColumn)
             cols.push(d)
+          // 处理format回调，如果是一个字符串，则转为函数
+          if (typeof col.format === 'string') {
+            let func_str = 'return ' + '`' + col.format + '`'
+            let func = new Function('value', 'column', 'row', func_str)
+            col._format = col.format
+            col.format = func
+          }
         }
       })
 
@@ -585,6 +599,27 @@ export default {
       handler: function () {
         this.store.states.columns = this.makeCols()
         this.resize()
+      },
+      deep: true
+    },
+
+    choices: {
+      immediate: true,
+      handler () {
+        for(let field of this.columns) {
+          let choices = this.choices[field.name]
+          if (choices) {
+            if (!field.editor) {
+              this.$set(field, 'editor', {type: 'select', options: {choices: choices}})
+            } else {
+              if (!field.editor.options) {
+                this.$set(field.editor, 'options', {choices: choices})
+              } else {
+                this.$set(field.editor.options, 'choices', choices)
+              }
+            }
+          }
+        }
       },
       deep: true
     },

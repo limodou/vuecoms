@@ -1,7 +1,7 @@
 <template>
   <div class="u-sort" :class="{up:dir==='asc', down:dir==='desc'}" @click.stop.prevent="handleSort">
-    <i class="ivu-icon ivu-icon-android-arrow-dropup u-sort-up"></i>
-    <i class="ivu-icon ivu-icon-android-arrow-dropdown u-sort-down"></i>
+    <i class="ivu-icon ivu-icon-md-arrow-dropup u-sort-up"></i>
+    <i class="ivu-icon ivu-icon-md-arrow-dropdown u-sort-down"></i>
   </div>
 </template>
 
