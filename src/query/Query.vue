@@ -111,6 +111,10 @@ export default {
     resetText: {
       type: String,
       default: '重置'
+    },
+    parseUrl: {
+      type: Boolean,
+      default: true
     }
   },
   mixins: [Emitter, dict],
@@ -237,7 +241,13 @@ export default {
   },
 
   created () {
+    let curValue = {}
+    let query_url = new QueryURL()
+    if (this.parseUrl)
+      curValue = query_url.urlParams
+
     this.merge(this.value, this.defaultValue)
+    this.merge(this.value, curValue)
     this.merge(this.current_value, this.value)
     this.merge(this.old_value, this.current_value)
     this.makeFields()

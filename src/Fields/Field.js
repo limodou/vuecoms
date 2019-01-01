@@ -46,7 +46,12 @@ export default class Field {
   render (h, ctx) {
     let self = ctx.props
     let value = self.value[self.name]
-    let props = Object.assign({}, this.defaultOptions, {value: self.value[self.name]}, this.options)
+    // 增加options是函数时的处理
+    let opts = this.options
+    if (typeof opts === 'function') {
+      opts = opts(self.value[self.name], self.name, self.value)
+    }
+    let props = Object.assign({}, this.defaultOptions, {value: self.value[self.name]}, opts)
     let events = {
       input: (x) => {
         x = this.convert_value(x)

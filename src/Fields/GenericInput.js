@@ -20,7 +20,7 @@ export default {
       default: true
     },
     onChange: {},
-    options: Object, // 编辑控件选项
+    options: {}, // 编辑控件选项
     multiple: {
       type: Boolean,
       default: false

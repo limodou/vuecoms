@@ -21,7 +21,7 @@
         :name="col.column.name"
         :format="col.column.format"
         :value="savingRow || col.row"
-        :static="col.column.fixed !== fixed || col.column.editor.static || !col.row._editting"
+        :static="checkCellStatic(col, savingRow || col.row)"
         :show-title="col.column.showTitle"
         :classes="nowrap ? 'nowrap' : ''"
       >
@@ -186,6 +186,12 @@ export default {
       }
       this.$set(this.col.row, this.expandField, expand)
       this.$emit('expanded', this.col.row[this.expandField], this.col.row)
+    },
+    checkCellStatic (col, row) {
+      let static_flag = (col.column.fixed !== this.fixed || col.column.editor.static || !col.row._editting)
+      if (col.row._editting && col.column.editor && col.column.editor.onEnableEdit && !col.column.editor.onEnableEdit(row[col.name], col, row))
+        static_flag = true
+      return static_flag
     }
   }
 }

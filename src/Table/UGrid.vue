@@ -587,6 +587,10 @@ export default {
     this.resize()
     window.addEventListener('resize', this.handleResize, true)
 
+    // 初始化query 的 param
+    if (this.$refs.query && this.$refs.query.value)
+      this.param = Object.assign(this.param, this.$refs.query.value)
+
     if (this.autoLoad) {
       this.$nextTick( () => {
         this.loadData()

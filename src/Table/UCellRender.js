@@ -1,3 +1,5 @@
+import {findParent} from '../utils/utils'
+
 export default {
   name: 'CellRender',
   functional: true,
@@ -11,10 +13,12 @@ export default {
     }
   },
   render: (h, ctx) => {
+    let grid = findParent(ctx.parent, 'Grid')
     let param = {
       value: ctx.props.value,
       column: ctx.props.column,
-      row: ctx.props.row
+      row: ctx.props.row,
+      grid: grid
     }
     return ctx.props.render(h, param)
   }
