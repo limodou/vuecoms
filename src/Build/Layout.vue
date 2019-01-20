@@ -2,7 +2,7 @@
   <component v-if="boxComponent" :is="boxComponent" :title="title" v-bind="boxOptions" class="u-layout">
     <Row v-for="(row, i) in rows" class="u-layout-row" :key="i">
       <Col v-for="(col, j) in row" :span="col.colspan" :key="j">
-        <FormCell :col="col" :value="value" :validateResult="validateResult"
+        <FormCell v-if="!col.hidden" :col="col" :value="value" :validateResult="validateResult"
           :labelDir="labelDir"
           :staticSuffix="staticSuffix" root="Build"></FormCell>
       </Col>
@@ -14,7 +14,7 @@
   <div v-else class="u-layout">
     <Row v-for="(row, i) in rows" class="u-layout-row" :key="i">
       <Col v-for="(col, j) in row" :span="col.colspan" :key="j">
-        <FormCell :col="col" :value="value" :validateResult="validateResult" 
+        <FormCell v-if="!col.hidden" :col="col" :value="value" :validateResult="validateResult" 
           :labelDir="labelDir"
           :staticSuffix="staticSuffix" :root="Build"></FormCell>
       </Col>

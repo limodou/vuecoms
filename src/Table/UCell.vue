@@ -47,7 +47,7 @@ import GenericInput from '../Fields/GenericInput'
 import List from '../utils/list.js'
 
 export default {
-  name: 'Cell',
+  name: 'uCell',
   props: {
     col: Object,
     store: Object,

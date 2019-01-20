@@ -42,6 +42,10 @@ export default {
     labelDir: { //标签排列方向，水平 horizontal 垂直 vertical
       type: String,
       default: 'horizontal'
+    },
+    hidden: { // 设置隐藏
+      type: Boolean,
+      default: false
     }
   },
 
@@ -67,6 +71,7 @@ export default {
           let field = Object.assign({colspan: span,
             labelWidth: this.labelWidth,
             static: col.static || this.static,
+            hidden: this.hidden || col.hidden,
           }, f)
 
           new_r.push(field)

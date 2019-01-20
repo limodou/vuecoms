@@ -1,14 +1,17 @@
 <template>
   <div class="u-build">
-    <component v-for="item in data"
-      :is="item.component || 'BuildLayout'"
-      v-bind="item"
-      :value="value"
-      :labelWidth="item.labelWidth || labelWidth"
-      :staticSuffix="staticSuffix"
-      :validateResult="validateResult"
-      :ref="item.name"
-      ></component>
+    <template v-for="item in data">
+      <component
+        v-if="!item.hidden"
+        :is="item.component || 'BuildLayout'"
+        v-bind="item"
+        :value="value"
+        :labelWidth="item.labelWidth || labelWidth"
+        :staticSuffix="staticSuffix"
+        :validateResult="validateResult"
+        :ref="item.name"
+        ></component>
+    </template>
   </div>
 </template>
 
@@ -22,6 +25,7 @@ export default {
     return {
       oldvalue: deepCopy(this.value),
       fields: {},
+      rows: {}, // 每段索引,key为每段name值，如果没有则不插入
       validating: false,
       validateResult: {} //保存校验结果
     }
@@ -85,7 +89,8 @@ export default {
         let error = ''
         for(let k in this.validateResult) {
           let r = this.validateResult[k]
-          if (r.rule && r.rule.length > 0) {
+          // 增加对hidden的处理
+          if (r.rule && r.rule.length > 0 && !this.fields[k].hidden) {
             if (!r.validateState && !this.fields[k].static) {
               validateRule(this.value, k, this.validateResult)
               result.pending.push(r)
@@ -134,9 +139,13 @@ export default {
     makeFields () {
       var fs = {}
       for(let row of this.data) {
+        if (row.name) {
+          this.rows[row.name] = row
+        }
         for(let field of (row.fields || [])) {
           fs[field.name] = field
-          this.$set(field, 'static', field.static || row.static || false)
+          this.$set(field, 'static', field.static || false)
+          this.$set(field, 'hidden', field.hidden || false)
           this.$set(field, 'enableOnChange', false) // 禁止Input确发onChange回调
           if (typeof field.options === 'undefined') {
             this.$set(field, 'options', {})

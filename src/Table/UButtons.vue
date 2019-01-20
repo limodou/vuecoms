@@ -1,18 +1,22 @@
 <template>
   <div class="u-buttons">
     <ButtonGroup v-for="btnGroup in buttons" :size="size">
-      <Button v-for="btn in btnGroup" 
-        :type="btn.type || 'default'"
-        :ghost="btn.ghost || false"
-        :disabled="btn.disabled || disabled"
-        :shape="btn.shape"
-        :size="btn.size"
-        :long="btn.long"
-        :loading="btn.loading"
-        :icon="btn.icon"
-        @click.prevent="handleButtonClick(btn)">
-          {{btn.label}}
-      </Button>
+      <template v-for="btn in btnGroup">
+        <Button 
+          v-if="!btn.component || btn.component =='Button'"
+          :type="btn.type || 'default'"
+          :ghost="btn.ghost || false"
+          :disabled="btn.disabled || disabled"
+          :shape="btn.shape"
+          :size="btn.size"
+          :long="btn.long"
+          :loading="btn.loading"
+          :icon="btn.icon"
+          @click.prevent="handleButtonClick(btn)">
+            {{btn.label}}
+        </Button>
+        <component v-else :is="btn.component" v-bind="btn.props" v-on="btn.on"></component>
+      </template>
     </ButtonGroup>
   </div>
 </template>
