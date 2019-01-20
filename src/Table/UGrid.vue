@@ -609,9 +609,9 @@ export default {
 
     choices: {
       immediate: true,
-      handler () {
+      handler (v) {
         for(let field of this.columns) {
-          let choices = this.choices[field.name]
+          let choices = v[field.name]
           if (choices) {
             if (!field.editor) {
               this.$set(field, 'editor', {type: 'select', options: {choices: choices}})
