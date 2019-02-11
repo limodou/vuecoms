@@ -112,35 +112,12 @@ export default {
       'noDataHeight'
     ),
 
-    // 合并字段的定义需要是一个二维数组，可以用于多组合并的定义
-    combineColsIndex () {
-      let index = {}
-      let i
-      let first = true
-      let last_columns_set = []
-      for(let cc of this.combineCols) {
-        let last_columns = []
-        last_columns_set.push(last_columns)
-        i = 0
-        for(let c of cc) {
-          this.columns.forEach( (col, j) => {
-            if (col.name === c) {
-              index[j] = {index: i, last_columns: last_columns, first: first}
-              ++i
-              first = false
-            }
-          })
-        }
-      }
-      return {index: index, last_columns_set: last_columns_set}
-    },
-
     rows () {
       let rows = []
       let item
       let _col
       let c
-      let {index, last_columns_set} = this.combineColsIndex
+      let {index, last_columns_set} = this.combineColsIndex()
       let parents_expanded = {}
       let parents_show = {}
       let parents_level = {}
@@ -368,6 +345,29 @@ export default {
           this.rightWidth += newWidth - width
           break
       }
+    },
+
+    // 合并字段的定义需要是一个二维数组，可以用于多组合并的定义
+    combineColsIndex () {
+      let index = {}
+      let i
+      let first = true
+      let last_columns_set = []
+      for(let cc of this.combineCols) {
+        let last_columns = []
+        last_columns_set.push(last_columns)
+        i = 0
+        for(let c of cc) {
+          this.columns.forEach( (col, j) => {
+            if (col.name === c) {
+              index[j] = {index: i, last_columns: last_columns, first: first}
+              ++i
+              first = false
+            }
+          })
+        }
+      }
+      return {index: index, last_columns_set: last_columns_set}
     },
 
     thStyles (col) {

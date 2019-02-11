@@ -31,7 +31,7 @@ import {mapState} from '../utils/utils.js'
 import Sort from './USort'
 
 export default {
-  name: 'Cell',
+  name: 'UHCell',
   props: {
     column: Object,
     store: Object

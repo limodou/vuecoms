@@ -240,14 +240,20 @@ export const uuid = function () {
 export const formatChoices = function (choices) {
   let r = []
   let d
-  for(let item of (choices || [])) {
+  if (isEmpty(choices)) return []
+  if (!Array.isArray(choices)) choices = [choices]
+  for(let item of (choices)) {
     if (Array.isArray(item)) {
       d = {value: item[0], label: item[1]}
-    } else if (typeof item === 'object'){
+    } else if ((item instanceof Object) && item.hasOwnProperty('label') && item.hasOwnProperty('value')){
       d = item
     } else {
-      d = {value: item, label: item}
+      continue
     }
+    
+    /* else {
+      d = {value: item, label: item}
+    } */
     r.push(d)
   }
   return r
@@ -256,20 +262,14 @@ export const formatChoices = function (choices) {
 // 从choices中找到与value匹配的值， 返回为数组，每项值为 {value: xxx, label: xxx}
 export const findChoices = function (choices, value) {
   let v = []
-  if (Array.isArray(value)) {
-    let x = value.slice()
-    for (let c of formatChoices(choices)) {
-      if (x.length === 0) break
-      let p = x.indexOf(c.value)
-      if (p > -1) {
+  let v1 = value
+  choices = formatChoices(choices)
+  if (!Array.isArray(value)) v1 = [value]
+  for(let x of v1) {
+    for(let c of choices) {
+      if ((x instanceof Object  && x.value === c.value) || (x === c.value)) {
         v.push(c)
-        x.splice(p, 1)
-      }
-    }
-  } else {
-    for (let c of formatChoices(choices)) {
-      if (c.value == value) {
-        v.push(c)
+        break
       }
     }
   }
@@ -467,22 +467,6 @@ function compare2Objects(x, y, leftChain, rightChain) {
 // 比较两个对象，以obj1为准，比较与obj2不同的值
 export const deepCompare = function (x, y, returnValue=false) {
   let i, l, leftChain, rightChain, result = {}
-
-
-  // if (arguments.length < 1) {
-  //     return true //Die silently? Don't know how to handle such case, please help...
-  //     // throw "Need two or more arguments to compare";
-  // }
-
-  // for (i = 1, l = arguments.length; i < l; i++) {
-
-  //     leftChain = [] //Todo: this can be cached
-  //     rightChain = []
-
-  //     if (!compare2Objects(arguments[0], arguments[i])) {
-  //         result[]
-  //     }
-  // }
 
   leftChain = []
   rightChain = []

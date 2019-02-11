@@ -10,65 +10,47 @@ export default class SelectField extends Field {
       parent.$set(this.options, 'multiple', this.multiple)
   }
 
-  convert_value (value) {
-    if (this.options.remote) {
-      let v = value
-      // keeprich 为保持原始格式
-      if (this.options.rich) {
-        value = v
-      } else {
+  setValue (v) {
+    let value = v
+    if (!this.options.rich) {
+      if (Array.isArray(v)) {
         value = v.map(x => x.value)
+      } else if (v instanceof Object) {
+        value = v.value
+      } else {
+        value = v
       }
-      // 保存上次的selected值
-      this.value[this.selectedName] = v
     }
-    return value
+    this.parent.$set(this.value, this.name, value)
   }
 
   beforeRender (props) {
-    // if (this.options.remote) {
-    //   let v = this.value[this.selectedName] || this.value[this.name]
-    //   props['value'] = v
-    //   props['rich'] = true
-    // }
+    props['rich'] = true
   }
 
   getStaticValue (value) {
-    let v
-    if (this.options.remote) {
-      v = this.value[this.selectedName]
-      //如果富格式，则视为options的值
-      if (!v && this.options.rich) {
-        v = this.value[this.name]
+    let v, pv
+    if (Array.isArray(value)) {
+      if (value.length == 0) return ''
+      if (value[0] instanceof Object) {
+        return value.map(x => x.label).join(', ')
       }
-      if (!v) return ''
-      if (this.multiple) {
-        return v.map(x => x.label).join(', ')
-      } else {
-        if (v instanceof Object) {
-          return v.label
-        } else {
-          return v
-        }
-      }
+      // 继续处理
+      pv = value
+    } else {
+      if (!value) return ''
+      if (value instanceof Object)
+        return value.label
+      pv = [value]
     }
     v = []
     for (let c of formatChoices(this.options.choices)) {
-      if (Array.isArray(value)) {
-        if (value.indexOf(c.value) > -1) {
-          v.push(c.label)
-          if (!this.multiple) break
-        }
-      } else{
-        if (value instanceof Object && value.value == c.value){
-          v.push(value.label)
-          if (!this.multiple) break
-        } else if (c.value == value) {
-          v.push(c.label)
-          if (!this.multiple) break
-        }
+      if (pv.indexOf(c.value) > -1) {
+        v.push(c.label)
+        if (!Array.isArray(value)) break
       }
     }
+
     return v.join(', ')
   }
 }

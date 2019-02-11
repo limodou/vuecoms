@@ -147,17 +147,23 @@ export default {
     selected () {
       let v = []
       for (let row of this.layout) {
-        for (let k of row) {
+        for (let col of row) {
+          if (typeof col === 'object') {
+            name = col.name
+          } else {
+            name = col
+          }
+
           let value
-          let field = this.f[k]
+          let field = this.f[name]
           let InputClass = getField(field.type)
           let options = Object.assign({}, field, {value: this.value, staticSuffix: this.staticSuffix})
           let input = new InputClass(this, options)
-          if (! isEmpty(this.value[k])) {
+          if (! isEmpty(this.value[name])) {
             //判断是否有name_static值，如果有，则不再执行setStaticValue的方法
-            input.setStaticValue(this.value[k])
-            v.push({name: k, label: field.label, 
-              value: this.value[`${k}${this.staticSuffix}`] || this.value[k]})
+            input.setStaticValue(this.value[name])
+            v.push({name: name, label: field.label, 
+              value: this.value[`${name}${this.staticSuffix}`] || this.value[name]})
           }
         }
       }

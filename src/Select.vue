@@ -2,7 +2,8 @@
   <Select ref="select" v-model="data" :multiple="multiple" @input="handleInput" 
     :clearable="clearable" :filterable="filterable" :transfer="transfer" :remote="remote"
     :placeholder="placeholder"
-    :loading="loading" :remote-method="handleRemote">
+    :loading="loading" :remote-method="handleRemote"
+    :on-changing="onChanging">
     <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">
       <span v-html="renderLabel(item)"></span>
     </Option>
@@ -16,8 +17,9 @@ import {formatChoices, findChoices, isEmpty, deepCompare} from './utils/utils.js
 export default {
   name: 'uSelect',
   data () {
+    let selectedValue = formatChoices(this.value)
     let d = this.initValue(this.value)
-    return {data: d.data, items: [], loading: false, selectedValue: d.selectedValue}
+    return {data: d.data, items: [], loading: false, selectedValue: selectedValue}
   },
 
   props: {
@@ -65,7 +67,8 @@ export default {
       type: Boolean,
       default: false
     },
-    onRenderLabel: {}
+    onRenderLabel: {},
+    onChanging: {}
   },
 
   mounted () {
@@ -118,7 +121,10 @@ export default {
                 this.setSelected(v)
             }
             this.remoteSelected(this.data, callback)
-          }      
+          } else {
+            let v = this.getSelected()
+            this.setSelected(v)
+          }
         } else {
           this.setSelected(this.selectedValue)
         }
@@ -164,6 +170,7 @@ export default {
         }
       }
     },
+    
     initValue (v) {
       let d = {}
       if (isEmpty(v)) {
@@ -173,16 +180,18 @@ export default {
           v = ''
         }
       } else {
-        if (this.rich) {
-          if (this.remote) {
-            d.selectedValue = v
+        if (Array.isArray(v)) {
+          let r = []
+          for(let c of v) {
+            if (c instanceof Object)
+              r.push(c.value)
+            else
+              r.push(c)
+            v = r
           }
-          if (Array.isArray(v)) {
-            v = v.map( x => x.value)
-          } else if (v instanceof Object) {
-            v = v.value
-          }
-        }
+        } else if (v instanceof Object) {
+          v = v.value
+        }            
       }
       d.data = v
       return d
@@ -196,11 +205,12 @@ export default {
   watch: {
     value: {
       handler (v) {
+        let selectedValue = formatChoices(v)
         let d = this.initValue(v)
         let data = d.data
         if (!deepCompare(data, this.data)) {
           this.data = data
-          this.selectedValue = d.selectedValue
+          this.selectedValue = selectedValue
           this.fireSelected()
         }
       },

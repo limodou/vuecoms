@@ -46,8 +46,10 @@ export default {
       type: Boolean,
       default: false
     },
-    classes: {
-      
+    classes: {},
+    labelField: { // 值字段，主要是指select类型
+      type: String,
+      deafult: ''
     }
   },
 
@@ -57,7 +59,10 @@ export default {
     let InputClass = getField(self.type)
     let input = new InputClass(ctx.parent, ctx.props)
     if (self.value[self.name] !== undefined) {
-      input.setStaticValue(self.value[self.name])
+      if (!self.labelField)
+        input.setStaticValue(self.value[self.name])
+      else
+        input.setStaticValue(self.value[self.labelField], true)
     }
     if (self.static) {
       return h(self.staticComponent, {props: ctx.props})

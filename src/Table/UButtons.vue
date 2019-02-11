@@ -1,6 +1,6 @@
 <template>
   <div class="u-buttons">
-    <ButtonGroup v-for="btnGroup in buttons" :size="size">
+    <ButtonGroup v-for="btnGroup in btngroups" :size="size">
       <template v-for="btn in btnGroup">
         <Button 
           v-if="!btn.component || btn.component =='Button'"
@@ -46,6 +46,23 @@ export default {
     target: {},
     size: {
       default: 'small'
+    }
+  },
+
+  computed: {
+    btngroups () {
+      let v = []
+      for(let bs of this.buttons) {
+        let x = []
+        for(let b of bs) {
+          if (!b.hidden) {
+            x.push(b)
+          }
+        }
+        if (x.length > 0)
+          v.push(x)
+      }
+      return v
     }
   },
 

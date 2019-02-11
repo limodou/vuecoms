@@ -12,6 +12,7 @@ export default class Field {
     this.name = options.name
     this.label = options.label
     this.static = options.static
+    this.labelField = options.labelField
     this.options = options.options || {}
     this.multiple = options.multiple
     this.format = options.format
@@ -31,8 +32,19 @@ export default class Field {
     return v
   }
 
-  setStaticValue (value) {
-    this.parent.$set(this.value, this.static_name, this.getStaticValue(value))
+  setStaticValue (value, direct=false) {
+    let v
+    if (!direct)
+      v = this.getStaticValue(value)
+    else
+       v = value
+    this.parent.$set(this.value, this.static_name, v)
+    if (this.labelField) 
+      this.parent.$set(this.value, this.labelField, v)
+  }
+
+  setValue (v) {
+    this.parent.$set(this.value, this.name, v)
   }
 
   convert_value (value) {
@@ -51,7 +63,12 @@ export default class Field {
     if (typeof opts === 'function') {
       opts = opts(self.value[self.name], self.name, self.value)
     }
-    let props = Object.assign({}, this.defaultOptions, {value: self.value[self.name]}, opts)
+    // 处理select的labelField
+    if (this.labelField) {
+      value = {label: self.value[this.labelField], value: value}
+    } 
+
+    let props = Object.assign({}, this.defaultOptions, {value}, opts)
     let events = {
       input: (x) => {
         x = this.convert_value(x)
@@ -59,7 +76,8 @@ export default class Field {
         let old_value = self.value[self.name]
         if (deepCompare(old_value, x)) return
 
-        ctx.parent.$set(self.value, self.name, x)
+        // ctx.parent.$set(self.value, self.name, x)
+        this.setValue(x)
         this.setStaticValue(x)
         ctx.parent.$nextTick(() => {
           if (this.events.indexOf('input') > -1) {
