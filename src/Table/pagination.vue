@@ -181,7 +181,7 @@ export default {
       margin: 0;
       text-decoration: none;
       color: #495060;
-      padding: 2px 6px;
+      padding: 3px 6px;
       border-radius: 0px;
       border: 1px solid #eee;
     }
@@ -193,6 +193,12 @@ export default {
       a {
         color: #2d8cf0;
       }
+    }
+
+    &.page-input {
+      border: 1px solid #eee;
+      border-radius: 0px;
+      padding: 0 7px;
     }
   }
 
@@ -231,6 +237,8 @@ export default {
   .page-options {
     display: inline-block;
     vertical-align: middle;
+    margin-right: 4px;
+    background-color: #fff;
 
     .page-options-elevator, .page-options-sizer {
       display: inline-block;
@@ -264,21 +272,34 @@ export default {
   }
 
   .select-single {
+    line-height: 24px;
+    height: 24px;
     border: 1px solid #eee;
-    padding: 0px 7px;
+    padding: 1px 7px 0px 7px;
     cursor: pointer;
 
     .ivu-select-arrow {
       position: initial;
     }
+
+    .select-selection {
+      margin-top: -2px;
+    }
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
   }
 
   .page-input {
     input {
-      height: 20px;
+      height: 16px;
       width: 30px;
+      line-height: 16px;
       border: 1px solid #dddee1;
       vertical-align: middle;
+      margin-top: -4px;
+      font-size: 12px;
     }
   }
 

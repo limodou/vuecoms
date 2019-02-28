@@ -6,11 +6,11 @@
       >
         <table cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" class="u-table-header">
           <colgroup>
-            <col v-for="(column, index) in columns" :style="getColumnStyle(column)" :key="column.name">
+            <col v-for="(column, index) in columns" :style="getColumnStyle(column)">
           </colgroup>
           <thead>
             <tr :style="headerTrStyle" v-for="cols in drawColumns">
-              <th v-for="(column, index) in cols" :key="column.name" :style="thStyles(column)"
+              <th v-for="(column, index) in cols" :style="thStyles(column)"
                 :rowspan="column.rowspan" :colspan="column.colspan"
               >
                 <HeaderCell :store="store" :column="column"></HeaderCell>
@@ -22,9 +22,9 @@
     </div>
     <div class="u-table-body-scroll" :style="bodyStyles" @scroll="handleBodyScroll" ref="body">
       <div class="u-table-no-data" :style="noDataStyles" v-if="data.length===0 && !fixed">{{noData}}</div>
-      <table v-else cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" ref="content">
+      <table v-show="data.length>0" cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" ref="content">
         <colgroup>
-          <col v-for="column in columns"  :style="getColumnStyle(column)" :key="column.name">
+          <col v-for="column in columns"  :style="getColumnStyle(column)">
         </colgroup>
         <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
@@ -221,14 +221,14 @@ export default {
     },
 
     wrapStyles () {
-      let s = {width: `${this.width - 2}px`}
+      let s = {width: `${this.width}px`}
       let scrollbar = measureScrollbar()
       if (this.fixed === 'right') {
-        s.width = `${this.width + 2}px`
+        // s.width = `${this.width + 2}px`
         if (this.hscroll) 
           s.right = `${scrollbar}px`
         else
-          s.right = '0'
+          s.right = '0px'
       }
       return s
     },
@@ -400,11 +400,11 @@ export default {
       if (!this.fixed) {
         this.$refs.header.scrollLeft = this.$refs.body.scrollLeft
         this.store.states.scrollLeft = this.$refs.body.scrollLeft
-        this.store.states.isScrollRight = this.$refs.body.scrollLeft && (this.$refs.body.scrollLeft + 
-          this.$refs.body.clientWidth === this.$refs.content.clientWidth)
+        this.store.states.isScrollRight = (!this.xscroll) || (this.$refs.body.scrollLeft && (this.$refs.body.scrollLeft + 
+          this.$refs.body.clientWidth === this.$refs.content.clientWidth))
         if (this.$refs.body && this.$refs.content) {
-          this.store.states.hscroll = this.$refs.body.scrollHeight > this.$refs.body.clientHeight
-          this.store.states.xscroll = this.$refs.body.scrollWidth > this.$refs.body.clientWidth
+          this.hscroll = this.$refs.body.scrollHeight > this.$refs.body.clientHeight
+          this.xscroll = this.$refs.body.scrollWidth > this.$refs.body.clientWidth
         }
       }
     },

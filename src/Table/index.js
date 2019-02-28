@@ -1,7 +1,7 @@
-import Grid from './UGrid'
-import Buttons from './UButtons'
+import Grid from './UGrid.vue'
+import Buttons from './UButtons.vue'
 
-module.exports = {
+export {
   Grid,
   Buttons
 }

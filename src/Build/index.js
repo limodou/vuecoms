@@ -1,9 +1,9 @@
-import Build from './Build'
-import GenericInput from '../Fields/GenericInput'
-import BuildLayout from './Layout'
+import Build from './Build.vue'
+import BuildLayout from './Layout.vue'
+import FormCell from './FormCell.vue'
 
-module.exports = {
+export {
   Build,
-  GenericInput,
-  BuildLayout
+  BuildLayout,
+  FormCell
 }

@@ -30,7 +30,7 @@
         @scroll="handleScroll"
         ></u-table>
 
-      <u-table v-if="rightWidth"
+      <u-table v-show="rightWidth && xscroll && !isScrollRight"
         :store="store"
         :width="rightWidth"
         :table-width="tableWidth"
@@ -58,7 +58,9 @@ import Pagination from './pagination'
 import Buttons from './UButtons'
 import {mapState, mapMethod, copyDataRow} from '../utils/utils.js'
 import Emitter from '../mixins/emitter.js'
-import Query from '../query'
+import Query from '../Query'
+import debounce from 'lodash/debounce'
+import { addListener, removeListener } from 'resize-detector'
 
 export default {
   name: 'Grid',
@@ -111,7 +113,7 @@ export default {
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
       'isScrollRight', 'page', 'start', 'pageSize', 'nowrap', 'addAutoScrollTo',
-      'onRowEditRender', 'static'
+      'onRowEditRender', 'static', 'xscroll'
     ),
 
     columnDraggerStyles () {
@@ -546,9 +548,15 @@ export default {
       }, row._editting ? '取消' : '删除')
     },
 
-    loadData (url) {
-      let _url = url || this.url
-      let param = this.param
+    loadData (url, param) {
+      let _url
+      if (url instanceof Object) {
+        _url = this.url
+        param = url
+      } else {
+        _url = url || this.url
+      }
+      let args = this.param
       // data 为数据行， others 为其它信息，如total
       let callback = (data, others) => {
         if (data) {
@@ -565,7 +573,7 @@ export default {
       }
       if (this.onLoadData) {
         this.showLoading(true)
-        this.onLoadData(_url, param, callback)
+        this.onLoadData(_url, Object.assign({}, args, param || {}), callback)
       }
     },
 
@@ -596,6 +604,17 @@ export default {
         this.loadData()
       })
     }
+
+    this.__resizeHandler = debounce(() => {
+      this.store.states.columns = this.makeCols()
+      this.resize()
+    }, 100, { leading: true })
+    addListener(this.$parent.$el, this.__resizeHandler)
+
+  },
+
+  destroy () {
+    removeListener(this.$parent.$el, this.__resizeHandler)
   },
 
   watch: {

@@ -137,14 +137,15 @@ export default {
     },
 
     makeFields () {
-      var fs = {}
+      let fs = {}
       for(let row of this.data) {
+        let isStatic = row.static === undefined ? false : row.static
         if (row.name) {
           this.rows[row.name] = row
         }
         for(let field of (row.fields || [])) {
           fs[field.name] = field
-          this.$set(field, 'static', field.static || false)
+          this.$set(field, 'static', field.static || isStatic)
           this.$set(field, 'hidden', field.hidden || false)
           this.$set(field, 'enableOnChange', false) // 禁止Input确发onChange回调
           if (typeof field.options === 'undefined') {
@@ -266,7 +267,7 @@ export default {
     },
 
     data: {
-      handler () {
+      handler (v, oldv) {
         this.makeFields()
         this.makeValidateResult()
         this.mergeRules()
