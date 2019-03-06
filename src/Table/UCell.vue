@@ -229,7 +229,7 @@ export default {
     position: absolute;
     top: 0px;
     right: 0px;
-    z-index: 5000;
+    z-index: 900;
 
     &.error {
       border-color: #b94a48 #b94a48 transparent transparent;

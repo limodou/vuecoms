@@ -18,6 +18,7 @@ import DatepickerRange from './DatepickerRange.vue'
 //third-party plugin
 import uTemplate from "v-runtime-template"
 import VueScrollTo from 'vue-scrollto'
+import UploaderFile from './UploaderFile.vue'
 
 const Components = {
   Box,
@@ -36,7 +37,8 @@ const Components = {
 //   ckeditor: CKEditor
   tinymce: TinyMce,
   DatepickerRange,
-  uTemplate
+  uTemplate,
+  UploaderFile
 }
 
 const install = function (Vue) {

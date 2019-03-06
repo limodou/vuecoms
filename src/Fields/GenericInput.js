@@ -21,6 +21,7 @@ export default {
     },
     onChange: {},
     options: {}, // 编辑控件选项
+    on: {}, // 事件回调
     multiple: {
       type: Boolean,
       default: false

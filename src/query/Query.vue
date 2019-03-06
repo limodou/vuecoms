@@ -14,11 +14,11 @@
       </Row>
       <div class="line"></div>
     </template>
-    <!-- 生成单选条件 -->
+    <!-- 生成单行条件 -->
     <Row v-if="rows.length===1 || !isShow" class="u-layout-row">
-      <FormCell v-for="col in rows[0]" :col="col" :value="current_value" style="float:left;margin-right: 10px;"
+      <FormCell v-for="col in firstLayout" :col="col" :value="current_value" style="float:left;"
         :staticSuffix="staticSuffix"
-        :field-style="fromFieldStyle"
+        :field-style="col.style"
         :compact="true"
         root="Query"
         ></FormCell>
@@ -69,6 +69,12 @@ export default {
     layout: {
       type: Array,
       requied: true
+    },
+    firstLineLayout: {
+      type: Array,
+      default () {
+        return []
+      }
     },
     labelWidth: {
       type: Number,
@@ -136,11 +142,7 @@ export default {
       current_value: {},
       old_value: {}, //保存上一次的值,用于数据比较
       isShow: false,
-      buttons: buttons,
-      fromFieldStyle: {
-        minWidth: '100px',
-        maxWidth: '200px'
-      }
+      buttons: buttons
     }
   },
   computed: {
@@ -168,6 +170,30 @@ export default {
         }
       }
       return v
+    },
+
+    // 获取第一行的布局，可以单独设置style，如宽度 width
+    firstLayout () {
+      let fields = [], row
+      if (this.firstLineLayout.length > 0) row = this.firstLineLayout
+      else row = this.layout[0]
+      for (let f of row) {
+        let d = {}
+        if (typeof f === 'string') {
+          d.name = f
+        } else {
+          d = f
+        }
+        let col = this.f[d.name]
+        if (!d.style) {
+          d.style = {
+            width: '200px',
+          }
+        }
+        Object.assign(d, col)
+        fields.push(d)
+      }
+      return fields
     },
 
     rows () {
@@ -318,7 +344,7 @@ export default {
 }
 
 .u-query {
-  padding: 15px;
+  padding: 0px;
 
   .line {
     height: 1px;

@@ -24,20 +24,20 @@
       <div class="u-table-no-data" :style="noDataStyles" v-if="data.length===0 && !fixed">{{noData}}</div>
       <table v-show="data.length>0" cellspaceing="0" cellpadding="0" border="0" :style="tableStyles" ref="content">
         <colgroup>
-          <col v-for="column in columns"  :style="getColumnStyle(column)">
+          <col v-for="column in columns" :style="getColumnStyle(column)">
         </colgroup>
         <tbody ref="table_body">
           <tr v-for="(row, row_index) in rows"
             ref="rows"
             v-if="!row.row._hidden"
             :style="bodyTrStyle"
-            :key="getRowId(row.row)"
+            :key="row._rowKey"
             :class="{selected:row.row._selected, hover:row.row._hover}"
             @mouseenter="handleTrMouseEnter(row.row)"
             @mouseleave="handleTrMouseLeave(row.row)"
             >
             <td v-for="(col, col_index) in row.columns"
-              :key="col_index"
+              :key="col._columnKey"
               @click="handleClick(col.row)"
               :style="cellStyles(col.column)"
               :rowspan="col.rowspan"
@@ -59,6 +59,9 @@ import Emitter from '../mixins/emitter.js'
 import Cell from './UCell'
 import HeaderCell from './UHeaderCell'
 import Sortable from 'sortablejs'
+
+let rowKey = 1
+let columnKey = 1
 
 export default {
   name: 'Table',
@@ -125,7 +128,7 @@ export default {
       let parent, expanded, pshow, show, level, prow
 
       this.data.forEach( (row, i) => {
-        let new_row = {row: row, columns: []}
+        let new_row = {row: row, columns: [], _rowKey: ++rowKey }
         // 增加对父结点是否可见的判断
         if (this.tree) {
           parent = row[this.parentField]
@@ -168,7 +171,7 @@ export default {
         rows.push(new_row)
         this.columns.forEach( (col, j) => {
           let item = {value: row[col.name], rowspan: 1, colspan: 1,
-            column: col, row: row}
+            column: col, row: row, _columnKey: ++columnKey}
 
           // 不需要合并
           if (!this.combineCols) {

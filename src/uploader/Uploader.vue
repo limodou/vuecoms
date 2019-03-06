@@ -43,7 +43,7 @@
 </template>
 <script>
 
-  import FileUpload from "vue-upload-component"
+  import FileUpload from "../vue-upload-component"
   import {Table, Row, Col} from "iview"
 
   export default {

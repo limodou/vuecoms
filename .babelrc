@@ -20,6 +20,13 @@
         }],
         "stage-3"
     ],
-    "plugins": ["transform-runtime"],
+    "plugins": [
+        "dynamic-import-node",
+        "transform-class-properties",
+        "transform-es5-property-mutators",
+        "transform-object-rest-spread",
+        "transform-runtime",
+        "array-includes"
+    ],
     "comments": false
 }

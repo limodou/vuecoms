@@ -221,7 +221,14 @@ export default {
 
         for (let i = 0, len = this.columns.length; i < len; i++) {
           let col = this.columns[i]
-          if (col.fixed === 'left') {
+          if (
+              (col.fixed === 'left') || 
+              (hasLeftFixed && (
+                ( col.name === '__check_col__') || (col.name === '__index_col__')
+                )
+              )
+            ) {
+            col.fixed = 'left'
             leftCols.push(col)
             this.store.states.leftWidth += col.width
           } else if (col.fixed === 'right') {
@@ -335,51 +342,59 @@ export default {
     makeCols () {
       var cols = []
 
+      let check_column
+      let index_column
       // 生成checkbox列
       if (this.checkCol) {
-        let d = this.getDefaultColumn({
+        check_column = this.getDefaultColumn({
           name: '__check_col__',
           type: 'check',
           resizable: false,
           width: this.checkColWidth,
           title: this.checkColTitle,
           align: 'center',
-          fixed: 'left'
+          fixed: ''
         })
-        cols.push(d)
+        cols.push(check_column)
       }
 
       // 生成序号列
       if (this.indexCol) {
-        let d = this.getDefaultColumn({
+        index_column = this.getDefaultColumn({
           name: '__index_col__',
           type: 'index',
           resizable: false,
           width: this.indexColWidth,
           title: this.indexColTitle,
           align: 'center',
-          fixed: 'left'
+          fixed: ''
         })
-        cols.push(d)
+        cols.push(index_column)
       }
 
       this.data.columns.forEach(col => {
         if (!col.hidden) {
-          let d = this.getDefaultColumn(col)
-          // 增加行编辑操作列的render函数
-          if (this.editMode === 'row' && col.name === this.actionColumn) {
-            d.render = col.render || this.editActionRender
-          }
-          if (!d.title) d.title = d.name
-          // 静态模式下，隐藏操作列
-          if (!this.static && col.name === this.actionColumn || col.name !== this.actionColumn)
-            cols.push(d)
-          // 处理format回调，如果是一个字符串，则转为函数
-          if (typeof col.format === 'string') {
-            let func_str = 'return ' + '`' + col.format + '`'
-            let func = new Function('value', 'column', 'row', func_str)
-            col._format = col.format
-            col.format = func
+          if (col.name === '__check_col__'){
+            Object.assign(check_column, col)
+          } else if (col.name === '__index_col__') {
+            Object.assign(index_column, col)
+          } else {
+            let d = this.getDefaultColumn(col)
+            // 增加行编辑操作列的render函数
+            if (this.editMode === 'row' && col.name === this.actionColumn) {
+              d.render = col.render || this.editActionRender
+            }
+            if (!d.title) d.title = d.name
+            // 静态模式下，隐藏操作列
+            if (!this.static && col.name === this.actionColumn || col.name !== this.actionColumn)
+              cols.push(d)
+            // 处理format回调，如果是一个字符串，则转为函数
+            if (typeof col.format === 'string') {
+              let func_str = 'return ' + '`' + col.format + '`'
+              let func = new Function('value', 'column', 'row', func_str)
+              col._format = col.format
+              col.format = func
+            }
           }
         }
       })

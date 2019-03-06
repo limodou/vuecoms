@@ -267,7 +267,7 @@ export default {
     },
 
     data: {
-      handler (v, oldv) {
+      handler () {
         this.makeFields()
         this.makeValidateResult()
         this.mergeRules()

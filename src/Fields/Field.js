@@ -14,6 +14,7 @@ export default class Field {
     this.static = options.static
     this.labelField = options.labelField
     this.options = options.options || {}
+    this.on = options.on || {}
     this.multiple = options.multiple
     this.format = options.format
     this.from = options.from  //从value转为控件属性值的方法
@@ -109,7 +110,7 @@ export default class Field {
 
     return h(this.component, {
       props,
-      on: events
+      on: Object.assign({}, this.on, events)
     })
   }
 }
