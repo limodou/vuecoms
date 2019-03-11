@@ -218,9 +218,9 @@ export default {
     },
     choices: {
       immediate: true,
-      handler () {
-        if (typeof this.choices !== 'function') {
-          this.items = formatChoices(this.choices)
+      handler (v) {
+        if (typeof v !== 'function') {
+          this.items = formatChoices(v)
         }
       },
       deep: true

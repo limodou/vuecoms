@@ -290,6 +290,14 @@ export default {
       let fields = {}
       for (let f of this.fields) {
         fields[f.name] = f
+        //如果type是select，则初始化options
+        if (f.type === 'select') {
+          if (!f.options) {
+            this.$set(f, 'options', {choices: []})
+          } else if (!f.options.choices) {
+            this.$set(f.options, 'choices', [])
+          }
+        }
       }
       this.f = fields
     },
