@@ -1,6 +1,6 @@
 <template>
   <RadioGroup v-model="data" @input="handleInput">
-    <Radio v-for="item in items" :label="item.value">{{ item.label }}</Option>
+    <Radio v-for="item in items" :label="item.value" :key="item.label+item.value">{{ item.label }}</Radio>
   </RadioGroup>
 </template>
 

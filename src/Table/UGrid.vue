@@ -56,7 +56,7 @@ import UTable from './UTable'
 import Store from './UGridStore'
 import Pagination from './pagination'
 import Buttons from './UButtons'
-import {mapState, mapMethod, copyDataRow} from '../utils/utils.js'
+import {mapState, mapMethod, copyDataRow, setChoice} from '../utils/utils.js'
 import Emitter from '../mixins/emitter.js'
 import Query from '../Query'
 import debounce from 'lodash/debounce'
@@ -647,14 +647,14 @@ export default {
         for(let field of this.columns) {
           let choices = v[field.name]
           if (choices) {
-            if (!field.editor) {
-              this.$set(field, 'editor', {type: 'select', options: {choices: choices}})
-            } else {
-              if (!field.editor.options) {
-                this.$set(field.editor, 'options', {choices: choices})
-              } else {
-                this.$set(field.editor.options, 'choices', choices)
-              }
+            setChoice(this, field.editor, choices)
+          }
+        }
+        if (this.query) {
+          for(let field of this.query.fields) {
+            let choices = v[field.name]
+            if (choices) {
+              setChoice(this, field, choices)
             }
           }
         }

@@ -1,6 +1,5 @@
 <template>
-  <file-upload
-    v-bind="config"
+  <FileUpload
     :class="customClass"
     :post-action="postAction"
     :size="size"
@@ -16,13 +15,14 @@
     @input-file="handleInputFile"
     ref="upload">
     <slot></slot>
-  </file-upload>
+  </FileUpload>
 </template>
 
 <script>
 import FileUpload from "./vue-upload-component"
 export default {
   name: 'uploader-file',
+  components: {FileUpload},
   props: {
     value: {},
     size: {},

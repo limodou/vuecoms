@@ -795,14 +795,14 @@ export default {
         if (this.shouldUseChunkUpload(file)) {
           return this.uploadChunk(file)
         }
-        if (file.putAction) {
+        if (this.putAction) {
           return this.uploadPut(file)
         }
-        if (file.postAction) {
+        if (this.postAction) {
           return this.uploadHtml5(file)
         }
       }
-      if (file.postAction) {
+      if (this.postAction) {
         return this.uploadHtml4(file)
       }
       return Promise.reject('No action configured')
@@ -863,7 +863,7 @@ export default {
       }
       form.append(this.name, file.file, file.file.filename || file.name)
       let xhr = new XMLHttpRequest()
-      xhr.open('POST', file.postAction)
+      xhr.open('POST', this.postAction)
       return this.uploadXhr(xhr, file, form)
     },
 
@@ -1013,8 +1013,8 @@ export default {
         }
 
         // headers
-        for (let key in file.headers) {
-          xhr.setRequestHeader(key, file.headers[key])
+        for (let key in this.headers) {
+          xhr.setRequestHeader(key, this.headers[key])
         }
 
         // 更新 xhr
@@ -1045,7 +1045,7 @@ export default {
 
       let form = document.createElement('form')
 
-      form.action = file.postAction
+      form.action = this.postAction
 
       form.name = 'upload-form-' + file.id
 

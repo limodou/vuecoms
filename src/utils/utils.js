@@ -482,3 +482,11 @@ export const deepCompare = function (x, y, returnValue=false) {
     return compare2Objects(x, y, [], [])
   }
 }
+// 设置 select choice值
+export const setChoice = function (vm, c, value) {
+  if (!c.options) {
+    vm.$set(c, 'options', {choices: value, type: 'select'})
+  } else {
+    vm.$set(c.options, 'choices', value)
+  }
+}
