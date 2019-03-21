@@ -98,6 +98,12 @@ export default class Field {
           })
         }
       },
+      'on-error': (x) => {
+        ctx.listeners['on-error'] && ctx.listeners['on-error'](x)
+      },
+      'on-clear-error': (x) => {
+        ctx.listeners['on-clear-error'] && ctx.listeners['on-clear-error'](x)
+      }
     }
     for(let e_name of this.events) {
       if (e_name === 'input') continue

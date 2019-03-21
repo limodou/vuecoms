@@ -8,6 +8,8 @@
       <GenericInput v-bind="col" :value="value"
         :staticSuffix="staticSuffix"
         @on-validate="handleValidate"
+        @on-error="handleError"
+        @on-clear-error="handleClearError"
         :root="root"></GenericInput>
       <div class="u-layout-cell-help" v-if="col.help && !col.static">{{col.help}}</div>
       <div class="u-layout-cell-error" v-if="error">{{error}}</div>
@@ -107,8 +109,18 @@ export default {
 
     handleValidate () {
       this.validate()
-    }
+    },
 
+    // 错误为一个对象，可以包含多个字段
+    // 如： {name: error_msg, name: error_msg}
+    handleError (error, $event) {
+      let d = {error, validateState: 'error'}
+      this.$set(this.validateResult, this.col.name, Object.assign(this.validateResult[this.col.name], d))
+    },
+    handleClearError (error, $event) {
+      let d = {error: '', validateState: ''}
+      this.$set(this.validateResult, this.col.name, Object.assign(this.validateResult[this.col.name], d))
+    }
   }
 }
 </script>

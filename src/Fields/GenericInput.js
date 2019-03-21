@@ -65,7 +65,8 @@ export default {
       else
         input.setStaticValue(self.value[self.labelField], true)
     }
-    if (self.static) {
+    // 当存在静态组件时，使用静态组件来展示静态内容
+    if (self.static && self.staticComponent) {
       return h(self.staticComponent, {props: ctx.props})
     }
 

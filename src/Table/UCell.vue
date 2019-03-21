@@ -1,11 +1,11 @@
 <template>
   <div class="u-cell" :class="classes">
     <div class="u-cell-wrap" :style="cellWrapStyles">
-      <span v-if="tree && treeField===col.column.name && col.row[isParentField]" 
+      <span v-if="tree && treeField===col.column.name && col.row[childrenField]" 
         class="u-cell-tree-field-icon" 
         :style="iconStyles"
         @click="handleExpandClick">
-        <i :class="openedIcon" v-if="!col.row._loading && (col.row[expandField] || defaultExpanded)" style="font-size:18px"></i>
+        <i :class="openedIcon" v-if="!col.row._loading && col.row[expandField]" style="font-size:18px"></i>
         <i :class="closedIcon" v-if="!col.row._loading && !col.row[expandField]" style="font-size:18px"></i>
         <i v-if="col.row._loading" class="ivu-icon ivu-icon-ios-loading ivu-load-loop"></i>
       </span>
@@ -64,7 +64,7 @@ export default {
     ...mapState('nowrap', 'start', 'editRow', 'editMode', 'onCheckable', 'cellTitle',
       'tree', 'treeField', 'iconWidth', 'indentWidth', 'expandField', 'openedIcon',
       'closedIcon', 'isParentField', 'defaultExpanded', 'onLoadData', 'url', 'selected',
-      'idField', 'static'
+      'idField', 'static', 'childrenField'
     ),
     value () {
       let value = this.col.value
@@ -151,16 +151,15 @@ export default {
       this.store.toggle(this.col.row)
     },
     handleExpandClick () {
-      let expand = !(this.col.row[this.expandField] || this.defaultExpanded)
-      if (expand && this.col.row[this.isParentField]) {
+      let expand = !(this.col.row[this.expandField])
+      if (expand && this.col.row[this.childrenField]) {
         if (!this.col.row['_loaded']) {
           let callback = (data, others) => {
             //转换数据
             let rows = []
             if (data) {
               rows = this.makeRows(data)
-              //插入数据
-              List.add(this.store.states.data, rows, this.row_index)
+              this.$set(this.col.row, this.childrenField, rows)
               //合并其它值
               if (others && (others instanceof Object)) {
                 this.store.mergeStates(others)

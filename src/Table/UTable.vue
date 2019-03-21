@@ -60,7 +60,7 @@ import Cell from './UCell'
 import HeaderCell from './UHeaderCell'
 import Sortable from 'sortablejs'
 
-let rowKey = 1
+// let rowKey = 1
 let columnKey = 1
 
 export default {
@@ -112,7 +112,7 @@ export default {
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
       'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth',
       'tree', 'parentField', 'expandField', 'defaultExpanded', 'noData',
-      'noDataHeight'
+      'noDataHeight', 'childrenField'
     ),
 
     rows () {
@@ -121,57 +121,55 @@ export default {
       let _col
       let c
       let {index, last_columns_set} = this.combineColsIndex()
-      let parents_expanded = {}
-      let parents_show = {}
-      let parents_level = {}
-      let parents_rows = {}
-      let parent, expanded, pshow, show, level, prow
+      let parent, show, level
 
-      this.data.forEach( (row, i) => {
-        let new_row = {row: row, columns: [], _rowKey: ++rowKey }
-        // 增加对父结点是否可见的判断
-        if (this.tree) {
-          parent = row[this.parentField]
-          if (parent !== undefined) {
-            expanded = parents_expanded[parent]
-            pshow = parents_show[parent]
-            level = parents_level[parent]
-            if (expanded === undefined) {
-              expanded = this.defaultExpanded
-            }
-            if (pshow === undefined) {
-              pshow = true
-            }
-            if (level === undefined) {
-              level = 0
-            } else level ++
-            prow = parents_rows[parent]
-            if (prow === undefined) {
-              prow = null
-            }
-          } else {
-            expanded = true
-            pshow = true
-            level = 0
-            prow = null
-          }
-          if (pshow && expanded) show = true
-          else show = false
-          this.$set(row, '_hidden', !show)
-          this.$set(row, '_level', level)
-          //自动设置父结点是已装入状态
-          if (prow) {
-            this.$set(prow, '_loaded', true)
-          }
-          parents_expanded[row[this.idField]] = row[this.expandField] === undefined ? this.defaultExpanded : row[this.expandField]
-          parents_show[row[this.idField]] = show
-          parents_level[row[this.idField]] = level
-          parents_rows[row[this.idField]] = row
-        }
+      const processNode = (row, parent, rows) => {
+        let new_row = {row: row, columns: [], _rowKey: row._rowKey }
         rows.push(new_row)
+        processRow(new_row)
+        if (this.tree) {
+
+          //设置level
+          if (parent) {
+            level = parent._level + 1
+          } else {
+            level = 0
+          }
+          this.$set(row, '_level', level)
+
+          if (row[this.childrenField]) {
+            if (row[this.childrenField].length > 0) {
+              // 处理展开状态
+              if (!row.hasOwnProperty(this.expandField)) {
+                this.$set(row, this.expandField, this.defaultExpanded)
+              }
+              show = true
+              // 处理显示状态
+              if (!row[this.expandField]) {
+                  show = false
+              }
+              
+              if (show) {
+                // 处理子节点
+                for (let _row of row[this.childrenField]) {
+                  processNode(_row, row, rows)
+                }
+              }
+
+            } else {
+              // 判断是否已经装载，如果已装载，则清除children字段
+              if (row['_loaded']) {
+                this.$delete(row, this.childrenField)
+              }
+            }
+          }
+        }
+      }
+
+      const processRow = (new_row) => {
         this.columns.forEach( (col, j) => {
-          let item = {value: row[col.name], rowspan: 1, colspan: 1,
-            column: col, row: row, _columnKey: ++columnKey}
+          let item = {value: new_row.row[col.name], rowspan: 1, colspan: 1,
+          column: col, row: new_row.row, _columnKey: ++columnKey}
 
           // 不需要合并
           if (!this.combineCols) {
@@ -203,10 +201,12 @@ export default {
               }
             }
           }
-
         })
-      })
+      }
 
+      for (let row of this.data) {
+        processNode(row, null, rows)
+      }
       return rows
     },
 
