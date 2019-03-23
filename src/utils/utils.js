@@ -238,11 +238,11 @@ export const uuid = function () {
 
 // 格式化choices, 转对对象形式
 export const formatChoices = function (choices) {
-  let r = []
   let d
-  if (isEmpty(choices)) return []
+  if (!choices || isEmpty(choices)) return []
   if (!Array.isArray(choices)) choices = [choices]
-  for(let item of (choices)) {
+  let r = []
+  for(let item of choices) {
     if (Array.isArray(item)) {
       d = {value: item[0], label: item[1]}
     } else if ((item instanceof Object) && item.hasOwnProperty('label') && item.hasOwnProperty('value')){
@@ -250,12 +250,8 @@ export const formatChoices = function (choices) {
     } else {
       continue
     }
-    
-    /* else {
-      d = {value: item, label: item}
-    } */
     r.push(d)
-  }
+  }  
   return r
 }
 

@@ -158,7 +158,7 @@ export default {
             //转换数据
             let rows = []
             if (data) {
-              rows = this.makeRows(data)
+              rows = this.makeRows(data, this.col.row)
               this.$set(this.col.row, this.childrenField, rows)
               //合并其它值
               if (others && (others instanceof Object)) {

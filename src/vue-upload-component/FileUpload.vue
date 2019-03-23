@@ -2,7 +2,7 @@
   <span :class="className">
     <slot></slot>
     <label :for="inputId || name"></label>
-    <input-file></input-file>
+    <input-file ref="file"></input-file>
   </span>
 </template>
 <style>
@@ -333,6 +333,9 @@ export default {
         let files = this.files
         this.files = []
 
+        // 清除input value
+        this.$refs.file.$el.value = ''
+        
         // 定位
         this.maps = {}
 

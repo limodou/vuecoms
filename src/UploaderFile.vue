@@ -10,6 +10,7 @@
     :extensions="extensions"
     :input-id="inputId"
     :accept="accept"
+    :inputId="inputId"
     :name="name"
     @input="handleUpdateFiles"
     @input-file="handleInputFile"
@@ -20,6 +21,8 @@
 
 <script>
 import FileUpload from "./vue-upload-component"
+import {uuid} from './utils/utils'
+
 export default {
   name: 'uploader-file',
   components: {FileUpload},
@@ -33,7 +36,12 @@ export default {
     headers: {},
     data: {},
     accept: {},
-    inputId: {},
+    inputId: {
+      type: String,
+      default () {
+        return uuid()
+      }
+    },
     name: {},
     extensions: {},
     postAction: {},
@@ -112,6 +120,9 @@ export default {
         f.status = status
       }
       this.$emit('input', v)
+    },
+    clear () {
+      this.$refs.upload.clear()
     }
   }
 }

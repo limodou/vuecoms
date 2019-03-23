@@ -13,7 +13,7 @@ export default {
       let v = this.value[static_name]
       if (v !== undefined && v !== null) {
         if (this.format) {
-          v = this.format(v)
+          v = this.format(v, this.value[this.name], this.value)
         }
       }
       return v

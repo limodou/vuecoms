@@ -7,7 +7,7 @@ export default class TreeSelectField extends Field {
     this.component = 'tree-select'
     if (this.multiple !== undefined)
       parent.$set(this.options, 'multiple', this.multiple)
-    this.events = ['close']
+    this.events = ['close', 'check']
     this.defaultOptions = {transfer: true}
   }
 
@@ -36,7 +36,7 @@ export default class TreeSelectField extends Field {
 
     let v = []
     let selected = []
-    find(formatChoices(this.options.choices), value, v, selected)
+    find(this.options.choices, value, v, selected)
     if (selected.length === 0) return ''
 
     // 设置tree的初始值

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <DatePicker type="date" v-model="val1" transfer :placeholder="placeholderBegin" style="width: 120px;"></DatePicker>
+    <DatePicker :type="type" v-model="val1" transfer :placeholder="placeholderBegin" style="width: 120px;"></DatePicker>
     -
-    <DatePicker type="date" v-model="val2" transfer :placeholder="placeholderEnd" style="width: 120px;"></DatePicker>
+    <DatePicker :type="type" v-model="val2" transfer :placeholder="placeholderEnd" style="width: 120px;"></DatePicker>
   </div>
 </template>
 
@@ -20,6 +20,10 @@ export default {
     value: Array,
     placeholderBegin: String,
     placeholderEnd: String,
+    type: {
+      type: String,
+      default: 'date'
+    }
   },
   methods: {
     parseDate (v) {

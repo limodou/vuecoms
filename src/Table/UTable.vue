@@ -32,12 +32,11 @@
             v-if="!row.row._hidden"
             :style="bodyTrStyle"
             :key="row._rowKey"
-            :class="{selected:row.row._selected, hover:row.row._hover}"
+            :class="{selected:row.row._selected, hover:row.row._rowKey==hoverRowKey}"
             @mouseenter="handleTrMouseEnter(row.row)"
             @mouseleave="handleTrMouseLeave(row.row)"
             >
             <td v-for="(col, col_index) in row.columns"
-              :key="col._columnKey"
               @click="handleClick(col.row)"
               :style="cellStyles(col.column)"
               :rowspan="col.rowspan"
@@ -112,7 +111,7 @@ export default {
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
       'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth',
       'tree', 'parentField', 'expandField', 'defaultExpanded', 'noData',
-      'noDataHeight', 'childrenField'
+      'noDataHeight', 'childrenField', 'hoverRowKey'
     ),
 
     rows () {
@@ -124,7 +123,8 @@ export default {
       let parent, show, level
 
       const processNode = (row, parent, rows) => {
-        let new_row = {row: row, columns: [], _rowKey: row._rowKey }
+        let new_row = {row: row, columns: [], _rowKey: row._rowKey}
+        row._parent = parent
         rows.push(new_row)
         processRow(new_row)
         if (this.tree) {
@@ -169,7 +169,7 @@ export default {
       const processRow = (new_row) => {
         this.columns.forEach( (col, j) => {
           let item = {value: new_row.row[col.name], rowspan: 1, colspan: 1,
-          column: col, row: new_row.row, _columnKey: ++columnKey}
+          column: col, row: new_row.row/*, _columnKey: ++columnKey*/}
 
           // 不需要合并
           if (!this.combineCols) {
@@ -438,11 +438,11 @@ export default {
     },
 
     handleTrMouseEnter (row) {
-      this.$set(row, '_hover', true)
+      this.hoverRowKey = row._rowKey
     },
 
     handleTrMouseLeave (row) {
-      this.$set(row, '_hover', false)
+      this.hoverRowKey = null
     },
 
     getRowId (row) {

@@ -1,5 +1,5 @@
 import List from '../utils/list.js'
-import {uuid} from '../utils/utils.js'
+import {uuid, copyDataRow} from '../utils/utils.js'
 import VueScrollTo from 'vue-scrollto'
 
 let rowKey = 1
@@ -145,8 +145,8 @@ class Store {
     if (selectable) {
       this.grid.$set(row, '_selected', true)
       let id = row[this.states.idField]
-      this.grid.$set(this.states.selected, id, id)
-      this.grid.$set(this.states.selectedRows, id, row)
+      this.grid.$set(this.states.selected, row._rowKey, id)
+      this.grid.$set(this.states.selectedRows, row._rowKey, row)
     }
   }
 
@@ -171,8 +171,8 @@ class Store {
     this.grid.$set(row, '_deselected', deselectable)
     if (deselectable) {
       this.grid.$set(row, '_selected', false)
-      this.grid.$delete(this.states.selected, row[this.states.idField])
-      this.grid.$delete(this.states.selectedRows, row[this.states.idField])
+      this.grid.$delete(this.states.selected, row._rowKey)
+      this.grid.$delete(this.states.selectedRows, row._rowKey)
     }
   }
 
@@ -226,7 +226,10 @@ class Store {
   }
 
   removeRow (row) {
-    let removed = List.remove(this.states.data, row, this.states.idField)
+    let d
+    if (!row._parent) d = this.states.data
+    else d = row._parent[this.states.childrenField]
+    let removed = List.remove(d, row, '_rowKey')
     for(let i of removed) {
       this.deselect(i)
       this.states.total -= 1
@@ -236,7 +239,7 @@ class Store {
   getKey (row, column) {
     let key, col
     if (typeof row === 'object') {
-      key = row[this.states.idField]
+      key = row._rowKey
     } else {
       key = row
     }
@@ -307,67 +310,103 @@ class Store {
 
   // 更新行
   updateRow (row){
-    List.update(this.states.data, row)
+    List.update(this.states.data, row, '_rowKey')
     return row
   }
 
+  getPosition (row, list, position) {
+    if (!row || !list || list && list.length === 0) return -1
+    return List.index(list, row, '_rowKey')
+  }
+
   // 新加记录有一个 _new 属性
-  addRow (row, position) {
+  // parent 用于处理添加子结点
+  // position = 'before', 'after'
+  addRow (row, item, position='after', isChild=false) {
+    let pos, data
     if (!row) {
-      row = {}
+      row = this.getDefaultRow()
       for(let c of this.states.columns) {
         let v = ''
         if (c.type === 'column') {
           row[c.name] = ''
         }
       }
+    } else {
+      row = this.getDefaultRow(row)
     }
     row['_new'] = true
-    if (!row[this.states.idField]) {
-      row[this.states.idField] = uuid()
+    // if (!row[this.states.idField]) {
+    //   row[this.states.idField] = uuid()
+    // }
+    if (!item || !isChild) {
+      data = this.states.data
+      pos = this.getPosition(item, data, position)
+    } else {
+      data = item[this.states.childrenField]
+      if (!data) {
+        this.grid.$set(item, this.states.childrenField, [])
+        data = item[this.states.childrenField]
+        this.grid.$set(item, '_loaded', true)
+        this.grid.$set(item, '_expand', true)
+        row._parent = item
+      }
+      // 子结点，after为最后，before为最前
+      if (position === 'after') pos = -1
+      else pos = 0
     }
-    List.add(this.states.data, row, position)
+    if (position === 'after')
+      List.add(data, row, pos)
+    else
+      List.insert(data, pos, row)
     this.states.total += 1
     return row
   }
 
+  addChildRow (row, parent, position) {
+    return this.addRow(row, parent, position, true)
+  }
   /* 生成新的可编辑行
    options 为滚动属性
   */
-  addEditRow (row, options) {
-    let n_row = this.addRow(row)
+  addEditRow (row, parent, position, isChild=false) {
+    let n_row = this.addRow(row, parent, position, isChild)
     this.grid.$set(n_row, '_editRow', Object.assign({}, n_row))
     this.grid.$set(n_row, '_editting', true)
-    if (options === undefined) return
+    // if (options === undefined) return
 
-    this.grid.$nextTick(() => {
-      let el = this.grid.$refs.table.$refs.rows[this.states.data.length-1]
-      function findParent(e) {
-        let p = e.parentNode
-        while (p) {
-          if (p.scrollHeight > p.clientHeight) break
-          p = p.parentNode
-        }
-        return p
-      }
-      // var container = el.offsetParent.offsetParent
-      var _options = {
-        easing: 'ease-in',
-        offset: 0,
-        cancelable: false,
-        x: false,
-        y: true
-      }
-      if (options === true) options = {}
-      else if (typeof options === 'string') options = {container: options}
-      let opts = Object.assign({}, _options, options)
-      if (!opts.container) {
-        opts.container = findParent(el) || 'body'
-      }
-      VueScrollTo.scrollTo(el, 1, opts)
-    })
+    // this.grid.$nextTick(() => {
+    //   let el = this.grid.$refs.table.$refs.rows[this.states.data.length-1]
+    //   function findParent(e) {
+    //     let p = e.parentNode
+    //     while (p) {
+    //       if (p.scrollHeight > p.clientHeight) break
+    //       p = p.parentNode
+    //     }
+    //     return p
+    //   }
+    //   // var container = el.offsetParent.offsetParent
+    //   var _options = {
+    //     easing: 'ease-in',
+    //     offset: 0,
+    //     cancelable: false,
+    //     x: false,
+    //     y: true
+    //   }
+    //   if (options === true) options = {}
+    //   else if (typeof options === 'string') options = {container: options}
+    //   let opts = Object.assign({}, _options, options)
+    //   if (!opts.container) {
+    //     opts.container = findParent(el) || 'body'
+    //   }
+    //   VueScrollTo.scrollTo(el, 1, opts)
+    // })
 
     return n_row
+  }
+
+  addEditChildRow (row, parent, position) {
+    return this.addEditRow(row, parent, position, true)
   }
 
   mergeStates (o) {
@@ -401,7 +440,7 @@ class Store {
       this.states.query.value = Object.assign({}, p)
   }
 
-  getDefaultRow (row) {
+  getDefaultRow (row={}) {
     return Object.assign({
       _selected: false,
       _hover: false,
@@ -410,14 +449,20 @@ class Store {
       _editting: false,
       _hidden: false,
       _level: 0,
-      _rowKey: rowKey++
+      _rowKey: rowKey++,
+      _parent: parent
     }, row)
   }
 
-  makeRows (data) {
+  makeRows (data, parent) {
     var rows = []
     data.forEach(row => {
-      rows.push(this.getDefaultRow(row))
+      let new_row = this.getDefaultRow(row, parent)
+      if (new_row[this.states.childrenField] && new_row[this.states.childrenField].length > 0) {
+        new_row['_loaded'] = true
+        new_row[this.states.childrenField] = this.makeRows(new_row[this.states.childrenField])
+      }
+      rows.push(new_row)
     })
     return rows
   }
