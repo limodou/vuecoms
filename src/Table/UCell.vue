@@ -12,10 +12,8 @@
       <CellRender v-if="columnType === 'render'"
         :row="col.row" :render="col.column.render" :column="col.column"
         :value="col.value"></CellRender>
-      <div v-if="col.column.html && columnType === 'normal' && col.column.showTitle" v-html="value" :title="value" class="u-cell-text" :class="{nowrap:nowrap}"></div>
-      <div v-if="col.column.html && columnType === 'normal' && !col.column.showTitle" v-html="value" class="u-cell-text" :class="{nowrap:nowrap}"></div>
-      <div v-if="!col.column.html && columnType === 'normal' && col.column.showTitle" :title="value" class="u-cell-text" :class="{nowrap:nowrap}">{{value}}</div>
-      <div v-if="!col.column.html && columnType === 'normal' && !col.column.showTitle" class="u-cell-text" :class="{nowrap:nowrap}">{{value}}</div>
+      <div v-if="col.column.html && columnType === 'normal' && col.column.showTitle" v-html="value" :title="title" class="u-cell-text" :class="{nowrap:nowrap}"></div>
+      <div v-if="!col.column.html && columnType === 'normal' && col.column.showTitle" :title="title" class="u-cell-text" :class="{nowrap:nowrap}">{{value}}</div>
       <GenericInput v-if="columnType === 'editor'" 
         v-bind="col.column.editor"
         :name="col.column.name"
@@ -72,6 +70,18 @@ export default {
         value = this.col.column.format(value, this.col.column, this.col.row)
       }
       return value
+    },
+
+    title () {
+      let showTitle = this.col.column.showTitle
+      if (showTitle) {
+        if (typeof showTitle === 'function') {
+          //调用原始值及format值
+          return showTitle(this.col.value, this.value)
+        } else {
+          return this.value
+        }
+      }
     },
 
     comment () {

@@ -15,6 +15,7 @@ export default class TreeSelectField extends Field {
     if (!value) return ''
     if (this.multiple && value.length === 0) return ''
     const find = (choices, value, result, selected) => {
+      if (!choices || choices.length === 0) return
       for (let c of choices) {
         if (Array.isArray(value)) {
           if (value.indexOf(c.id) > -1) {
@@ -31,7 +32,6 @@ export default class TreeSelectField extends Field {
           find(c.children, value, result, selected)
         }
       }
-      return v
     }
 
     let v = []
