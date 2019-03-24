@@ -32,7 +32,7 @@
             v-if="!row.row._hidden"
             :style="bodyTrStyle"
             :key="row._rowKey"
-            :class="{selected:row.row._selected, hover:row.row._rowKey==hoverRowKey}"
+            :class="{selected:row.row._selected, hover:hoverRowKey && row.row._rowKey==hoverRowKey}"
             @mouseenter="handleTrMouseEnter(row.row)"
             @mouseleave="handleTrMouseLeave(row.row)"
             >
