@@ -1,5 +1,5 @@
 import List from '../utils/list.js'
-import {uuid, copyDataRow} from '../utils/utils.js'
+import {uuid, walkTree} from '../utils/utils.js'
 import VueScrollTo from 'vue-scrollto'
 
 let rowKey = 1
@@ -128,11 +128,12 @@ class Store {
   }
 
   selected (row) {
-    return row._selected
+    let id = row[this.states.idField] || row._rowKey
+    return this.states.selected[id]
   }
 
   toggle (row) {
-    if (row._selected) this.deselect(row)
+    if (this.selected(row)) this.deselect(row)
     else this.select(row)
   }
 
@@ -141,12 +142,10 @@ class Store {
     if (this.states.onSelect) {
       selectable = this.states.onSelect(row)
     }
-    this.grid.$set(row, '_selected', selectable)
     if (selectable) {
-      this.grid.$set(row, '_selected', true)
-      let id = row[this.states.idField]
-      this.grid.$set(this.states.selected, row._rowKey, id)
-      this.grid.$set(this.states.selectedRows, row._rowKey, row)
+      let id = row[this.states.idField] || row._rowKey
+      this.grid.$set(this.states.selected, id, id)
+      this.grid.$set(this.states.selectedRows, id, row)
     }
   }
 
@@ -169,10 +168,10 @@ class Store {
       deselectable = this.states.onDeselect(row)
     }
     this.grid.$set(row, '_deselected', deselectable)
+    let id = row[this.states.idField] || row._rowKey
     if (deselectable) {
-      this.grid.$set(row, '_selected', false)
-      this.grid.$delete(this.states.selected, row._rowKey)
-      this.grid.$delete(this.states.selectedRows, row._rowKey)
+      this.grid.$delete(this.states.selected, id)
+      this.grid.$delete(this.states.selectedRows, id)
     }
   }
 
@@ -198,19 +197,27 @@ class Store {
   }
 
   setSelection (selection) {
-    let flag
-    for(let row of this.states.data) {
-      flag = false
-      let id = row[this.states.idField]
-      if (Array.isArray(selection)) {
-        flag = selection.indexOf(id) > -1
-      } else {
-        flag = this.states.selected.hasOwnProperty(id)
-      }
-      if (flag) {
-        this._select(row)
-      }
+    if (Array.isArray(selection)) {
+      for(let c of selection) {
+        this.grid.$set(this.states.selected, c, c)
+      }  
+    } else {
+      this.grid.$set(this.states.selected, selection, selection)
     }
+    // let flag
+    // const callback = (row) => {
+    //   flag = false
+    //   let id = row[this.states.idField]
+    //   if (Array.isArray(selection)) {
+    //     flag = selection.indexOf(id) > -1
+    //   } else {
+    //     flag = id === selection
+    //   }
+    //   if (flag) {
+    //     this._select(row)
+    //   }
+    // }
+    // walkTree(this.states.data, callback)
   }
 
   showLoading (loading=true, text='') {
@@ -339,8 +346,16 @@ class Store {
     // if (!row[this.states.idField]) {
     //   row[this.states.idField] = uuid()
     // }
-    if (!item || !isChild) {
+    if (!item){
       data = this.states.data
+      pos = this.getPosition(item, data, position)
+    } else if(!isChild) {
+      data = item._parent
+      if (data) {
+        data = data[this.states.childrenField]
+      } else {
+        data = this.states.data
+      }
       pos = this.getPosition(item, data, position)
     } else {
       data = item[this.states.childrenField]
@@ -442,7 +457,6 @@ class Store {
 
   getDefaultRow (row={}) {
     return Object.assign({
-      _selected: false,
       _hover: false,
       _selectable: true, // 可被选中
       _checkable: true, // 可显示checkbox

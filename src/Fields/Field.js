@@ -81,7 +81,7 @@ export default class Field {
         this.setValue(x)
         this.setStaticValue(x)
         ctx.parent.$nextTick(() => {
-          if (this.events.indexOf('input') > -1) {
+          if (old_value !== undefined && this.events.indexOf('input') > -1) {
             ctx.listeners['on-validate'] && ctx.listeners['on-validate']()
           }
           // 触发on-field-change事件

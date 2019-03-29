@@ -487,3 +487,18 @@ export const setChoice = function (vm, c, value) {
     vm.$set(c.options, 'choices', value)
   }
 }
+
+
+export const walkTree = (data, callback, childrenField='children') => {
+  if (!data || data.length === 0) return
+  const _f = (d) => {
+    for(let c of d) {
+      callback(c)
+      if (c[childrenField] && c[childrenField].length > 0) {
+        _f(c[childrenField])
+      }
+    }
+  }
+
+  return _f(data)
+}
