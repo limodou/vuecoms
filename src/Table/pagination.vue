@@ -1,39 +1,31 @@
 <template>
   <div class="pagination">
     <ul>
-      <li v-if="first" :title="first" class="page-first page-item" :class="{'page-disabled':!hasFirst}">
+      <li v-if="first" :title="first" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasFirst}">
         <a @click.prevent="handlePageClick(1)">{{first}}</a>
       </li>
-      <li v-if="prev" :title="prev" class="page-prev page-item" :class="{'page-disabled':!hasPrev}">
+      <li v-if="prev" :title="prev" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasPrev}">
         <a @click.prevent="handlePageClick(current-1)">{{prev}}</a>
       </li>
-      <li class="page-item page-input">
+      <li v-if="next" :title="next" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasNext}">
+        <a @click.prevent="handlePageClick(current+1)">{{next}}</a>
+      </li>
+      <li v-if="last" :title="last" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasLast}">
+        <a @click.prevent="handlePageClick(pages)">{{last}}</a>
+      </li>
+      <Dropdown class="ivu-btn ivu-btn-default ivu-btn-small" @on-click="handlePageSize">
+        <a>
+          {{limit}}条/每页
+          <Icon type="ios-arrow-down"></Icon>
+        </a>
+        <DropdownMenu slot="list">
+            <DropdownItem v-for="x in pageSizeOpts" :key="x" :name="x">{{x}}条/每页</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+      <li class="ivu-btn ivu-btn-text ivu-btn-small page-input">
       第
         <input type="text" ref='page' :value="current" @keypress.enter="handleEnter">
       页/共 {{pages}} 页
-      </li>
-      <div class="page-options" v-clickoutside="handleClose">
-        <div class="page-options-sizer">
-          <div class="select-single">
-            <div class="select-selection" @click.prevent="handlePageSizeDropdown">
-              <span class="select-selected-value">{{limit}} 条/页</span>
-              <i class="ivu-icon ivu-icon-arrow-down-b ivu-select-arrow"></i>
-            </div>
-            <div class="select-dropdown" :style="dropdownStyles">
-              <ul class="select-dropdown-list">
-                <li v-for="x in pageSizeOpts" class="select-item" :class="{'select-item-selected':limit === x}"
-                  style="text-align: center;" @click.prevent="handlePageSize(x)">
-                  {{x}} 条/页</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <li v-if="next" :title="next" class="page-next page-item" :class="{'page-disabled':!hasNext}">
-        <a @click.prevent="handlePageClick(current+1)">{{next}}</a>
-      </li>
-      <li v-if="last" :title="last" class="page-last page-item" :class="{'page-disabled':!hasLast}">
-        <a @click.prevent="handlePageClick(pages)">{{last}}</a>
       </li>
     </ul>
 
@@ -53,7 +45,6 @@ export default {
   data () {
     return {
       current: this.store.states.page,
-      showPageSize: false,
       limit: this.store.states.pageSize
     }
   },
@@ -95,13 +86,8 @@ export default {
   },
 
   methods: {
-    handlePageSizeDropdown () {
-      this.showPageSize = !this.showPageSize
-    },
-
     handlePageSize (size) {
       this.limit = size
-      this.showPageSize = false
       this.$emit('on-page-size', size)
     },
 
@@ -143,6 +129,7 @@ export default {
   margin: 8px 0;
   width: 100%;
   font-size: 14px;
+  position: relative;
 
   &:after {
     content: "";
@@ -155,50 +142,10 @@ export default {
 
   ul {
     display: inline-block;
-  }
 
-  .page-item {
-    display: inline-block;
-    vertical-align: middle;
-    min-width: 24px;
-    height: 24px;
-    line-height: 24px;
-    margin-right: 4px;
-    text-align: center;
-    list-style: none;
-    background-color: #fff;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    font-family: Arial;
-    border: 0;
-    border-radius: 2px;
-    transition: border .2s ease-in-out,color .2s ease-in-out;
-    margin-top: 0;
-
-    > a {
-      margin: 0;
-      text-decoration: none;
-      color: #495060;
-      padding: 3px 6px;
-      border-radius: 0px;
-      border: 1px solid #eee;
-    }
-
-    &:hover {
-      border-color: #2d8cf0;
-      background-color: whitesmoke;
-
-      a {
-        color: #2d8cf0;
-      }
-    }
-
-    &.page-input {
-      border: 1px solid #eee;
-      border-radius: 0px;
-      padding: 0 7px;
+    li {
+      margin-top: 0px;
+      position: relative;
     }
   }
 
@@ -207,88 +154,7 @@ export default {
     line-height: 24px;
     margin: 0px 8px;
     float: right!important;
-  }
-
-  .page-prev, .page-next, .page-first, .page-last {
-    min-width: 20px;
-    transition: all .2s ease-in-out;
-    cursor: pointer;
-  }
-
-  .page-disabled a {
-    cursor: not-allowed;
-  }
-
-  .page-active {
-    background-color: #2d8cf0;
-    border-color: #2d8cf0;
-
-    a {
-      color: #fff;
-    }
-
-    &:hover {
-      a {
-        color: #fff;
-      }
-    }
-  }
-
-  .page-options {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 4px;
-    background-color: #fff;
-
-    .page-options-elevator, .page-options-sizer {
-      display: inline-block;
-    }
-
-    .select-dropdown {
-      width: 78px; transform-origin: center top 0px;
-      z-index: 9999;
-
-      .select-dropdown-list {
-        border: 1px solid #eee;
-        list-style: none;
-        background-color: white;
-        padding: 0;
-
-        .select-item {
-          list-style: none;
-          padding: 0 8px;;
-
-          &:hover {
-            background-color: #ddd;
-          }
-
-          &.select-item-selected {
-            background-color: #2d8cf0;
-            color: white;
-          }
-        }
-      }
-    }
-  }
-
-  .select-single {
-    line-height: 24px;
-    height: 24px;
-    border: 1px solid #eee;
-    padding: 1px 7px 0px 7px;
-    cursor: pointer;
-
-    .ivu-select-arrow {
-      position: initial;
-    }
-
-    .select-selection {
-      margin-top: -2px;
-    }
-
-    &:hover {
-      background-color: #f5f5f5;
-    }
+    font-size: 12px;
   }
 
   .page-input {
@@ -298,10 +164,10 @@ export default {
       line-height: 16px;
       border: 1px solid #dddee1;
       vertical-align: middle;
-      margin-top: -4px;
+      margin-top: -2px;
       font-size: 12px;
+      text-align: center;
     }
   }
-
 }
 </style>

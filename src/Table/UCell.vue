@@ -25,7 +25,7 @@
       >
       </GenericInput>
       <template v-if="columnType === 'check' && checkable">
-        <i v-if="selected[col.row._rowKey]" class="ivu-icon ivu-icon-md-checkbox u-cell-checkbox" style="color:#2489f3" @click.stop="handleCheckClick"></i>
+        <i v-if="store.selected(col.row)" class="ivu-icon ivu-icon-md-checkbox u-cell-checkbox" style="color:#2489f3" @click.stop="handleCheckClick"></i>
         <i v-else class="ivu-icon ivu-icon-md-square-outline u-cell-checkbox" style="color:#bdbdbd" @click.stop="handleCheckClick"></i>
       </template>
       <span v-if="columnType === 'index'" :class="{nowrap:nowrap}">
