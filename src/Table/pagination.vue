@@ -15,22 +15,22 @@
       </li>
       <Dropdown class="ivu-btn ivu-btn-default ivu-btn-small" @on-click="handlePageSize">
         <a>
-          {{limit}}条/每页
+          {{limit}}条/页
           <Icon type="ios-arrow-down"></Icon>
         </a>
         <DropdownMenu slot="list">
-            <DropdownItem v-for="x in pageSizeOpts" :key="x" :name="x">{{x}}条/每页</DropdownItem>
+            <DropdownItem v-for="x in pageSizeOpts" :key="x" :name="x">{{x}}条/页</DropdownItem>
         </DropdownMenu>
       </Dropdown>
       <li class="ivu-btn ivu-btn-text ivu-btn-small page-input">
-      第
+      跳至
         <input type="text" ref='page' :value="current" @keypress.enter="handleEnter">
-      页/共 {{pages}} 页
+      页
       </li>
     </ul>
 
     <slot></slot>
-    <span class="page-total">共 {{total}} 条记录</span>
+    <span class="page-total">共 {{pages}} 页/{{total}} 条记录</span>
   </div>
 </template>
 
@@ -89,6 +89,8 @@ export default {
     handlePageSize (size) {
       this.limit = size
       this.$emit('on-page-size', size)
+      this.current = 1
+      this.$emit('on-page', 1)
     },
 
     handlePageClick (page) {
@@ -146,6 +148,11 @@ export default {
     li {
       margin-top: 0px;
       position: relative;
+      margin-right: 4px;
+    }
+
+    .ivu-dropdown-rel > a {
+      color: inherit;
     }
   }
 

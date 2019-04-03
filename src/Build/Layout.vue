@@ -70,7 +70,7 @@ export default {
   font-size: 14px;
 
   &:after {
-    content: ":";
+    content: " ";
     display: inline-block;
     margin-right: 4px;
     line-height: 1;

@@ -6,6 +6,7 @@ export default class TextField extends Field {
     super(parent, options)
     this.component = 'Input'
     this.defaultOptions = {type: 'textarea', autosize: {minRows: 5}}
+    this.events = ['input', 'on-blur'] //记录哪些事件要抛出
   }
 
   getStaticValue (value, callback) {
