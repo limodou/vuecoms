@@ -1,5 +1,5 @@
 import List from '../utils/list.js'
-import {uuid, walkTree} from '../utils/utils.js'
+import {uuid, walkTree, isEmpty} from '../utils/utils.js'
 import VueScrollTo from 'vue-scrollto'
 
 let rowKey = 1
@@ -49,7 +49,8 @@ class Store {
       query: null, // 查询条件对象
       noData: '暂无数据', //无数据时显示内容
       noDataHeight: 40, //无数据显示的高度
-      addAutoScrollTo: true, //行编辑在添加新行时，自动滚动到新加行
+      // addAutoScrollTo: true, //行编辑在添加新行时，自动滚动到新加行
+      detectParentResize: true,
 
       // tree 相关的参数
       tree: false, // 是否treegrid
@@ -197,27 +198,40 @@ class Store {
   }
 
   setSelection (selection) {
-    if (Array.isArray(selection)) {
-      for(let c of selection) {
-        this.grid.$set(this.states.selected, c, c)
-      }  
-    } else {
-      this.grid.$set(this.states, 'selected', selection)
-    }
-    // let flag
-    // const callback = (row) => {
-    //   flag = false
-    //   let id = row[this.states.idField]
-    //   if (Array.isArray(selection)) {
-    //     flag = selection.indexOf(id) > -1
-    //   } else {
-    //     flag = id === selection
-    //   }
-    //   if (flag) {
-    //     this._select(row)
-    //   }
+    // if (Array.isArray(selection)) {
+    //   for(let c of selection) {
+    //     this.grid.$set(this.states.selected, c, c)
+    //   }  
+    // } else {
+    //   this.grid.$set(this.states, 'selected', selection)
     // }
-    // walkTree(this.states.data, callback)
+    if (isEmpty(selection)) return
+    let index, s
+    if (Array.isArray(selection)) {
+      s = selection.slice()
+    } else if (selection instanceof Object) {
+      s = []
+      for (let c in selection) {
+        s.push(c)
+      }
+    } else {
+      s = [selection]
+    }
+    const callback = (row) => {
+      let id = row[this.states.idField]
+      index = s.indexOf(id)
+      if (index > -1) {
+        this._select(row)
+        s.splice(index, 1, 1)
+      }
+      if (s.length === 0) return true
+    }
+    walkTree(this.states.data, callback)
+
+    // 处理剩余数据
+    for(let c of s) {
+      this.grid.$set(this.states.selected, c, c)
+    }
   }
 
   showLoading (loading=true, text='') {

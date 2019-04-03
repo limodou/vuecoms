@@ -493,7 +493,8 @@ export const walkTree = (data, callback, childrenField='children') => {
   if (!data || data.length === 0) return
   const _f = (d) => {
     for(let c of d) {
-      callback(c)
+      let ret = callback(c)
+      if (ret) return // 如果返回 true 则结束递归
       if (c[childrenField] && c[childrenField].length > 0) {
         _f(c[childrenField])
       }

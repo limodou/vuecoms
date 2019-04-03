@@ -619,12 +619,18 @@ export default {
         this.loadData()
       })
     }
+    this.oldParentWidth = this.$parent.$el.offsetWidth
 
     this.__resizeHandler = debounce(() => {
-      this.store.states.columns = this.makeCols()
-      this.resize()
+      let width = this.$parent.$el.offsetWidth
+      if (width !== this.oldParentWidth) {
+        this.store.states.columns = this.makeCols()
+        this.resize()
+        this.oldParentWidth = width
+      }
     }, 100, { leading: true })
-    addListener(this.$parent.$el, this.__resizeHandler)
+    if (this.store.states.detectParentResize)
+      addListener(this.$parent.$el, this.__resizeHandler)
 
   },
 
