@@ -13,7 +13,7 @@
       <li v-if="last" :title="last" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasLast}">
         <a @click.prevent="handlePageClick(pages)">{{last}}</a>
       </li>
-      <Dropdown class="ivu-btn ivu-btn-default ivu-btn-small" @on-click="handlePageSize">
+      <Dropdown class="ivu-btn ivu-btn-default ivu-btn-small" @on-click="handlePageSize" transfer>
         <a>
           {{limit}}条/页
           <Icon type="ios-arrow-down"></Icon>
@@ -166,12 +166,11 @@ export default {
 
   .page-input {
     input {
-      height: 16px;
+      height: 20px;
       width: 30px;
-      line-height: 16px;
+      line-height: 20px;
       border: 1px solid #dddee1;
       vertical-align: middle;
-      margin-top: -2px;
       font-size: 12px;
       text-align: center;
     }

@@ -26,6 +26,7 @@ class Store {
       data: [],
       multiSelect: false,
       clickSelect: false,  // 点击选中
+      selectedRowClass: 'selected', // 选中行反显样式，可以设为指定类名
       resizable: true, // 是否表头列可以调整大小
       draggable: false,
       indexCol: false, // 是否显示序号列
@@ -133,71 +134,89 @@ class Store {
     return this.states.selected[id]
   }
 
-  toggle (row) {
-    if (this.selected(row)) this.deselect(row)
-    else this.select(row)
+  toggle (row, force=false) {
+    if (this.selected(row)) this.deselect(row, force)
+    else this.select(row, force)
   }
 
-  _select (row) {
+  _select (row, force=false) {
     let selectable = true
-    if (this.states.onSelect) {
-      selectable = this.states.onSelect(row)
+    if (!force && this.states.onSelect) {
+      selectable = this.states.onSelect(row, true)
     }
     if (selectable) {
       let id = row[this.states.idField] || row._rowKey
       this.grid.$set(this.states.selected, id, id)
       this.grid.$set(this.states.selectedRows, id, row)
     }
+    return selectable
   }
 
-  select (row) {
-    if (!this.states.multiSelect) this.deselectAll()
-    this._select(row)
-    this.grid.$emit('on-selected', row)
-  }
-
-  selectAll () {
-    this.states.data.forEach(row => {
-      this._select(row)
-    })
-    this.grid.$emit('on-selected-all')
-  }
-
-  _deselect (row) {
-    let deselectable = true
-    if (this.states.onDeselect) {
-      deselectable = this.states.onDeselect(row)
+  select (row, force=false) {
+    if (this._select(row, force)) {
+      if (!this.states.multiSelect) this.deselectAll()
+      this.grid.$emit('on-selected', row)
     }
-    this.grid.$set(row, '_deselected', deselectable)
-    let id = row[this.states.idField] || row._rowKey
+  }
+
+  selectAll (force=false) {
+    let rows = []
+    this.states.data.forEach(row => {
+      if (!this._select(row, force)) {
+        rows.push(row)
+      }
+    })
+    this.grid.$emit('on-selected-all', rows)
+  }
+
+  _deselect (row, force=false) {
+    let deselectable = true
+    if (!force && this.states.onDeselect) {
+      deselectable = this.states.onDeselect(row)
+    } else if (!force && this.states.onSelect) {
+      deselectable = this.states.onSelect(row, false)
+    }
     if (deselectable) {
+      let id = row[this.states.idField] || row._rowKey
       this.grid.$delete(this.states.selected, id)
       this.grid.$delete(this.states.selectedRows, id)
     }
+    return deselectable
   }
 
-  deselect (row) {
-    this._deselect(row)
-    this.grid.$emit('on-deselected', row)
+  deselect (row, force=false) {
+    if (this._deselect(row, force)) {
+      this.grid.$emit('on-deselected', row)
+    }
   }
 
-  deselectAll () {
+  deselectAll (force=false) {
+    let rows = []
     this.states.data.forEach(row => {
-      this._deselect(row)
+      if (!this._deselect(row)){
+        rows.push(row)
+      }
     })
-    this.states.selected = {}
-    this.grid.$emit('on-deselected-all')
+    // if (rows.length === 0) {
+    //   this.states.selected = {}
+    //   this.states.selectedRows = {}
+    // }
+    this.grid.$emit('on-deselected-all', rows)
   }
 
   getSelection () {
-    return Object.values(this.states.selected)
+    let s = []
+    for (let c in this.states.selected) {
+      s.push(c)
+    }
+    return s
   }
 
   getSelectedRows () {
     return Object.values(this.states.selectedRows)
   }
 
-  setSelection (selection) {
+  setSelection (selection, force=true) {
     // if (Array.isArray(selection)) {
     //   for(let c of selection) {
     //     this.grid.$set(this.states.selected, c, c)
@@ -221,8 +240,8 @@ class Store {
       let id = row[this.states.idField]
       index = s.indexOf(id)
       if (index > -1) {
-        this._select(row)
-        s.splice(index, 1, 1)
+        this._select(row, force)
+        s.splice(index, 1)
       }
       if (s.length === 0) return true
     }
@@ -337,7 +356,8 @@ class Store {
 
   getPosition (row, list, position) {
     if (!row || !list || list && list.length === 0) return -1
-    return List.index(list, row, '_rowKey')
+    let id = this.states.idField || '_rowKey'
+    return List.index(list, row, id)
   }
 
   // 新加记录有一个 _new 属性
