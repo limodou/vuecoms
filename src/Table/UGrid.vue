@@ -42,7 +42,7 @@
       <div class="column-dragger-guide" v-show="columnResizing" :style="columnDraggerStyles"></div>
       <div ref="loading" class="loading" v-if="loadingText" v-show="loading" v-html="loadingText"></div>
     </div>
-    <Pagination v-if="pagination && store.states.data.length > 0" :store="store"
+    <Pagination ref="pagination" v-if="pagination && store.states.data.length > 0" :store="store"
       @on-page="handlePage"
       @on-page-size="handlePageSize">
       <Buttons ref="bottomButtons" :buttons="bottomButtons" :target="this" :data="store"></Buttons>
@@ -113,7 +113,7 @@ export default {
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
       'isScrollRight', 'page', 'start', 'pageSize', 'nowrap', 'addAutoScrollTo',
-      'onRowEditRender', 'static', 'xscroll'
+      'onRowEditRender', 'static', 'xscroll', 'afterLoadData'
     ),
 
     columnDraggerStyles () {
@@ -563,6 +563,10 @@ export default {
       }, row._editting ? '取消' : '删除')
     },
 
+    go(page) {
+      this.$refs.pagination.go(page)
+    },
+
     loadData (url, param) {
       let _url
       if (url instanceof Object) {
@@ -573,12 +577,16 @@ export default {
       }
       let args = this.param
       // data 为数据行， others 为其它信息，如total
-      let callback = (data, others) => {
+      const callback = (data, others) => {
         if (data) {
           this.store.states.data = this.makeRows(data)
         }
         if (others && (others instanceof Object)) {
           this.store.mergeStates(others)
+        }
+        if (this.afterLoadData) {
+          this.afterLoadData()
+          this.afterLoadData = null // 清除
         }
         this.$nextTick( () => {
           this.showLoading(false)

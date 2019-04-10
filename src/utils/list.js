@@ -296,6 +296,38 @@ export default {
       items[children_field_name].push(item)
     }
     return result
+  },
+
+  reorder (list, pos, des, options) {
+    let b = pos
+    let e = des
+    if (b > e) {
+      b = des
+      e = pos
+    }
+    let order = []
+    let ids = []
+    for (let i=b, len=e; i<e+1 && i<list.length; i++) {
+      ids.push(list[i][options.idField])
+      order.push(list[i][options.orderField])
+    }
+    let r
+    if (pos > des) { // 向前移动
+      r = ids.splice(ids.length-1, 1)
+      ids.splice(0, 0, r[0])
+    } else {
+      r = ids.splice(0, 1)
+      ids.push(r[0])
+    }
+    let result = []
+    let d
+    for (let i=0, len=ids.length; i<len; i++) {
+      d = {}
+      d[options.idField] = ids[i]
+      d[options.orderField] = order[i]
+      result.push(d)
+    }
+    return result
   }
 
 }

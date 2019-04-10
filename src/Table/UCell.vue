@@ -174,6 +174,11 @@ export default {
               if (others && (others instanceof Object)) {
                 this.store.mergeStates(others)
               }
+
+              if (this.afterLoadData) {
+                this.afterLoadData()
+                this.afterLoadData = null // 清除
+              }
             }
             //更新
             this.$nextTick( () => {
