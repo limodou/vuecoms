@@ -113,7 +113,7 @@ export default {
       'selected', 'editMode', 'actionColumn', 'deleteRowConfirm',
       'onSaveRow', 'onDeleteRow', 'onLoadData', 'query', 'theme', 'cellTitle',
       'isScrollRight', 'page', 'start', 'pageSize', 'nowrap', 'addAutoScrollTo',
-      'onRowEditRender', 'static', 'xscroll', 'afterLoadData'
+      'onRowEditRender', 'static', 'xscroll', 'afterLoadData', 'multiHeaderSep'
     ),
 
     columnDraggerStyles () {
@@ -175,7 +175,7 @@ export default {
       let max_level = 0
 
       for (let col of this.columns) {
-        col.subs = col.title.split('/')
+        col.subs = col.title.split(this.multiHeaderSep)
         max_level = Math.max(max_level, col.subs.length)
         if (col.width) {
           w -= col.width

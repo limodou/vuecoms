@@ -44,7 +44,6 @@ export default {
       }
     },
     showTitle: {
-      type: Boolean,
       default: false
     },
     classes: {},

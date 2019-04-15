@@ -16,7 +16,7 @@ export default {
   methods: {
     change(e) {
       this.$parent.addInputFile(e.target)
-      // e.target.value = ''
+      e.target.value = ''
       if (!e.target.files || e.target.files.length===0) {
         // ie9 fix #219
         this.$destroy()

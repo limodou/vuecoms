@@ -20,6 +20,8 @@ class Store {
       checkColWidth: 30,
       checkColTitle: '',
       cellTitle: true, // 单元格显示title属性
+      headerShow: true, // 是否显示表头，缺省为true
+      multiHeaderSep: '/', // 多行表头分隔符
       idField: 'id',
       orderField: '', // 排序字段
       static: false, // 是否静态，如果true，则行编辑将禁止，不能进行行选择，可以执行setSelection()
@@ -364,7 +366,7 @@ class Store {
   getKeyField (row) {
     let key
     if (row[this.states.idField]) {
-      key = 'id'
+      key = this.states.idField
     } else if (row['_rowKey']) {
       key = '_rowKey'
     } else {
@@ -442,7 +444,7 @@ class Store {
    options 为滚动属性
   */
   addEditRow (row, parent, position, isChild=false) {
-    if (!row || isEmpty) {
+    if (!row || isEmpty(row)) {
       row = {_new: true}
     } else {
       row['_new'] = true

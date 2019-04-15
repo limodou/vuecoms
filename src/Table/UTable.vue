@@ -1,6 +1,6 @@
 <template>
   <div class="u-table" :class="[tableClass, height==='auto' ? 'auto-height' : '']" :style="wrapStyles" >
-    <div class="u-table-header-wrapper"> <!-- Wrapper -->
+    <div v-if="headerShow" class="u-table-header-wrapper"> <!-- Wrapper -->
       <div class="u-table-header-scroll" :style="headerScrollStyles" ref="header"
         @scroll="handleHeaderScroll"
       >
@@ -111,7 +111,7 @@ export default {
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
       'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth',
       'tree', 'parentField', 'expandField', 'defaultExpanded', 'noData',
-      'noDataHeight', 'childrenField', 'hoverRowKey'
+      'noDataHeight', 'childrenField', 'hoverRowKey', 'headerShow'
     ),
 
     rows () {
@@ -401,7 +401,8 @@ export default {
     checkScroll () {
       // 主内容才计算滚动条
       if (!this.fixed) {
-        this.$refs.header.scrollLeft = this.$refs.body.scrollLeft
+        if (this.$refs.header)
+          this.$refs.header.scrollLeft = this.$refs.body.scrollLeft
         this.store.states.scrollLeft = this.$refs.body.scrollLeft
         this.store.states.isScrollRight = (!this.xscroll) || (this.$refs.body.scrollLeft && (this.$refs.body.scrollLeft + 
           this.$refs.body.clientWidth === this.$refs.content.clientWidth))

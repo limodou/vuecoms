@@ -50,7 +50,12 @@ export default class Field {
 
   convert_value (value) {
     //如果是多选，但是value不是数据组，则进行转换
-    if (this.multiple && !Array.isArray(value)) return []
+    if (this.multiple) {
+      if (!Array.isArray(value))
+        return []
+      else 
+        return value.slice()
+    }
     return value
   }
 
