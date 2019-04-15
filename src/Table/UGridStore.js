@@ -21,6 +21,7 @@ class Store {
       checkColTitle: '',
       cellTitle: true, // 单元格显示title属性
       headerShow: true, // 是否显示表头，缺省为true
+      hoverShow: true, // 是否显示hover效果
       multiHeaderSep: '/', // 多行表头分隔符
       idField: 'id',
       orderField: '', // 排序字段

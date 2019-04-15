@@ -32,7 +32,7 @@
             v-if="!row.row._hidden"
             :style="bodyTrStyle"
             :key="row._rowKey"
-            :class="{[store.states.selectedRowClass]:store.states.selectedRowClass && store.selected(row.row), hover:hoverRowKey && row._rowKey==hoverRowKey}"
+            :class="{[store.states.selectedRowClass]:store.states.selectedRowClass && store.selected(row.row), hover:hoverShow && hoverRowKey && row._rowKey==hoverRowKey}"
             @mouseenter="handleTrMouseEnter(row.row)"
             @mouseleave="handleTrMouseLeave(row.row)"
             >
@@ -111,7 +111,7 @@ export default {
       'clickSelect', 'checkAll', 'start', 'resizable', 'minColWidth',
       'multiSelect', 'drawColumns', 'combineCols', 'draggable', 'leftWidth', 'rightWidth',
       'tree', 'parentField', 'expandField', 'defaultExpanded', 'noData',
-      'noDataHeight', 'childrenField', 'hoverRowKey', 'headerShow'
+      'noDataHeight', 'childrenField', 'hoverRowKey', 'headerShow', 'hoverShow'
     ),
 
     rows () {
