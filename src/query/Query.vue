@@ -15,7 +15,7 @@
       <div class="line"></div>
     </template>
     <!-- 生成单行条件 -->
-    <Row v-if="rows.length===1 || !isShow" class="u-layout-row">
+    <Row v-if="!isShow && showLine === 1" class="u-layout-row">
       <FormCell v-for="col in firstLayout" :col="col" :value="current_value" style="float:left;"
         :staticSuffix="staticSuffix"
         :field-style="col.style"
@@ -25,7 +25,7 @@
       <Button v-for="btn of buttons" v-bind="btn" @click="handleClick(btn)" style="margin-right:5px">{{btn.label}}</Button>
     </Row>
     <!-- 生成多行条件 -->
-    <Row v-if="rows.length > 1 && isShow" v-for="(row, index) in rows" class="u-layout-row" :key="index">
+    <Row v-else v-for="(row, index) in getRows(rows)" class="u-layout-row" :key="index">
       <Col v-for="col in row" :span="col.colspan">
         <FormCell :col="col" :value="current_value" :staticSuffix="staticSuffix" :root="Query"></FormCell>
       </Col>
@@ -39,7 +39,7 @@
       </span>
     </Row>
     <!-- 生成查询按钮 -->
-    <Row v-if="isShow">
+    <Row v-if="isShow || !isShow && showLine>1">
       <Col style="margin:5px; text-align:center" span="24">
         <Button v-for="btn of buttons" v-bind="btn" @click="handleClick(btn)" style="margin-right:5px">{{btn.label}}</Button>
       </Col>
@@ -92,7 +92,7 @@ export default {
         return {}
       }
     },
-    showLine: {
+    showLine: { // 当条件为多行时，初始显示几行，缺省为1
       type: Number,
       default: 1
     },
@@ -141,7 +141,7 @@ export default {
       f: {},  // fields
       current_value: {},
       old_value: {}, //保存上一次的值,用于数据比较
-      isShow: false,
+      isShow: false, // 是否显示隐藏内容
       buttons: buttons
     }
   },
@@ -314,6 +314,12 @@ export default {
       }
       this.merge(this.value, this.current_value)
       this.$emit("input", this.value)
+    },
+    getRows(rows) {
+      if (this.isShow) return rows
+      else {
+        return rows.slice(0, this.showLine)
+      }
     }
   }
 }

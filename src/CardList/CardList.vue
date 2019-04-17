@@ -4,7 +4,9 @@
     <Query ref="query" v-if="store.query" v-bind="store.query" 
       @input="handleQuerySubmit" 
       @on-query-change="handleQueryChange"></Query>
-    <slot name="nodata"><div v-if="store.data.length === 0">暂无数据</div></slot>
+    <div v-if="store.data.length === 0">
+      <slot name="nodata"><div v-html="store.nodata"></div></slot>
+    </div>
     <Scroll v-if="store.scroll" :on-reach-bottom="handleReachBottom">
       <slot :data="store.data"></slot>
     </Scroll>
@@ -79,6 +81,7 @@ export default {
       bottomButtons: [],
       loadingText: 'loading...',
       loading: false,
+      nodata: '暂无数据',
       scroll: false // 是否无限滚动
     }
     let d = Object.assign(_default, this.config)
