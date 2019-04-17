@@ -1,17 +1,17 @@
 <template>
   <div class="pagination">
     <ul>
-      <li v-if="first" :title="first" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasFirst}">
-        <a @click.prevent="handlePageClick(1)">{{first}}</a>
+      <li v-if="store.first" :title="store.first" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasFirst}">
+        <a @click.prevent="handlePageClick(1)">{{store.first}}</a>
       </li>
-      <li v-if="prev" :title="prev" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasPrev}">
-        <a @click.prevent="handlePageClick(current-1)">{{prev}}</a>
+      <li v-if="store.prev" :title="store.prev" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasPrev}">
+        <a @click.prevent="handlePageClick(current-1)">{{store.prev}}</a>
       </li>
-      <li v-if="next" :title="next" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasNext}">
-        <a @click.prevent="handlePageClick(current+1)">{{next}}</a>
+      <li v-if="store.next" :title="store.next" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasNext}">
+        <a @click.prevent="handlePageClick(current+1)">{{store.next}}</a>
       </li>
-      <li v-if="last" :title="last" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasLast}">
-        <a @click.prevent="handlePageClick(pages)">{{last}}</a>
+      <li v-if="store.last" :title="store.last" class="ivu-btn ivu-btn-default ivu-btn-small" :class="{'disabled':!hasLast}">
+        <a @click.prevent="handlePageClick(pages)">{{store.last}}</a>
       </li>
       <Dropdown class="ivu-btn ivu-btn-default ivu-btn-small" @on-click="handlePageSize" transfer>
         <a>
@@ -19,7 +19,7 @@
           <Icon type="ios-arrow-down"></Icon>
         </a>
         <DropdownMenu slot="list">
-            <DropdownItem v-for="x in pageSizeOpts" :key="x" :name="x">{{x}}条/页</DropdownItem>
+            <DropdownItem v-for="x in store.pageSizeOpts" :key="x" :name="x">{{x}}条/页</DropdownItem>
         </DropdownMenu>
       </Dropdown>
       <li class="ivu-btn ivu-btn-text ivu-btn-small page-input">
@@ -30,12 +30,12 @@
     </ul>
 
     <slot></slot>
-    <span class="page-total">共 {{pages}} 页/{{total}} 条记录</span>
+    <span class="page-total">共 {{pages}} 页/{{store.total}} 条记录</span>
   </div>
 </template>
 
 <script>
-import {clickoutside, mapState} from '../utils/utils.js'
+import {clickoutside} from '../utils/utils.js'
 import Emitter from '../mixins/emitter.js'
 
 export default {
@@ -44,8 +44,8 @@ export default {
 
   data () {
     return {
-      current: this.store.states.page,
-      limit: this.store.states.pageSize
+      current: this.store.page,
+      limit: this.store.pageSize
     }
   },
 
@@ -56,8 +56,6 @@ export default {
   },
 
   computed: {
-    ...mapState('total', 'page', 'pageSize', 'pageSizeOpts', 'first', 'prev', 'next', 'last', 'bottomButtons'),
-
     hasFirst () {
       return this.current !== 1
     },
@@ -73,7 +71,7 @@ export default {
     },
 
     pages () {
-      return Math.ceil(this.total / this.limit)
+      return Math.ceil(this.store.total / this.limit)
     },
 
     dropdownStyles () {
