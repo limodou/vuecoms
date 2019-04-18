@@ -23,6 +23,7 @@ export default {
   name: 'Build',
   data () {
     return {
+      originValue: deepCopy(this.value), // 保留初始值，用于reset
       oldvalue: deepCopy(this.value),
       fields: {},
       rows: {}, // 每段索引,key为每段name值，如果没有则不插入
@@ -81,55 +82,62 @@ export default {
 
   methods: {
     validate (callback) {
-      if (this.validating) return
-      this.validating = true
-      this.$emit('validating', true)
+      return new Promise((resolve, reject) => {
+        if (this.validating){
+          return
+        }
+        this.validating = true
+        this.$emit('validating', true)
 
-      const _check = (children, result, recursion) => {
-        let error = ''
-        for(let k in this.validateResult) {
-          let r = this.validateResult[k]
-          // 增加对hidden的处理
-          if (r.rule && r.rule.length > 0 && !this.fields[k].hidden) {
-            if (!r.validateState && !this.fields[k].static) {
-              validateRule(this.value, k, this.validateResult)
-              result.pending.push(r)
-            } else if (r.validateState === 'validating') {
-              result.pending.push(r)
-            } else if (r.validateState === 'error' && !result.error) {
-              result.error = r.error
+        const _check = (children, result, recursion) => {
+          let error = ''
+          for(let k in this.validateResult) {
+            let r = this.validateResult[k]
+            // 增加对hidden的处理
+            if (r.rule && r.rule.length > 0 && !this.fields[k].hidden) {
+              if (!r.validateState && !this.fields[k].static) {
+                validateRule(this.value, k, this.validateResult)
+                result.pending.push(r)
+              } else if (r.validateState === 'validating') {
+                result.pending.push(r)
+              } else if (r.validateState === 'error' && !result.error) {
+                result.error = r.error
+              }
             }
           }
         }
-      }
 
-      const _check_pending = (children, recursion) => {
-        let r = {error: '', pending: []}
-        _check(children, r, recursion)
-        if (r.error) {
-          this.validating = false
-          this.$emit('validating', false)
-          callback(r.error)
-          return
-        } else if (r.pending.length > 0) {
-          setTimeout(()=>{
-            _check_pending(r.pending, false)
-          }, 10)
-        } else {
-          this.validating = false
-          this.$emit('validating', false)
-          callback()
+        const _check_pending = (children, recursion) => {
+          let r = {error: '', pending: []}
+          _check(children, r, recursion)
+          if (r.error) {
+            this.validating = false
+            this.$emit('validating', false)
+            reject(r.error)
+            if (callback) callback(r.error)
+            return
+          } else if (r.pending.length > 0) {
+            setTimeout(()=>{
+              _check_pending(r.pending, false)
+            }, 10)
+          } else {
+            this.validating = false
+            this.$emit('validating', false)
+            resolve()
+            if (callback) callback()
+          }
         }
-      }
 
-      _check_pending(this.validateResult, true)
+        _check_pending(this.validateResult, true)
+      })
     },
 
     //生成校验结构
-    makeValidateResult () {
+    //force表示是否强制
+    makeValidateResult (force) {
       for(let name in this.fields) {
         let field = this.fields[name]
-        if (!this.validateResult[name] && !field.static) {
+        if ((force || !this.validateResult[name]) && !field.static) {
           let rule = this.getRule(field)
           this.$set(this.validateResult, name, {error: '', validateState: '', rule: rule})
         }
@@ -214,6 +222,13 @@ export default {
           result.rule.push(v)
         }
       }
+    },
+
+    // 清空数据
+    reset () {
+      let v = deepCopy(this.originValue)
+      Object.assign(this.value, v)
+      this.makeValidateResult(true)
     }
   },
 
