@@ -208,11 +208,18 @@ class Store {
 
   deselectAll (force=false) {
     let rows = []
-    this.states.data.forEach(row => {
+    const callback = (row) => {
       if (!this._deselect(row)){
         rows.push(row)
       }
-    })
+    }
+    walkTree(this.states.data, callback)
+
+    // this.states.data.forEach(row => {
+    //   if (!this._deselect(row)){
+    //     rows.push(row)
+    //   }
+    // })
     // if (rows.length === 0) {
     //   this.states.selected = {}
     //   this.states.selectedRows = {}
