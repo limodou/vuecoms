@@ -24,10 +24,11 @@
         :classes="nowrap ? 'nowrap' : ''"
       >
       </GenericInput>
-      <template v-if="columnType === 'check' && checkable">
-        <i v-if="store.selected(col.row)" class="ivu-icon ivu-icon-md-checkbox u-cell-checkbox" style="color:#2489f3" @click.stop="handleCheckClick"></i>
-        <i v-else class="ivu-icon ivu-icon-md-square-outline u-cell-checkbox" style="color:#bdbdbd" @click.stop="handleCheckClick"></i>
-      </template>
+      <Checkbox v-if="columnType === 'check' && checkable"
+        @click.prevent.native="handleCheckClick"
+        :value="Boolean(store.selected(col.row))"
+        :indeterminate="col.row._indeterminate"
+        ></Checkbox>
       <span v-if="columnType === 'index'" :class="{nowrap:nowrap}">
         {{ index }}
       </span>
@@ -155,7 +156,7 @@ export default {
   },
 
   methods: {
-    ...mapMethod('getComment', 'getClass', 'setSelection', 'makeRows'),
+    ...mapMethod('getComment', 'getClass', 'setSelection', 'makeRows', 'checkSelectStatus'),
     handleCheckClick () {
       if (this.static) return
       this.store.toggle(this.col.row)
@@ -186,6 +187,7 @@ export default {
               this.$set(this.col.row, '_loaded', true)
               this.setSelection(this.selected)
               this.$set(this.col.row, this.expandField, expand)
+              this.checkSelectStatus(this.col.row)
               this.$emit('expanded', this.col.row[this.expandField], this.col.row)
             })
           }

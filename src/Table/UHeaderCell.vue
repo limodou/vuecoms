@@ -13,10 +13,11 @@
     </div>
 
     <div v-if="column.type === 'check'">
-      <template v-if="multiSelect">
-        <i v-if="checkAll" class="ivu-icon ivu-icon-md-checkbox u-cell-checkbox" style="color:#2489f3" @click.stop="handleCheckAll"></i>
-        <i v-else class="ivu-icon ivu-icon-md-square-outline u-cell-checkbox" style="color:#bdbdbd" @click.stop="handleCheckAll"></i>
-      </template>
+      <Checkbox v-if="multiSelect"
+        @click.prevent.native="handleCheckAll"
+        :value="checkAll"
+        :indeterminate="indeterminate"
+        ></Checkbox>
       <span v-if="column.title">{{column.title}}</span>
     </div>
 
@@ -41,13 +42,18 @@ export default {
   },
 
   computed: {
-    ...mapState('nowrap', 'resizable', 'multiSelect', 'checkAll', 'rowHeight', 'static')
+    ...mapState('nowrap', 'resizable', 'multiSelect', 'checkAll', 'rowHeight', 'static', 'indeterminate')
   },
 
   methods: {
     handleCheckAll () {
       if (this.static) return
-      this.store.states.checkAll = !this.store.states.checkAll
+      let result
+      if (this.indeterminate) {
+        this.store.selectAll()
+        return
+      }
+      this.checkAll = !this.checkAll
       if (this.checkAll) {
         this.store.selectAll()
       } else {

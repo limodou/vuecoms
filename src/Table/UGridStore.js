@@ -67,6 +67,7 @@ class Store {
       indentWidth: 20, // 子结点缩近宽度
       iconWidth: 14, // icon所占宽度
       hoverRowKey: null, // hover时的rowKey
+      checkStrictly: true, // 是否选中时联动选子结点
 
       // 回调
       onLoadData: null, // 装入数据回调函数，将传入 function (url, param, callback)，当树型结构时，会传入parent字段
@@ -88,6 +89,7 @@ class Store {
       columnResizing: false,
       columnPosition: 0,
       checkAll: false,
+      indeterminate: false, // 是否checkbox中间状态
       fixedColumns: [],
       leftWidth: 0, // 左侧固定列宽度
       rightWidth: 0, // 右侧固定列宽度
@@ -137,7 +139,7 @@ class Store {
 
   selected (row) {
     let id = row[this.states.idField] || row._rowKey
-    return this.states.selected[id]
+    return this.states.selected[id + '']
   }
 
   toggle (row, force=false) {
@@ -158,17 +160,86 @@ class Store {
       let id = row[this.states.idField] || row._rowKey
       this.grid.$set(this.states.selected, id, id)
       this.grid.$set(this.states.selectedRows, id, row)
+    }
+    row._selectable = selectable && checkable
+    return selectable && checkable
+  }
+
+  checkSelectStatus () {
+    const _f = (data) => {
+      // 检查父结点的选中状态
+      let total = 0
+      let selected = 0
+      let result
+      for(let c of data) {
+        if (c._selectable) {
+          // 处理子结点
+          if (c[this.states.childrenField] && c[this.states.childrenField].length > 0) {
+            result = _f(c[this.states.childrenField])
+            console.log(c, result)
+            c._indeterminate = false
+            if (this.states.checkStrictly) {
+              if (this.selected(c)) selected ++
+            } else {
+              if (result.total === result.selected && result.total > 0) {
+                c._checked = true
+                if (!this.states.checkStrictly)
+                  this._select(c)
+                selected ++
+              } else {
+                c._checked = false
+                // 不销定check则取消选中
+                if (!this.states.checkStrictly)
+                  this._deselect(c)
+                if (result.selected)
+                  c._indeterminate = true
+              }
+            }
+            total += result.total + 1
+            selected += result.selected  
+        } else {
+            if (this.selected(c)) {
+              selected ++
+            }
+            total ++
+          }
+        }
+      }
+      result = {
+        total,
+        selected
+      }
+      return result
+    }
+    let result
+    result = _f(this.states.data)
+    this.states.indeterminate = false
+    if (result.total === result.selected && result.total > 0) {
+      this.states.checkAll = true
     } else {
       this.states.checkAll = false
+      if (result.selected > 0) this.states.indeterminate = true
     }
-    return selectable
-  }
+}
 
   select (row, force=false) {
     if (this._select(row, force)) {
       if (!this.states.multiSelect){
         this.deselectAll()
         this._select(row, force)
+      } else {
+        if (!this.states.checkStrictly) {
+          let data = row[this.states.childrenField]
+          if (data && data.length > 0) {
+            let rows = []
+            walkTree(data, (r) => {
+              if (this._select(r, force)) {
+                rows.push(r)
+              }
+            }, this.states.childrenField)
+          }
+        }
+        this.checkSelectStatus()
       }
       this.grid.$emit('on-selected', row)
     }
@@ -177,10 +248,12 @@ class Store {
   selectAll (force=false) {
     let rows = []
     walkTree(this.states.data, (row)=>{
-      if (!this._select(row, force)) {
+      if (this._select(row, force)) {
         rows.push(row)
       }
     }, this.states.childrenField)
+    this.states.checkAll = true
+    this.states.indeterminate = false
     this.grid.$emit('on-selected-all', rows)
   }
 
@@ -195,13 +268,24 @@ class Store {
       let id = row[this.states.idField] || row._rowKey
       this.grid.$delete(this.states.selected, id)
       this.grid.$delete(this.states.selectedRows, id)
-      this.states.checkAll = false
     }
     return deselectable
   }
 
   deselect (row, force=false) {
     if (this._deselect(row, force)) {
+      if (!this.states.checkStrictly) {
+        let data = row[this.states.childrenField]
+        if (data && data.length > 0) {
+          let rows = []
+          walkTree(data, (r) => {
+            if (this._deselect(r, force)) {
+              rows.push(r)
+            }
+          }, this.states.childrenField)
+        }
+      }
+      this.checkSelectStatus()
       this.grid.$emit('on-deselected', row)
     }
   }
@@ -209,7 +293,7 @@ class Store {
   deselectAll (force=false) {
     let rows = []
     const callback = (row) => {
-      if (!this._deselect(row)){
+      if (this._deselect(row)){
         rows.push(row)
       }
     }
@@ -224,6 +308,8 @@ class Store {
     //   this.states.selected = {}
     //   this.states.selectedRows = {}
     // }
+    this.states.checkAll = false
+    this.states.indeterminate = false
     this.grid.$emit('on-deselected-all', rows)
   }
 
@@ -259,20 +345,34 @@ class Store {
     } else {
       s = [selection]
     }
+    let checkAll = true
+    let indeterminate = false
     const callback = (row) => {
-      let id = row[this.states.idField]
-      index = s.indexOf(id)
-      if (index > -1) {
-        this._select(row, force)
-        s.splice(index, 1)
+      if (s.length === 0){
+        checkAll = false
+        return true
       }
-      if (s.length === 0) return true
+      let id = row[this.states.idField]
+      index = s.indexOf(id+'')
+      if (index > -1) {
+        if(this._select(row, force)) {
+          indeterminate = true
+        }
+        s.splice(index, 1)
+      } else {
+        checkAll = false
+      }
     }
     walkTree(this.states.data, callback)
 
     // 处理剩余数据
     for(let c of s) {
       this.grid.$set(this.states.selected, c, c)
+    }
+
+    this.states.checkAll = checkAll
+    if (!checkAll) {
+      this.states.indeterminate = indeterminate
     }
   }
 
@@ -503,6 +603,8 @@ class Store {
       _hover: false,
       _selectable: true, // 可被选中
       _checkable: true, // 可显示checkbox
+      _checked: false, // 是否选中状态
+      _indeterminate: false, // 中间态状态
       _editting: false,
       _hidden: false,
       _level: 0,

@@ -2,6 +2,7 @@
   <Select ref="select" v-model="data" :multiple="multiple" @input="handleInput" 
     :clearable="clearable" :filterable="filterable" :transfer="transfer" :remote="remote"
     :placeholder="placeholder"
+    :disabled="disabled"
     :loading="loading" :remote-method="handleRemote"
     :on-changing="onChanging">
     <Option v-for="item in items" :value="item.value" :key="item.value + item.label" :label="item.label">
@@ -51,6 +52,10 @@ export default {
     transfer: {
       type: Boolean,
       default: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     placeholder: {
       type: String,

@@ -786,6 +786,10 @@ label {
         box-shadow: -1px 0px 2px #999;
       }
     }
+
+    .ivu-checkbox-wrapper {
+      margin-right: 0px;
+    }
   }
 
   &.theme-simple {

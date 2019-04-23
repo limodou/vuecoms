@@ -54,22 +54,23 @@ export default {
 <style lang="less">
   .u-sort {
     position: absolute;
-    width: 7px;
+    width: 10px;
     height: 10px;
     color: #999;
     cursor: pointer;
     top: 50%;
-    right: 8px;
+    right: 10px;
     transform: translate(0,-50%);
+    font-size: 18px;
 
     .u-sort-up {
       position: absolute;
-      top: -5px;
+      top: -7px;
     }
 
     .u-sort-down {
       position: absolute;
-      bottom: -5px;
+      bottom: -7px;
     }
 
     &.up {
