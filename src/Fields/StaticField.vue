@@ -15,6 +15,8 @@ export default {
         if (this.format) {
           v = this.format(v, this.value[this.name], this.value)
         }
+      } else {
+        v = ''
       }
       return v
     },

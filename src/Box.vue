@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!removed" class="box" :class="[boxType, headerStyle]">
+  <div v-if="!removed" class="box" :class="[boxType, headerStyle, boxTheme]">
     <div v-if="title" class="box-header" :class="{'with-border':withBorder}">
       <h3 class="box-title">{{title}}</h3>
 
@@ -11,7 +11,7 @@
             <Icon v-if="open" type="ios-remove" class="box-icon"></Icon>
             <Icon v-else type="ios-add" class="box-icon"></Icon>
         </button>
-        <button v-if="removable" type="button" class="box-tool"
+        <button v-if="removerable" type="button" class="box-tool"
           @click.prevent="removed=true"
         ><Icon type="ios-close" class="box-icon"></Icon></button>
       </div>
@@ -66,12 +66,17 @@ export default {
       default: true
     },
 
-    removable: {
+    removerable: {
       type: Boolean,
       default: false
     },
 
     height: {
+    },
+
+    theme: {
+      type: String,
+      default: '' // 目前只支持 card 和 ''
     }
   },
 
@@ -87,6 +92,14 @@ export default {
         } else {
           return {height: this.height, overflow: 'auto'}
         }
+      }
+    },
+
+    boxTheme () {
+      if (this.theme === 'default')
+        return
+      if (this.theme) {
+        return `box-theme-${this.theme}`
       }
     }
   },
@@ -523,6 +536,12 @@ export default {
 
 .box-icon {
     font-size: 25px;
+}
+
+.box.box-theme-card {
+    border: 1px solid #dcdee2;
+    border-color: #e8eaec;
+    box-shadow: none;
 }
 
 </style>

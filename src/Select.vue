@@ -100,6 +100,7 @@ export default {
       }
     },
     setSelected (selected) {
+      if (isEmpty(selected)) return
       let v
       this.selectedValue = selected
       if (this.multiple) {
@@ -141,7 +142,7 @@ export default {
         if (this.multiple) {
           v = []
         } else {
-          v = {}
+          v = {label: '', value: ''}
         }
       } else {
         let s
@@ -158,7 +159,16 @@ export default {
         if (!this.multiple) {
           if (v.length > 0) v = v[0]
           else v = {}
-        } 
+        }
+        if (isEmpty(v) && this.data) {
+          if (Array.isArray(this.data)) {
+            v = this.data.map((x) => {
+              return {label: '', value: x}
+            })
+          } else {
+            v = {label: '', value: this.data}
+          }
+        }
       }
       this.selectedValue = v
       return v
