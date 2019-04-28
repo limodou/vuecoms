@@ -1,8 +1,9 @@
 <template>
   <div v-if="!removed" class="box" :class="[boxType, headerStyle, boxTheme]">
     <div v-if="title" class="box-header" :class="{'with-border':withBorder}">
-      <h3 class="box-title">{{title}}</h3>
-
+      <div class="box-title" :style="{'text-align':headerAlign}">
+          <slot name="title"><p><Icon v-if="icon" :type="icon"></Icon>{{title}}</p></slot>
+      </div>
       <div class="box-tools pull-right">
         <slot name="tools"></slot>
         <button v-if="collapse" type="button" class="box-tool"
@@ -28,7 +29,7 @@
       </div>
     </transition>
 
-    <div v-if="$slots.footer" class="box-footer">
+    <div v-if="$slots.footer" class="box-footer" :class="{'with-footer-border':withFooterBorder}" :style="{'text-align':footerAlign}">
       <slot name="footer"></slot>
     </div>
   </div>
@@ -51,7 +52,22 @@ export default {
       default: ''
     },
 
+    headerAlign: {
+      type: String,
+      default: 'left'
+    },
+
+    footerAlign: {
+      type: String,
+      default: 'left'
+    },
+
     withBorder: {
+      type: Boolean,
+      default: true
+    },
+
+    withFooterBorder: {
       type: Boolean,
       default: true
     },
@@ -71,6 +87,11 @@ export default {
       default: false
     },
 
+    icon: {
+      type: String,
+      default: ''
+    },
+
     height: {
     },
 
@@ -82,7 +103,10 @@ export default {
 
   computed: {
     headerStyle () {
-      return `box-${this.headerClass}`
+      if (this.headerClass)
+        return `box-${this.headerClass}`
+      else
+        return ''
     },
 
     bodyStyle () {
@@ -358,15 +382,20 @@ export default {
     border-bottom: 1px solid #f4f4f4
 }
 
+.box-footer.with-footer-border {
+    border-top: 1px solid #f4f4f4
+}
+
 .collapsed-box .box-header.with-border {
     border-bottom: none
 }
 
-.box-header>.fa,.box-header>.glyphicon,.box-header>.ion,.box-header .box-title {
+.box-header>.fa,.box-header>.glyphicon,.box-header>.ion,.box-header .box-title > p {
     display: inline-block;
     font-size: 18px;
     margin: 0!important;
-    line-height: 1
+    line-height: 1;
+    font-weight: bold;
 }
 
 .box-header>.fa,.box-header>.glyphicon,.box-header>.ion {
@@ -462,7 +491,6 @@ export default {
     border-top-right-radius: 0;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-    border-top: 1px solid #f4f4f4;
     padding: 10px;
     background-color: #fff
 }
